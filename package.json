@@ -3,10 +3,10 @@
   "version": "1.1.1",
   "description": "Show markers on a layer basis. Create layers based on filter criteria.",
   "scripts": {
-    "start": "c8ycli server -u https://entelios-dev.eu-latest.cumulocity.com/ --shell cockpit-1016",
+    "start": "c8ycli server",
     "build": "c8ycli build",
     "build:ci": "npm run build -- --ci",
-    "deploy": "c8ycli deploy -u https://entelios-dev.eu-latest.cumulocity.com",
+    "deploy": "c8ycli deploy",
     "postinstall": "ngcc"
   },
   "keywords": [
@@ -55,7 +55,7 @@
   },
   "c8y": {
     "application": {
-      "name": "advanced-map-widget-plugin",
+      "name": "Advanced Map Plugin",
       "description": "Show markers on a layer basis. Create layers based on filter criteria.",
       "contextPath": "sag-ps-iot-pkg-advanced-map-widget-plugin",
       "key": "sag-ps-iot-pkg-advanced-map-widget-key",
