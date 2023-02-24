@@ -1,0 +1,39 @@
+<div class="alarm-status m-l-auto">
+  <small class="text-muted">
+    <i c8yIcon="alarm"></i>
+    {{
+      mo?.c8y_ActiveAlarmsStatus
+        ? "Current Alarms:"
+        : ("No current alarms" | translate)
+    }}
+  </small>
+  <br />
+  <small
+    class="status critical text-nowrap"
+    title="{{ 'Critical alarms' | translate }}"
+    *ngIf="mo?.c8y_ActiveAlarmsStatus?.critical"
+  >
+    {{ mo?.c8y_ActiveAlarmsStatus?.critical }}<i c8yIcon="warning"></i>
+  </small>
+  <small
+    class="status major text-nowrap"
+    title="{{ 'Major alarms' | translate }}"
+    *ngIf="mo?.c8y_ActiveAlarmsStatus?.major"
+  >
+    {{ mo?.c8y_ActiveAlarmsStatus?.major }}<i c8yIcon="exclamation-circle"></i>
+  </small>
+  <small
+    class="status minor text-nowrap"
+    title="{{ 'Minor alarms' | translate }}"
+    *ngIf="mo?.c8y_ActiveAlarmsStatus?.minor"
+  >
+    {{ mo?.c8y_ActiveAlarmsStatus?.minor }}<i c8yIcon="exclamation-circle"></i>
+  </small>
+  <small
+    class="status warning text-nowrap"
+    title="{{ 'Warning alarms' | translate }}"
+    *ngIf="mo?.c8y_ActiveAlarmsStatus?.warning"
+  >
+    {{ mo?.c8y_ActiveAlarmsStatus?.warning }}<i c8yIcon="circle"></i>
+  </small>
+</div>

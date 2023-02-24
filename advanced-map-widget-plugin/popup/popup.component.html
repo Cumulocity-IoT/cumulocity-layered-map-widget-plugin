@@ -1,0 +1,35 @@
+<div class="map-marker">
+  <a
+    class="text-truncate deviceLink text-14"
+    [href]="'#/device/' + mo?.id"
+    title="{{ mo?.name }}"
+  >
+    {{ mo?.name }}
+  </a>
+  <div class="text-muted m-b-4" *ngIf="lastUpdated">
+    <i c8yIcon="clock-o"></i>
+    {{ "Last update" | translate }}:<br />{{ lastUpdated | c8yDate }}
+  </div>
+  <alarm-display [mo]="mo"></alarm-display>
+  <table class="switch m-t-8">
+    <tr>
+      <td>
+        <label class="c8y-switch">
+          <input
+            type="checkbox"
+            [ngModel]="active"
+            (change)="toggleActive()"
+            [disabled]="true"
+          />
+          <span></span>
+        </label>
+      </td>
+      <td class="description" *ngIf="active">
+        {{ "Track visible" | translate }}
+      </td>
+      <td class="description" *ngIf="!active">
+        {{ "Track hidden" | translate }}
+      </td>
+    </tr>
+  </table>
+</div>

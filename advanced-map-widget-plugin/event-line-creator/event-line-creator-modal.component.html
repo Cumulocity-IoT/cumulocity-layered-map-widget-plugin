@@ -1,0 +1,122 @@
+<c8y-modal
+  title="{{ title | translate }}"
+  (onClose)="onClose()"
+  (onDismiss)="onDismiss()"
+  [labels]="labels"
+  [disabled]="!eventsForm.trackName || !coordinates.length"
+  style="width: 100%"
+>
+  <!-- <div class="legend form-block">Draw track by LocationUpdate events</div> -->
+  <div class="form-group">
+    <label for="trackName">Track name</label>
+    <input
+      id="trackName"
+      class="form-control"
+      type="string"
+      [(ngModel)]="eventsForm.trackName"
+      required
+    />
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <label for="startDate" translate>Start date</label>
+      <div class="form-group datepicker">
+        <input
+          class="form-control"
+          id="startDate"
+          name="startDate"
+          [(ngModel)]="eventsForm.startDate"
+          [bsConfig]="{ returnFocusToInput: true }"
+          bsDatepicker
+          required
+        />
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label for="startTime" translate>Start time</label>
+        <timepicker
+          id="startTime"
+          [(ngModel)]="eventsForm.startTime"
+          [showSpinners]="false"
+          [showMeridian]="false"
+          required
+        ></timepicker>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <label for="endDate" translate>End date</label>
+      <div class="form-group datepicker">
+        <input
+          class="form-control"
+          id="endDate"
+          name="endDate"
+          [(ngModel)]="eventsForm.endDate"
+          [bsConfig]="{ returnFocusToInput: true }"
+          bsDatepicker
+          required
+        />
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label for="endTime" translate>End time</label>
+        <timepicker
+          id="endTime"
+          [(ngModel)]="eventsForm.endTime"
+          [showSpinners]="false"
+          [showMeridian]="false"
+          required
+        ></timepicker>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <!-- <label for="circuitSource">Source</label> -->
+    <c8y-select
+      id="circuitSource"
+      [items]="items"
+      [placeholder]="'Select options'"
+      (onChange)="userAppliedCircuitDevice($event)"
+    ></c8y-select>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="form-group">
+        <button
+          type="button"
+          (click)="onReload()"
+          class="btn btn-primary btn-icon"
+          [disabled]="
+            eventsForm.deviceId === null ||
+            eventsForm.startDate === null ||
+            eventsForm.startTime === null ||
+            eventsForm.endDate === null ||
+            eventsForm.endTime === null
+          "
+        >
+          Load coordinates<i c8yIcon="reload"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <p>{{ text }}</p>
+    </div>
+  </div>
+
+  <div (resized)="onResized()" class="form-group" style="height: 400px">
+    <div
+      id="track-map"
+      class="map-container"
+      [leafletOptions]="options"
+      (leafletMapReady)="onMapReady($event)"
+      leaflet
+    ></div>
+  </div>
+</c8y-modal>

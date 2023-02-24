@@ -1,0 +1,120 @@
+<c8y-modal
+  title="{{ title | translate }}"
+  (onClose)="onClose()"
+  (onDismiss)="onDismiss()"
+  [labels]="labels"
+  [disabled]="type === 'Unset' || !layer.name"
+  style="width: 100%"
+>
+  <div class="legend form-block center">General</div>
+  <div class="form-group">
+    <label translate for="layerName">Name</label>
+    <input
+      id="layerName"
+      class="form-control"
+      type="text"
+      name="layerName"
+      [maxlength]="254"
+      [(ngModel)]="layer.name"
+    />
+  </div>
+  <div class="form-group">
+    <label translate for="iconInput">Icon</label>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button class="btn btn-primary" (click)="openIconModal()">
+          Pick icon
+        </button>
+      </div>
+      <input
+        id="iconInput"
+        class="form-control"
+        type="text"
+        name="iconInput"
+        [(ngModel)]="layer.icon"
+      />
+      <span *ngIf="layer.icon" class="input-group-addon"
+        ><i [c8yIcon]="layer.icon"></i
+      ></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label translate for="layerType">Layer Type</label>
+    <div class="c8y-select-wrapper" title="{{ 'Select type' | translate }}">
+      <select
+        id="layerType"
+        #typeSelect
+        class="btn btn-default dropdown-toggle c8y-dropdown"
+        required="true"
+        (change)="changeType(typeSelect.value)"
+      >
+        <option value="" selected disabled>Select a type</option>
+        <option
+          value="DeviceFragmentLayerConfig"
+          [selected]="type === 'DeviceFragmentLayerConfig'"
+        >
+          Device-Fragment
+        </option>
+        <option
+          value="InventoryQueryLayerConfig"
+          [selected]="type === 'QueryLayerConfig' && queryType === 'Inventory'"
+        >
+          Inventory Query
+        </option>
+        <option
+          value="AlarmQueryLayerConfig"
+          [selected]="type === 'QueryLayerConfig' && queryType === 'Alarm'"
+        >
+          Alarm Query
+        </option>
+        <option
+          value="EventQueryLayerConfig"
+          [selected]="type === 'QueryLayerConfig' && queryType === 'Event'"
+        >
+          Event Query
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <span *ngIf="type === 'DeviceFragmentLayerConfig'">
+    <div class="legend form-block center">Device Fragment Configuration</div>
+    <div class="form-group">
+      <label for="fragment" translate>Fragment</label>
+      <input
+        name="fragment"
+        id="fragment"
+        class="form-control"
+        placeholder="type"
+        [(ngModel)]="layer.fragment"
+      />
+    </div>
+    <div class="form-group">
+      <label for="value" translate>Value</label>
+      <input
+        name="value"
+        id="value"
+        class="form-control"
+        placeholder="c8y_Event"
+        [(ngModel)]="layer.value"
+      />
+    </div>
+  </span>
+  <span *ngIf="type === 'QueryLayerConfig'">
+    <div class="legend form-block center">
+      {{queryType}} Query Configuration
+    </div>
+    <inventory-query-form
+      *ngIf="queryType === 'Inventory'"
+      [filter]="layer.filter"
+    ></inventory-query-form>
+    <alarm-query-form
+      *ngIf="queryType === 'Alarm'"
+      [filter]="layer.filter"
+    ></alarm-query-form>
+    <event-query-form
+      *ngIf="queryType === 'Event'"
+      [filter]="layer.filter"
+    ></event-query-form>
+  </span>
+</c8y-modal>

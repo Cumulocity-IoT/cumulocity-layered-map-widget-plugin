@@ -1,0 +1,85 @@
+<c8y-modal
+  title="{{ title | translate }}"
+  (onClose)="onClose($event)"
+  (onDismiss)="onDismiss($event)"
+  [labels]="labels"
+  [disabled]="!trackName || !coordinates.length"
+  style="width: 100%"
+>
+  <!-- <div class="legend form-block">Draw track by LocationUpdate events</div> -->
+  <div class="form-group">
+    <label for="trackName">Track name</label>
+    <input
+      id="trackName"
+      class="form-control"
+      type="string"
+      [(ngModel)]="trackName"
+      required
+    />
+  </div>
+  <div class="form-inline"></div>
+  <div class="form-group">
+    <label for="trackName">Start/ stop drawing</label>
+    <button
+      type="button"
+      class="btn btn-primary btn-icon"
+      [disabled]="isDrawingLine"
+      (click)="startDrawingLine()"
+    >
+      <i c8yIcon="play-circle"></i>
+      Start/Continue drawing
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-icon"
+      [disabled]="!isDrawingLine"
+      (click)="pauseDrawingLine()"
+    >
+      <i c8yIcon="pause-circle"></i>
+      Pause drawing
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger btn-icon"
+      [disabled]="coordinates.length === 0"
+      (click)="resetLine()"
+    >
+      <i c8yIcon="clear-symbol"></i>
+      Reset
+    </button>
+  </div>
+
+  <div class="form-group">
+    <div class="input-group input-group-search">
+      <input
+        type="text"
+        #searchAddress
+        placeholder="{{ 'Enter address' | translate }}"
+        class="form-control"
+        (keyup.enter)="navigateToAddress(searchAddress.value)"
+      />
+      <span class="input-group-btn">
+        <button
+          class="btn btn-link"
+          type="submit"
+          (click)="navigateToAddress(searchAddress.value)"
+        >
+          <i c8yIcon="search"></i>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group" (resized)="onResized()" style="height: 400px">
+    <div
+      id="draw-line-map"
+      class="map-container"
+      [leafletOptions]="options"
+      (leafletMouseDown)="onMouseDown($event)"
+      (leafletMouseMove)="onMouseMove($event)"
+      (leafletMouseOut)="onMouseOut($event)"
+      (leafletMapReady)="onMapReady($event)"
+      leaflet
+    ></div>
+  </div>
+</c8y-modal>

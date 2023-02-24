@@ -1,0 +1,38 @@
+<c8y-list-group>
+  <c8y-li *ngFor="let track of tracks;">
+    <c8y-li-icon>
+      <i c8yIcon="gps"></i>
+    </c8y-li-icon>
+    <c8y-li-body>
+      <div class="row">
+        <div class="col-sm-1">
+          <label title="Select" class="c8y-checkbox">
+            <input
+              type="checkbox"
+              [checked]="track.name === selectedTrackName"
+              [disabled]="!selectable"
+              (change)="onUserChangedSelection($event, track)"
+            />
+            <span></span>
+          </label>
+        </div>
+        <div class="col-sm-4">
+          <p class="text-truncate" title="{{ track.name }}">
+            {{ track.name }}
+          </p>
+        </div>
+        <div class="col-sm-6">
+          <i c8yIcon="calendar"></i>&nbsp;<span translate>{{
+            track.createDate | date: "long"
+          }}</span>
+        </div>
+      </div>
+    </c8y-li-body>
+    <!-- <c8y-li-action (click)="editProject(template)" icon="pencil">
+        {{ "Edit" | translate }}
+      </c8y-li-action> -->
+    <c8y-li-action (click)="onDeleteTrack(track)" icon="trash-o">
+      {{ "Delete" | translate }}
+    </c8y-li-action>
+  </c8y-li>
+</c8y-list-group>

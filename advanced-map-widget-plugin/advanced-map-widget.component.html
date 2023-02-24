@@ -1,0 +1,11 @@
+<div (resized)="onResized()" class="map-container">
+  <div
+    id="map"
+    leaflet
+    class="map-container"
+    [leafletOptions]="options"
+    (leafletMapReady)="onMapReady($event)"
+  ></div>
+</div>
+<!-- [style.height.px]="mapHeight" -->
+<!-- (leafletMapZoomEnd)="onMapZoomEnd($event)" -->

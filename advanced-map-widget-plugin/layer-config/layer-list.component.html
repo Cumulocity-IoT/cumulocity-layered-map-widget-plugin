@@ -1,0 +1,25 @@
+<c8y-list-group>
+  <c8y-li *ngFor="let layer of layers">
+    <c8y-li-checkbox
+      [selected]="layer.active"
+      (onSelect)="layer.active = $event"
+    ></c8y-li-checkbox>
+    <c8y-li-icon>
+      <i [c8yIcon]="layer.config.icon"></i>
+    </c8y-li-icon>
+    <c8y-li-body>
+      <p class="text-truncate" title="{{ layer.config.name }}">
+        {{ layer.config.name }}
+      </p>
+    </c8y-li-body>
+    <c8y-li-collapse
+      ><p>{{ getContent(layer) }}</p></c8y-li-collapse
+    >
+    <c8y-li-action (click)="onEditLayer(layer)" icon="pencil">
+      {{ "Edit" | translate }}
+    </c8y-li-action>
+    <c8y-li-action (click)="onDeleteLayer(layer)" icon="trash-o">
+      {{ "Delete" | translate }}
+    </c8y-li-action>
+  </c8y-li>
+</c8y-list-group>
