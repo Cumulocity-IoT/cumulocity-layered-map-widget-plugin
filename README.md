@@ -1,22 +1,41 @@
 # IoT Cumulocity Advanced Map Widget plugin
-Cumulocity module federation plugin containing the advanced map widget. 
+Cumulocity module federation plugin containing the Advanced Map widget. By installing this plugin to a cockpit application, the user can choose this widget from the catalog.
 
-Displays a map with position markers for selected devices. Draw lines based on location update events or by free hand.
-Goal: Support for configuration of additional layers and custom markers.
+Displays a map with position markers for devices with c8y_Position fragments. The user can create multiple layers using different queries:
+- fragment and value layer, e.g. show all devices with type = c8y_MQTTDevice
+- inventory query layer, e.g. show all devices with critical alarm count greater 0 and having custom fragment xyz
+- alarm query layer, show all devices for that at least oe alarm exists matching the alarm query you create
+- event query layer, show all devices for that at least oe event exists matching the event query you create
+
+The map widget is designed to scale well also with higher count of devices. Position updates and changes regarding the layers are polled using bulk requests.
+Markers can be configured to show different icons. If alarms exist, different colors will be shown depending on the highest alarm.
+Alarm details can be found in the popover of the device. The popover is built to be easily extended/ replaced in code.
+
 
 ## Sample images
 
-Draw lines freehand:
-![alt Create track example](/docs/create-track.png)
+Create
+![alt Create device fragment layer example](/docs/create-device-fragment-layer.png)
 
-Draw line from c8y_Position events:
-![alt Draw track from c8y_Position events example](/docs/load-coordinates.png)
+Manage you existing layers in the config (by editing or deleting)
+![alt Manage layers](/docs/widget-config.png)
 
-Manage your lines:
-![alt Widget config example](/docs/widget-config.png)
+Layers can be selected and deselected on the map later. You can also choose whether or not layers should be selected by default.
+![alt Layers](/docs/layers.png)
 
-Widget in action:
-![alt Widget in action example](/docs/widget-in-action.png)
+Powerful queries can be created with a simple UI whih let's you create the query parameters for a layer. Only devices matching your query will be shown for that layer.
+![alt Alarm query layer example](/docs/edit-alarm-layer.png)
+
+Popovers show alarm counts. These can easily be extended in code.
+![alt Popover example](/docs/popover-example.png)
+
+## Features to come
+
+- pick color for markers
+- configurable polling intervals
+- latest value queries, (e.g. only show devices where latest event states that the machine is in a specific state)
+- extra layer for drawings
+- clustering of markers
 
 ## Recommended versions
 node v 14.x
@@ -25,10 +44,6 @@ npm v 6.x
 ## Plugin versions
 Angular v 14.x
 WebSDK v 1016.0.x
-
-# Cumulocity widget plugin
-
-This is the Cumulocity module federation plugin. Plugins can be developed like any Cumulocity application, but can be used at runtime by other applications. Therefore, they export an Angular module which can then be imported by any other application. The exports are defined in `package.json`.
 
 **How to start**
 Change the target tenant and application you want to run this plugin on in the `package.json`.
