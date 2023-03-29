@@ -62,7 +62,7 @@ export class LayerService {
           });
       }
     } else {
-      const matches = this.getMatches(setup.config, devices);
+      const matches = this.getMatches(setup.config, devices || []);
       // assign devices mathcing the layer criteria
       layer.devices = matches.map((d) => d.id);
       // create coordinate cache for devices having the c8y_Position fragment

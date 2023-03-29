@@ -125,7 +125,7 @@ export class AdvancedMapWidgetComponent implements AfterViewInit, OnDestroy {
     layerControl.addBaseLayer(osm, "Open Street Map");
     osm.addTo(this.map);
 
-    if (!isEmpty(devices) && !isEmpty(config.layers)) {
+    if (!isEmpty(config.layers)) {
       const layers = this.layerService.createLayers(config.layers, devices);
       for (const layer of layers) {
         layerControl.addOverlay(layer.group, layer.config.name);

@@ -4,8 +4,8 @@ Cumulocity module federation plugin containing the Advanced Map widget. By insta
 Displays a map with position markers for devices with c8y_Position fragments. The user can create multiple layers using different queries:
 - fragment and value layer, e.g. show all devices with type = c8y_MQTTDevice
 - inventory query layer, e.g. show all devices with critical alarm count greater 0 and having custom fragment xyz
-- alarm query layer, show all devices for that at least oe alarm exists matching the alarm query you create
-- event query layer, show all devices for that at least oe event exists matching the event query you create
+- alarm query layer, show all devices for that at least one alarm exists matching the alarm query you create
+- event query layer, show all devices for that at least one event exists matching the event query you create
 
 The map widget is designed to scale well also with higher count of devices. Position updates and changes regarding the layers are polled using bulk requests.
 Markers can be configured to show different icons. If alarms exist, different colors will be shown depending on the highest alarm.
@@ -23,7 +23,7 @@ Manage you existing layers in the config (by editing or deleting)
 Layers can be selected and deselected on the map later. You can also choose whether or not layers should be selected by default.
 ![alt Layers](/docs/layers.png)
 
-Powerful queries can be created with a simple UI whih let's you create the query parameters for a layer. Only devices matching your query will be shown for that layer.
+Powerful queries can be created with a simple UI which let's you create the query parameters for a layer. Only devices matching your query will be shown for that layer.
 ![alt Alarm query layer example](/docs/edit-alarm-layer.png)
 
 Popovers show alarm counts. These can easily be extended in code.
