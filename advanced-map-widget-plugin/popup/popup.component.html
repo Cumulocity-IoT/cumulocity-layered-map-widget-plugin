@@ -1,7 +1,7 @@
 <div class="map-marker">
   <a
     class="text-truncate deviceLink text-14"
-    [href]="mo.c8y_IsDeviceGroup ? ('#/group/' + mo?.id): ('#/device/' + mo?.id)"
+    [href]="mo?.c8y_IsDeviceGroup ? ('#/group/' + mo?.id): ('#/device/' + mo?.id)"
     title="{{ mo?.name }}"
   >
     {{ mo?.name }}
