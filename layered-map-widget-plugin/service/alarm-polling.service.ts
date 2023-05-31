@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import {
-  EventService,
+  AlarmService,
+  IAlarm,
   IManagedObject,
   InventoryService,
 } from "@c8y/client";
@@ -9,7 +10,7 @@ import {
   MyLayer,
   PollingDelta,
   QueryLayerConfig,
-} from "../../advanced-map-widget-plugin/advanced-map-widget.model";
+} from "../../layered-map-widget-plugin/layered-map-widget.model";
 import { Observable, Subscriber } from "rxjs";
 import { QueryLayerService } from "./query-layer.service";
 import { isEmpty } from "lodash-es";
@@ -17,9 +18,9 @@ import { isEmpty } from "lodash-es";
 const FETCH_INTERVAL = 5000;
 
 @Injectable()
-export class EventPollingService {
+export class AlarmPollingService {
   constructor(
-    private event: EventService,
+    private alarm: AlarmService,
     private queryLayerService: QueryLayerService,
     private inventory: InventoryService
   ) {}
@@ -28,8 +29,8 @@ export class EventPollingService {
     layer: MyLayer,
     interval = FETCH_INTERVAL
   ): Observable<PollingDelta> {
-    if (!isQueryLayerConfig(layer.config) || layer.config.type !== "Event") {
-      throw new Error(`Layer is not event layer! ${layer}`);
+    if (!isQueryLayerConfig(layer.config) || layer.config.type !== "Alarm") {
+      throw new Error(`Layer is not alarm layer! ${layer}`);
     }
 
     return new Observable<PollingDelta>((observer) => {
@@ -62,7 +63,7 @@ export class EventPollingService {
 
   private checkForUpdates(layer: MyLayer) {
     const config = layer.config as QueryLayerConfig;
-    return this.fetchMatchingEvents(config).then((sources) =>
+    return this.fetchMatchingAlarms(config).then((sources) =>
       this.toPollingDelta(sources, layer)
     );
   }
@@ -109,7 +110,7 @@ export class EventPollingService {
     }
   }
 
-  private async fetchMatchingEvents(config: QueryLayerConfig) {
+  private async fetchMatchingAlarms(config: QueryLayerConfig) {
     const result = new Set<string>();
     const filter = {
       withTotalPages: true,
@@ -117,11 +118,11 @@ export class EventPollingService {
       ...this.queryLayerService.normalize(config.filter),
     };
 
-    let res = await this.event.list(filter);
+    let res = await this.alarm.list(filter);
     while (res.data.length) {
       const ids = res.data
-        .filter((event) => !result.has(event.source.id))
-        .map((event) => event.source.id);
+        .filter((alarm) => !result.has(alarm.source.id))
+        .map((alarm) => alarm.source.id);
       ids.forEach((id) => result.add(id));
 
       if (!res.paging.nextPage) {

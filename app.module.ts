@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule as ngRouterModule } from '@angular/router';
 import { BootstrapComponent, CoreModule, RouterModule } from '@c8y/ngx-components';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { AdvancedMapWidgetModule } from './advanced-map-widget-plugin/advanced-map-widget.module';
+import { LayeredMapWidgetModule } from './layered-map-widget-plugin/layered-map-widget.module';
 
 @NgModule({
   imports: [
@@ -13,7 +13,7 @@ import { AdvancedMapWidgetModule } from './advanced-map-widget-plugin/advanced-m
     ngRouterModule.forRoot([], { enableTracing: false, useHash: true }),
     RouterModule.forRoot(),
     CoreModule.forRoot(),
-    AdvancedMapWidgetModule
+    LayeredMapWidgetModule
   ],
   providers: [BsModalRef],
   bootstrap: [BootstrapComponent]

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { IEvent, EventService } from "@c8y/client";
 import { has, isEmpty } from "lodash-es";
 import { LatLng, polyline, Polyline } from "leaflet";
-import { IAdvancedMapWidgetConfig, ITrack } from "../advanced-map-widget.model";
+import { ILayeredMapWidgetConfig, ITrack } from "../layered-map-widget.model";
 
 export interface ILocationUpdateEvent extends IEvent {
   c8y_Position: {
@@ -15,10 +15,10 @@ export interface ILocationUpdateEvent extends IEvent {
 }
 
 @Injectable()
-export class AdvancedMapWidgetService {
+export class LayeredMapWidgetService {
   constructor(private eventService: EventService) {}
 
-  getTrack(config: IAdvancedMapWidgetConfig): ITrack | null {
+  getTrack(config: ILayeredMapWidgetConfig): ITrack | null {
     if (
       has(config, "selectedTrack") &&
       has(config, "tracks") &&

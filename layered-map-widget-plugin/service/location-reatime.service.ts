@@ -3,7 +3,7 @@ import { EventService, IEvent, IManagedObject, Realtime } from "@c8y/client";
 import { RealtimeService, RealtimeSubjectService } from "@c8y/ngx-components";
 import { EMPTY, from, merge, Observable } from "rxjs";
 import { filter, map, pairwise, startWith } from "rxjs/operators";
-import { ILocationUpdateEvent } from "./advanced-map-widget.service";
+import { ILocationUpdateEvent } from "./layered-map-widget.service";
 import { has, isEmpty } from "lodash-es";
 
 const EMPTY_EVENT: ILocationUpdateEvent = {

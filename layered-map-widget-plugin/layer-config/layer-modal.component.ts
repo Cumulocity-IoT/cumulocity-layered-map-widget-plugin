@@ -9,7 +9,7 @@ import {
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   QueryLayerConfig,
-} from "../advanced-map-widget.model";
+} from "../layered-map-widget.model";
 
 @Component({ templateUrl: "./layer-modal.component.html" })
 export class LayerModalComponent {

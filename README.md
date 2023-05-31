@@ -1,5 +1,5 @@
-# IoT Cumulocity Advanced Map Widget plugin
-Cumulocity module federation plugin containing the Advanced Map widget. By installing this plugin to a cockpit application, the user can choose this widget from the catalog.
+# IoT Cumulocity Layered Map Widget plugin
+Cumulocity module federation plugin containing the Layered Map widget. By installing this plugin to a cockpit application, the user can choose this widget from the catalog.
 
 Displays a map with position markers for devices with c8y_Position fragments. The user can create multiple layers using different queries:
 - fragment and value layer, e.g. show all devices with type = c8y_MQTTDevice
@@ -61,7 +61,7 @@ npm start
 
 In the Module Federation terminology, `widget` plugin is called `remote` and the `cokpit` is called `shell`. Modules provided by this `widget` will be loaded by the `cockpit` application at the runtime. This plugin provides a basic custom widget that can be accessed through the `Add widget` menu.
 
-> Note that the `--shell` flag creates a proxy to the cockpit application and provides` AdvancedMapWidgetModule` as an `remote` via URL options.
+> Note that the `--shell` flag creates a proxy to the cockpit application and provides` LayeredMapWidgetModule` as an `remote` via URL options.
 
 Also deploying needs no special handling and can be simply done via `npm run deploy`. As soon as the application has exports it will be uploaded as a plugin.
 

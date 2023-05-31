@@ -15,18 +15,18 @@ import {
   Polyline,
   tileLayer,
 } from "leaflet";
-import { AdvancedMapWidgetService } from "./service/advanced-map-widget.service";
+import { LayeredMapWidgetService } from "./service/layered-map-widget.service";
 import { get, isEmpty } from "lodash-es";
 import { Subscription } from "rxjs";
 import { IManagedObject } from "@c8y/client";
 import * as MarkerImage from "./marker-icon";
 
 import {
-  IAdvancedMapWidgetConfig,
+  ILayeredMapWidgetConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   MyLayer,
-} from "./advanced-map-widget.model";
+} from "./layered-map-widget.model";
 import { SelectedDevicesService } from "./service/selected-devices.service";
 import { LayerService } from "./service/layer.service";
 import { PopupComponent } from "./popup/popup.component";
@@ -37,19 +37,19 @@ import { PositionPollingService } from "./service/position-polling.service";
 import { EventPollingService } from "./service/event-polling.service";
 
 @Component({
-  selector: "advanced-map-widget",
+  selector: "layered-map-widget",
   providers: [
-    AdvancedMapWidgetService,
+    LayeredMapWidgetService,
     SelectedDevicesService,
     InventoryPollingService,
     AlarmPollingService,
     EventPollingService,
     PositionPollingService,
   ],
-  styleUrls: ["./advanced-map-widget.component.less"],
-  templateUrl: "./advanced-map-widget.component.html",
+  styleUrls: ["./layered-map-widget.component.less"],
+  templateUrl: "./layered-map-widget.component.html",
 })
-export class AdvancedMapWidgetComponent implements AfterViewInit, OnDestroy {
+export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   map: LMap;
   allLayers: MyLayer[] = [];
 
@@ -59,9 +59,9 @@ export class AdvancedMapWidgetComponent implements AfterViewInit, OnDestroy {
     iconAnchor: [12.5, 41],
   });
 
-  cfg: IAdvancedMapWidgetConfig;
+  cfg: ILayeredMapWidgetConfig;
 
-  @Input() set config(cfg: IAdvancedMapWidgetConfig) {
+  @Input() set config(cfg: ILayeredMapWidgetConfig) {
     if (cfg) {
       this.cfg = cfg;
       if (this.map && cfg.device) {
@@ -83,7 +83,7 @@ export class AdvancedMapWidgetComponent implements AfterViewInit, OnDestroy {
   circuit: Polyline;
 
   constructor(
-    private widgetService: AdvancedMapWidgetService,
+    private widgetService: LayeredMapWidgetService,
     private selectedDevicesService: SelectedDevicesService,
     private layerService: LayerService,
     private inventoryPollingService: InventoryPollingService,
@@ -111,7 +111,7 @@ export class AdvancedMapWidgetComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private draw(config: IAdvancedMapWidgetConfig, devices: IManagedObject[]) {
+  private draw(config: ILayeredMapWidgetConfig, devices: IManagedObject[]) {
     const osm = tileLayer(
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
@@ -161,7 +161,7 @@ export class AdvancedMapWidgetComponent implements AfterViewInit, OnDestroy {
 
   private updateRealtimeSubs(
     layers: MyLayer[],
-    config: IAdvancedMapWidgetConfig
+    config: ILayeredMapWidgetConfig
   ): void {
     for (const layer of layers) {
       if (this.layerSubs.has(layer)) {

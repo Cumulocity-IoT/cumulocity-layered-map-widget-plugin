@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ITrack } from "../advanced-map-widget.model";
+import { ITrack } from "../layered-map-widget.model";
 
 @Component({
   selector: "track-list",

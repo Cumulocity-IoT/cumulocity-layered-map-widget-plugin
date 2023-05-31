@@ -9,7 +9,7 @@ import {
   LayerConfig,
   MyLayer,
   PollingDelta,
-} from "../advanced-map-widget.model";
+} from "../layered-map-widget.model";
 import { MarkerIconService } from "./marker-icon.service";
 import { PopUpService } from "./popup.service";
 import { QueryLayerService } from "./query-layer.service";

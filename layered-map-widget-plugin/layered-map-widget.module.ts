@@ -8,8 +8,8 @@ import {
 } from "@c8y/ngx-components";
 
 import { ContextWidgetConfig } from "@c8y/ngx-components/context-dashboard";
-import { AdvancedMapWidgetConfig } from "./advanced-map-widget-config.component";
-import { AdvancedMapWidgetComponent } from "./advanced-map-widget.component";
+import { LayeredMapWidgetConfig } from "./layered-map-widget-config.component";
+import { LayeredMapWidgetComponent } from "./layered-map-widget.component";
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { TimepickerModule } from "ngx-bootstrap/timepicker";
@@ -43,8 +43,8 @@ import { AlarmDisplayComponent } from "./popup/alarm-display/alarm-display.compo
     HttpClientJsonpModule,
   ],
   declarations: [
-    AdvancedMapWidgetConfig,
-    AdvancedMapWidgetComponent,
+    LayeredMapWidgetConfig,
+    LayeredMapWidgetComponent,
     SubDeviceResolverComponent,
     EventLineCreatorModalComponent,
     DrawLineCreatorModalComponent,
@@ -59,8 +59,8 @@ import { AlarmDisplayComponent } from "./popup/alarm-display/alarm-display.compo
     AlarmDisplayComponent
   ],
   entryComponents: [
-    AdvancedMapWidgetConfig,
-    AdvancedMapWidgetComponent,
+    LayeredMapWidgetConfig,
+    LayeredMapWidgetComponent,
     EventLineCreatorModalComponent,
     DrawLineCreatorModalComponent,
     TrackListComponent,
@@ -76,8 +76,8 @@ import { AlarmDisplayComponent } from "./popup/alarm-display/alarm-display.compo
         label: "Advanced map widget",
         description:
           "Displays a map with position markers for selected devices. Support for configuration of additional layers and custom markers.",
-        component: AdvancedMapWidgetComponent,
-        configComponent: AdvancedMapWidgetConfig,
+        component: LayeredMapWidgetComponent,
+        configComponent: LayeredMapWidgetConfig,
         // comment this if you want to test the widget
         previewImage: require("./previewImage.png"),
         data: {
@@ -95,4 +95,4 @@ import { AlarmDisplayComponent } from "./popup/alarm-display/alarm-display.compo
     },
   ],
 })
-export class AdvancedMapWidgetModule {}
+export class LayeredMapWidgetModule {}

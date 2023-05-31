@@ -57,7 +57,7 @@ export type PollingDelta = {
   remove: string[];
 };
 
-export interface IAdvancedMapWidgetConfig {
+export interface ILayeredMapWidgetConfig {
   device?: IManagedObject;
   devices?: { name: string; id: string }[];
   selectedTrack?: string;

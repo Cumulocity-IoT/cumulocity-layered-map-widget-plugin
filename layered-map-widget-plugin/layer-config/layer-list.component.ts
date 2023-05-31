@@ -3,7 +3,7 @@ import {
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   LayerConfig,
-} from "../advanced-map-widget.model";
+} from "../layered-map-widget.model";
 @Component({
   templateUrl: "./layer-list.component.html",
   selector: "layer-list",

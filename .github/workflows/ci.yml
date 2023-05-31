@@ -65,24 +65,24 @@ jobs:
       - name: Upload Frontend Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: sag-ps-iot-pkg-advanced-map-widget-plugin-${{ env.C8Y_VERSION }}-${{ github.event.number }}-${{ github.run_id }}
+          name: sag-ps-iot-pkg-layered-map-widget-plugin-${{ env.C8Y_VERSION }}-${{ github.event.number }}-${{ github.run_id }}
           if-no-files-found: error
           retention-days: 5
-          path: dist/apps/sag-ps-iot-pkg-advanced-map-widget-plugin/
+          path: dist/apps/sag-ps-iot-pkg-layered-map-widget-plugin/
 
       - name: Upload Frontend Artifact (microfrontend)
         uses: actions/upload-artifact@v2
         with:
-          name: sag-ps-iot-pkg-advanced-map-widget-plugin-${{ env.C8Y_VERSION }}-${{ github.event.number }}-${{ github.run_id }}
+          name: sag-ps-iot-pkg-layered-map-widget-plugin-${{ env.C8Y_VERSION }}-${{ github.event.number }}-${{ github.run_id }}
           if-no-files-found: error
           retention-days: 5
-          path: dist/apps/sag-ps-iot-pkg-advanced-map-widget-plugin/
+          path: dist/apps/sag-ps-iot-pkg-layered-map-widget-plugin/
 
       - name: 🎁 Zip Frontend (microfrontend)
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         run: |
-          cd dist/apps/sag-ps-iot-pkg-advanced-map-widget-plugin
-          zip -r -q ../../../sag-ps-iot-pkg-advanced-map-widget-plugin.zip *
+          cd dist/apps/sag-ps-iot-pkg-layered-map-widget-plugin
+          zip -r -q ../../../sag-ps-iot-pkg-layered-map-widget-plugin.zip *
 
       - name: Create Release
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
@@ -104,6 +104,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./sag-ps-iot-pkg-advanced-map-widget-plugin.zip
-          asset_name: sag-ps-iot-pkg-advanced-map-widget-plugin-${{ env.C8Y_VERSION }}-${{ env.RELEASE_VERSION }}.zip
+          asset_path: ./sag-ps-iot-pkg-layered-map-widget-plugin.zip
+          asset_name: sag-ps-iot-pkg-layered-map-widget-plugin-${{ env.C8Y_VERSION }}-${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip

@@ -8,6 +8,6 @@ rm ../build.zip
 mv cumulocity.json cumulocity.tmp.json;
 cat cumulocity.tmp.json | BUILD_VERSION="${BUILD_VERSION}" jq '.version = env.BUILD_VERSION' > cumulocity.json;
 rm cumulocity.tmp.json;
-zip -r -q ../advanced-map-widget-plugin-${BUILD_VERSION}.zip *
+zip -r -q ../layered-map-widget-plugin-${BUILD_VERSION}.zip *
 cd ..
 rm -r ${BUILD_LOCATION}

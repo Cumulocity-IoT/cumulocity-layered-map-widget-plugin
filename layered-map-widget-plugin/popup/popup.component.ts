@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { IEvent, IManagedObject, InventoryService } from "@c8y/client";
-import { MyLayer } from "advanced-map-widget-plugin/advanced-map-widget.model";
+import { MyLayer } from "layered-map-widget-plugin/layered-map-widget.model";
 import { latLng, LatLng } from "leaflet";
 import { isEmpty } from "lodash-es";
 

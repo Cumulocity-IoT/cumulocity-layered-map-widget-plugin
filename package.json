@@ -1,12 +1,12 @@
 {
-  "name": "advanced-map-widget-plugin",
+  "name": "layered-map-widget-plugin",
   "version": "1.0.2",
   "description": "Show markers on a layer basis. Create layers based on filter criteria.",
   "scripts": {
     "start": "c8ycli server",
-    "start:shell": "c8ycli server --shell cockpit",
+    "start:shell": "c8ycli server -p 9326  -u https://entelios-dev.eu-latest.cumulocity.com/ --shell cockpit",
     "build": "c8ycli build",
-    "zip": "zip -r -q ./sag-ps-iot-pkg-advanced-map-widget-plugin.zip ./dist/apps/sag-ps-iot-pkg-advanced-map-widget-plugin/*",
+    "zip": "zip -r -q ./sag-ps-iot-pkg-layered-map-widget-plugin.zip ./dist/apps/sag-ps-iot-pkg-layered-map-widget-plugin/*",
     "build:ci": "npm run build -- --ci",
     "deploy": "c8ycli deploy",
     "postinstall": "ngcc"
@@ -57,11 +57,11 @@
   },
   "c8y": {
     "application": {
-      "name": "Advanced Map Plugin",
+      "name": "Layered Map Plugin",
       "description": "Show markers on a layer basis. Create layers based on filter criteria.",
-      "contextPath": "sag-ps-iot-pkg-advanced-map-widget-plugin",
-      "key": "sag-ps-iot-pkg-advanced-map-widget-key",
-      "globalTitle": "Advanced Map widget plugin",
+      "contextPath": "sag-ps-iot-pkg-layered-map-widget-plugin",
+      "key": "sag-ps-iot-pkg-layered-map-widget-key",
+      "globalTitle": "Layered Map widget plugin",
       "tabsHorizontal": true,
       "isPackage": true,
       "noAppSwitcher": true,
@@ -69,15 +69,15 @@
       "package": "plugin",
       "exports": [
         {
-          "name": "Advanced map widget plugin",
-          "module": "AdvancedMapWidgetModule",
-          "path": "./advanced-map-widget-plugin/advanced-map-widget.module.ts",
+          "name": "Layered map widget plugin",
+          "module": "LayeredMapWidgetModule",
+          "path": "./layered-map-widget-plugin/layered-map-widget.module.ts",
           "description": "Adds a custom map widget to the shell application"
         }
       ],
       "remotes": {
         "widget-plugin": [
-          "AdvancedMapWidgetModule"
+          "LayeredMapWidgetModule"
         ]
       },
       "copy": [

@@ -11,23 +11,23 @@ import { clone, cloneDeep, has, isEmpty } from "lodash-es";
 import { EventLineCreatorModalComponent } from "./event-line-creator/event-line-creator-modal.component";
 import { DrawLineCreatorModalComponent } from "./draw-line-creator/draw-line-creator-modal.component";
 import {
-  IAdvancedMapWidgetConfig,
+  ILayeredMapWidgetConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   ITrack,
   LayerConfig,
-} from "./advanced-map-widget.model";
+} from "./layered-map-widget.model";
 import { LayerModalComponent } from "./layer-config/layer-modal.component";
 
 export type WidgetConfigMode = "CREATE" | "UPDATE";
 
 @Component({
-  templateUrl: "./advanced-map-widget-config.component.html",
+  templateUrl: "./layered-map-widget-config.component.html",
 })
-export class AdvancedMapWidgetConfig
+export class LayeredMapWidgetConfig
   implements OnInit, DynamicComponent, OnBeforeSave
 {
-  @Input() config: IAdvancedMapWidgetConfig = {};
+  @Input() config: ILayeredMapWidgetConfig = {};
   ng1FormRef?: any;
   items: IManagedObject[] = [];
   mode: WidgetConfigMode;
@@ -132,7 +132,7 @@ export class AdvancedMapWidgetConfig
     }
   }
 
-  async onBeforeSave(config?: IAdvancedMapWidgetConfig): Promise<boolean> {
+  async onBeforeSave(config?: ILayeredMapWidgetConfig): Promise<boolean> {
     if (
       config.layers.find((l) => isDeviceFragmentLayerConfig(l)) &&
       isEmpty(this.config.device)

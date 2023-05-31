@@ -14,7 +14,7 @@ import {
 import { isEmpty } from "lodash-es";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { LocationGeocoderService } from "../service/location-geocoder.service";
-import { ITrack } from "../advanced-map-widget.model";
+import { ITrack } from "../layered-map-widget.model";
 
 @Component({
   providers: [LocationGeocoderService],

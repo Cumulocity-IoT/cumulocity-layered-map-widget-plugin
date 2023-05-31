@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IManagedObject, InventoryService } from "@c8y/client";
-import { MyLayer } from "advanced-map-widget-plugin/advanced-map-widget.model";
+import { MyLayer } from "layered-map-widget-plugin/layered-map-widget.model";
 import { Observable, Subscriber } from "rxjs";
 import { QueryLayerService } from "./query-layer.service";
 

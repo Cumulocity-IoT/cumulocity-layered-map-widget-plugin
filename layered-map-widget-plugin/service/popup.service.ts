@@ -6,7 +6,7 @@ import {
   Injector,
 } from "@angular/core";
 import { PopupComponent } from "../popup/popup.component";
-import { MyLayer } from "advanced-map-widget-plugin/advanced-map-widget.model";
+import { MyLayer } from "layered-map-widget-plugin/layered-map-widget.model";
 import { Marker } from "leaflet";
 import { get } from "lodash-es";
 

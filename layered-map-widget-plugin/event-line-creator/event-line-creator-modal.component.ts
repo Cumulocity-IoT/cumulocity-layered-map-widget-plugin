@@ -11,10 +11,10 @@ import {
   Polyline,
   tileLayer,
 } from "leaflet";
-import { AdvancedMapWidgetService } from "../service/advanced-map-widget.service";
+import { LayeredMapWidgetService } from "../service/layered-map-widget.service";
 import { isEmpty } from "lodash-es";
 import { BsModalRef } from "ngx-bootstrap/modal";
-import { ITrack } from "../advanced-map-widget.model";
+import { ITrack } from "../layered-map-widget.model";
 
 type IEventsForm = {
   deviceId: number;
@@ -26,7 +26,7 @@ type IEventsForm = {
 };
 
 @Component({
-  providers: [AdvancedMapWidgetService],
+  providers: [LayeredMapWidgetService],
   templateUrl: "./event-line-creator-modal.component.html",
   styleUrls: ["./event-line-creator-modal.component.less"],
 })
@@ -70,7 +70,7 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
 
   constructor(
     public bsModalRef: BsModalRef,
-    private trackService: AdvancedMapWidgetService
+    private trackService: LayeredMapWidgetService
   ) {}
 
   ngAfterViewInit(): void {
