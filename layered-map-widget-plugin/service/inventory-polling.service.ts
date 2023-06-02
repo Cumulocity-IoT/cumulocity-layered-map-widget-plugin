@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { IManagedObject, InventoryService } from "@c8y/client";
-import { MyLayer } from "../layered-map-widget.model";
-import { Observable, Subscriber } from "rxjs";
-import { QueryLayerService } from "./query-layer.service";
+import { Injectable } from '@angular/core';
+import { IManagedObject, InventoryService } from '@c8y/client';
+import { MyLayer } from '../layered-map-widget.model';
+import { Observable, Subscriber } from 'rxjs';
+import { QueryLayerService } from './query-layer.service';
 
 const FETCH_INTERVAL = 5000;
 
@@ -12,10 +12,7 @@ export type InventoryDelta = {
 };
 @Injectable()
 export class InventoryPollingService {
-  constructor(
-    private inventory: InventoryService,
-    private queryLayerService: QueryLayerService
-  ) {}
+  constructor(private inventory: InventoryService, private queryLayerService: QueryLayerService) {}
 
   createPolling$(
     filter: object,
@@ -52,9 +49,7 @@ export class InventoryPollingService {
   }
 
   private checkForUpdates(filter: object, layer: MyLayer) {
-    return this.fetchMatchingManagedObjects(filter).then((sources) =>
-      this.toDelta(sources, layer)
-    );
+    return this.fetchMatchingManagedObjects(filter).then((sources) => this.toDelta(sources, layer));
   }
 
   async toDelta(mos: Array<IManagedObject>, layer: MyLayer) {
@@ -68,9 +63,7 @@ export class InventoryPollingService {
       }
     }
 
-    const toRemoveIds = layer.devices.filter(
-      (id) => mos.find((m) => m.id === id) === undefined
-    );
+    const toRemoveIds = layer.devices.filter((id) => mos.find((m) => m.id === id) === undefined);
     toRemoveIds.forEach((id) => delta.remove.push(id));
 
     return delta;

@@ -1,15 +1,11 @@
-import { Injectable } from "@angular/core";
-import { divIcon, DivIcon } from "leaflet";
+import { Injectable } from '@angular/core';
+import { divIcon, DivIcon } from 'leaflet';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class MarkerIconService {
-  getIcon(
-    iconClassName = "dlt-c8y-icon-globe",
-    classNames = "",
-    color = "#fff"
-  ): DivIcon {
-    if (!iconClassName.startsWith("dlt-c8y-icon")) {
-      iconClassName = "dlt-c8y-icon-" + iconClassName;
+  getIcon(iconClassName = 'dlt-c8y-icon-globe', classNames = '', color = '#fff'): DivIcon {
+    if (!iconClassName.startsWith('dlt-c8y-icon')) {
+      iconClassName = 'dlt-c8y-icon-' + iconClassName;
     }
     const html = `<span style="position:absolute;left: 34px;top: 20px;" class="${classNames} ${iconClassName}"></span>
       <svg
@@ -35,7 +31,7 @@ export class MarkerIconService {
       html,
       iconSize: [80, 60],
       iconAnchor: [40, 60],
-      className: "div-icon",
+      className: 'div-icon',
     });
   }
 }

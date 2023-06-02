@@ -19,7 +19,7 @@
  * @authors Christof Strack
  */
 
-export type JsonEditorMode = "tree" | "view" | "form" | "code" | "text";
+export type JsonEditorMode = 'tree' | 'view' | 'form' | 'code' | 'text';
 
 export interface JsonEditorTreeNode {
   field: String;
@@ -125,10 +125,7 @@ export class JsonEditorOptions {
   when an error occurs
    */
   public onError: (error: any) => void;
-  public onModeChange: (
-    newMode: JsonEditorMode,
-    oldMode: JsonEditorMode
-  ) => void;
+  public onModeChange: (newMode: JsonEditorMode, oldMode: JsonEditorMode) => void;
   public onValidate: (json: Object) => IError[];
   public onValidationError: (errors: object[]) => void;
 
@@ -179,7 +176,7 @@ export class JsonEditorOptions {
     this.expandAll = false;
     this.sortObjectKeys = false;
     this.history = true;
-    this.mode = "code";
+    this.mode = 'code';
     this.search = true;
     this.indentation = 2;
   }

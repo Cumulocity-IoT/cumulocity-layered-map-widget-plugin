@@ -12,6 +12,8 @@
     "lib": ["dom", "es2015", "es2016"]
   },
   "angularCompilerOptions": {
-    "enableIvy": true
+    "enableIvy": true,
+    "strictTemplates": true,
+    "strictInjectionParameters": true
   }
 }

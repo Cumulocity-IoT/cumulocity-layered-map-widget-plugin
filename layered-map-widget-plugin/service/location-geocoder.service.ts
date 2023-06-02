@@ -1,21 +1,19 @@
-import { Injectable } from "@angular/core";
-import { FetchClient } from "@c8y/client";
-import { LatLng } from "leaflet";
-import { isEmpty } from "lodash";
+import { Injectable } from '@angular/core';
+import { FetchClient } from '@c8y/client';
+import { LatLng } from 'leaflet';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class LocationGeocoderService {
-  mapKey = "MgOKczqMYTkXK5jiMgEYGvjnTHf562mA";
+  mapKey = 'MgOKczqMYTkXK5jiMgEYGvjnTHf562mA';
   geoCodeSearchUrl = `http://www.mapquestapi.com/geocoding/v1/address`;
 
-  constructor() {}
-
   async geoCode(address: string): Promise<LatLng | null> {
-    const response = await new FetchClient(this.geoCodeSearchUrl).fetch("", {
-      method: "POST",
+    const response = await new FetchClient(this.geoCodeSearchUrl).fetch('', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({ location: address, maxResults: 1 }),
       params: {

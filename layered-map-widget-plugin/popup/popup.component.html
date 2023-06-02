@@ -1,17 +1,16 @@
 <div class="map-marker" style="min-width: 10rem;">
   <a
-    *ngIf="!isLoading"
     class="deviceLink text-14"
     [href]="mo?.c8y_IsDeviceGroup ? ('#/group/' + mo?.id): ('#/device/' + mo?.id)"
     title="{{ mo?.name }}"
   >
     {{ mo?.name }}
   </a>
-  <div class="text-muted m-t-4 m-b-4" *ngIf="!isLoading && cfg.showDate && (lastUpdated || mo)">
+  <div class="text-muted m-t-4 m-b-4" *ngIf="cfg.showDate && (lastUpdated || mo)">
     <i c8yIcon="clock-o"></i>
     {{ "Last update" | translate }}:<br />{{ (lastUpdated ? lastUpdated : mo.lastUpdated) | c8yDate }}
   </div>
-  <alarm-display *ngIf="!isLoading && cfg.showAlarms" [mo]="mo"></alarm-display>
+  <alarm-display *ngIf="cfg.showAlarms" [mo]="mo"></alarm-display>
   
   <div class="form-group form-inline">
     <button 

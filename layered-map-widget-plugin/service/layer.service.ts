@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { IManagedObject } from "@c8y/client";
-import { LatLng, latLng, LayerGroup, Marker } from "leaflet";
-import { get, has, isEmpty, set } from "lodash";
+import { Injectable } from '@angular/core';
+import { IManagedObject } from '@c8y/client';
+import { LatLng, latLng, LayerGroup, Marker } from 'leaflet';
+import { get, has, isEmpty, set } from 'lodash';
 import {
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,
@@ -9,12 +9,12 @@ import {
   LayerConfig,
   MyLayer,
   PollingDelta,
-} from "../layered-map-widget.model";
-import { MarkerIconService } from "./marker-icon.service";
-import { PopUpService } from "./popup.service";
-import { QueryLayerService } from "./query-layer.service";
+} from '../layered-map-widget.model';
+import { MarkerIconService } from './marker-icon.service';
+import { PopUpService } from './popup.service';
+import { QueryLayerService } from './query-layer.service';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class LayerService {
   constructor(
     private popupService: PopUpService,
@@ -32,34 +32,24 @@ export class LayerService {
     if (isQueryLayerConfig(setup.config)) {
       layer.group = new LayerGroup();
       const config = setup.config;
-      if (config.type === "Alarm") {
-        this.queryLayerService
-          .fetchByAlarmQuery(config.filter)
-          .then((devices) => {
-            layer.devices = devices.map((d) => d.id);
-            devices.forEach((d) => {
-              this.updatePosition(layer, d.id, d.c8y_Position);
-              this.updateMarkerIcon(d.id, layer, d.c8y_ActiveAlarmsStatus);
-            });
+      if (config.type === 'Alarm') {
+        this.queryLayerService.fetchByAlarmQuery(config.filter).then((devices) => {
+          layer.devices = devices.map((d) => d.id);
+          devices.forEach((d) => {
+            this.updatePosition(layer, d.id, d.c8y_Position);
+            this.updateMarkerIcon(d.id, layer, d.c8y_ActiveAlarmsStatus);
           });
-      } else if (config.type === "Inventory") {
-        this.queryLayerService
-          .fetchByInventoryQuery(config.filter)
-          .then((devices) => {
-            layer.devices = devices.map((d) => d.id);
-            devices.forEach((d) =>
-              this.updatePosition(layer, d.id, d.c8y_Position)
-            );
-          });
-      } else if (config.type === "Event") {
-        this.queryLayerService
-          .fetchByEventQuery(config.filter)
-          .then((devices) => {
-            layer.devices = devices.map((d) => d.id);
-            devices.forEach((d) =>
-              this.updatePosition(layer, d.id, d.c8y_Position)
-            );
-          });
+        });
+      } else if (config.type === 'Inventory') {
+        this.queryLayerService.fetchByInventoryQuery(config.filter).then((devices) => {
+          layer.devices = devices.map((d) => d.id);
+          devices.forEach((d) => this.updatePosition(layer, d.id, d.c8y_Position));
+        });
+      } else if (config.type === 'Event') {
+        this.queryLayerService.fetchByEventQuery(config.filter).then((devices) => {
+          layer.devices = devices.map((d) => d.id);
+          devices.forEach((d) => this.updatePosition(layer, d.id, d.c8y_Position));
+        });
       }
     } else {
       const matches = this.getMatches(setup.config, devices || []);
@@ -67,7 +57,7 @@ export class LayerService {
       layer.devices = matches.map((d) => d.id);
       // create coordinate cache for devices having the c8y_Position fragment
       matches
-        .filter((d) => has(d, "c8y_Position") && !isEmpty(d.c8y_Position))
+        .filter((d) => has(d, 'c8y_Position') && !isEmpty(d.c8y_Position))
         .forEach((d) => layer.coordinates.set(d.id, latLng(d.c8y_Position)));
 
       this.createLayerGroup(layer);
@@ -85,15 +75,15 @@ export class LayerService {
       warning?: number;
     }
   ) {
-    let classNames = "";
+    let classNames = '';
     if (status.critical) {
       classNames = `status critical`;
     } else if (status.major) {
-      classNames = "status major";
+      classNames = 'status major';
     } else if (status.minor) {
-      classNames = "status minor";
+      classNames = 'status minor';
     } else {
-      classNames = "status warning";
+      classNames = 'status warning';
     }
 
     const marker = layer.markerCache.get(deviceId);
@@ -104,7 +94,7 @@ export class LayerService {
   updateManagedObjects(mos: IManagedObject[], layer: MyLayer): void {
     for (const mo of mos) {
       this.updatePosition(layer, mo.id, mo.c8y_Position);
-      if (isQueryLayerConfig(layer.config) && layer.config.type === "Alarm") {
+      if (isQueryLayerConfig(layer.config) && layer.config.type === 'Alarm') {
         this.updateMarkerIcon(mo.id, layer, mo.c8y_ActiveAlarmsStatus);
       }
       const marker = this.updatePosition(layer, mo.id, mo.c8y_Position);
@@ -115,9 +105,9 @@ export class LayerService {
   updatePollingDelta(delta: PollingDelta, layer: MyLayer): void {
     for (const d of delta.add) {
       layer.devices.push(d.id);
-      if (has(d, "c8y_Position") && !isEmpty(d.c8y_Position)) {
+      if (has(d, 'c8y_Position') && !isEmpty(d.c8y_Position)) {
         this.updatePosition(layer, d.id, d.c8y_Position);
-        if (isQueryLayerConfig(layer.config) && layer.config.type === "Alarm") {
+        if (isQueryLayerConfig(layer.config) && layer.config.type === 'Alarm') {
           this.updateMarkerIcon(d.id, layer, d.c8y_ActiveAlarmsStatus);
         }
       }
@@ -150,21 +140,19 @@ export class LayerService {
   private createMarker(deviceId: string, coordinate: LatLng, layer: MyLayer) {
     // TODO: add layer specific stuff here
     const icon = this.markerIconService.getIcon(layer.config.icon);
-    const popup = this.popupService.getPopup({ deviceId, layer});
+    const popup = this.popupService.getPopup({ deviceId, layer });
 
     const marker = new Marker(coordinate, {
       icon,
     });
     marker.bindPopup(popup.html, { offset: [0, -24] });
-    set(marker.getPopup(), "ref", popup.ref);
+    set(marker.getPopup(), 'ref', popup.ref);
     return marker;
   }
 
   private getMatches(c: DeviceFragmentLayerConfig, devices: IManagedObject[]) {
     if (isDeviceFragmentLayerConfig(c)) {
-      return devices.filter(
-        (d) => has(d, c.fragment) && get(d, c.fragment) === c.value
-      );
+      return devices.filter((d) => has(d, c.fragment) && get(d, c.fragment) === c.value);
     }
 
     return devices;

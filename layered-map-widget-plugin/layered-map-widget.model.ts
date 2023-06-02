@@ -1,6 +1,6 @@
-import { IAlarm, IEvent, IManagedObject, IOperation } from "@c8y/client";
-import { LatLng, LayerGroup, Marker } from "leaflet";
-import { has } from "lodash";
+import { IAlarm, IEvent, IManagedObject, IOperation } from '@c8y/client';
+import { LatLng, LayerGroup, Marker } from 'leaflet';
+import { has } from 'lodash';
 
 export type BasicLayerConfig = {
   name: string;
@@ -13,39 +13,35 @@ export type PopoverConfig = {
   showAlarms: boolean;
   showDate: boolean;
   actions: PopoverAction[];
-}
+};
 
 export type OperationAction = { type: 'operation'; label: string; body: Partial<IOperation> };
 export type AlarmAction = { type: 'alarm'; label: string; body: Partial<IAlarm> };
-export type EventAction = { type: 'event'; label: string; body: Partial<IEvent> }
+export type EventAction = { type: 'event'; label: string; body: Partial<IEvent> };
 export type PopoverAction = OperationAction | AlarmAction | EventAction;
 
 export const DEFAULT_CONFIG: PopoverConfig = {
   showAlarms: true,
   showDate: true,
-  actions: []
-}
+  actions: [],
+};
 
 export type DeviceFragmentLayerConfig = BasicLayerConfig & {
   fragment: string;
   value: string;
 };
 
-export function isDeviceFragmentLayerConfig(
-  config: unknown
-): config is DeviceFragmentLayerConfig {
-  return has(config, "fragment") && has(config, "value");
+export function isDeviceFragmentLayerConfig(config: unknown): config is DeviceFragmentLayerConfig {
+  return has(config, 'fragment') && has(config, 'value');
 }
 
 export type QueryLayerConfig = BasicLayerConfig & {
   filter: object;
-  type: "Inventory" | "Alarm" | "Event";
+  type: 'Inventory' | 'Alarm' | 'Event';
 };
 
-export function isQueryLayerConfig(
-  config: BasicLayerConfig
-): config is QueryLayerConfig {
-  return has(config, "filter");
+export function isQueryLayerConfig(config: BasicLayerConfig): config is QueryLayerConfig {
+  return has(config, 'filter');
 }
 
 export type LayerConfig = {
