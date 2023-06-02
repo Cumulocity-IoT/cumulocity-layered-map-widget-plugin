@@ -1,35 +1,25 @@
-<div class="map-marker">
+<div class="map-marker" style="min-width: 10rem;">
   <a
-    class="text-truncate deviceLink text-14"
+    *ngIf="!isLoading"
+    class="deviceLink text-14"
     [href]="mo?.c8y_IsDeviceGroup ? ('#/group/' + mo?.id): ('#/device/' + mo?.id)"
     title="{{ mo?.name }}"
   >
     {{ mo?.name }}
   </a>
-  <div class="text-muted m-b-4" *ngIf="lastUpdated">
+  <div class="text-muted m-t-4 m-b-4" *ngIf="!isLoading && cfg.showDate && (lastUpdated || mo)">
     <i c8yIcon="clock-o"></i>
-    {{ "Last update" | translate }}:<br />{{ lastUpdated | c8yDate }}
+    {{ "Last update" | translate }}:<br />{{ (lastUpdated ? lastUpdated : mo.lastUpdated) | c8yDate }}
   </div>
-  <alarm-display [mo]="mo"></alarm-display>
-  <table class="switch m-t-8">
-    <tr>
-      <td>
-        <label class="c8y-switch">
-          <input
-            type="checkbox"
-            [ngModel]="active"
-            (change)="toggleActive()"
-            [disabled]="true"
-          />
-          <span></span>
-        </label>
-      </td>
-      <td class="description" *ngIf="active">
-        {{ "Track visible" | translate }}
-      </td>
-      <td class="description" *ngIf="!active">
-        {{ "Track hidden" | translate }}
-      </td>
-    </tr>
-  </table>
+  <alarm-display *ngIf="!isLoading && cfg.showAlarms" [mo]="mo"></alarm-display>
+  
+  <div class="form-group form-inline">
+    <button 
+    *ngFor="let a of cfg.actions"
+    class="btn btn-default btn-xs" 
+    (click)="sendAction(a, mo)">
+      <i c8yIcon="{{a | actionIcon}}"></i>
+      {{ a.label }}
+    </button>
+  </div>
 </div>

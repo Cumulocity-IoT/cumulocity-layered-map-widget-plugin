@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { C8yJSONSchema } from "@c8y/ngx-components";
 import { FormlyFieldConfig } from "@ngx-formly/core";
 import { JSONSchema7 } from "json-schema";
-import { set } from "lodash-es";
+import { set } from "lodash";
 
 @Component({
   selector: "dynamic-query-form",

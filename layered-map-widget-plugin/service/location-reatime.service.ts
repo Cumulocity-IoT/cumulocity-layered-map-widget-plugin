@@ -4,7 +4,7 @@ import { RealtimeService, RealtimeSubjectService } from "@c8y/ngx-components";
 import { EMPTY, from, merge, Observable } from "rxjs";
 import { filter, map, pairwise, startWith } from "rxjs/operators";
 import { ILocationUpdateEvent } from "./layered-map-widget.service";
-import { has, isEmpty } from "lodash-es";
+import { has, isEmpty } from "lodash";
 
 const EMPTY_EVENT: ILocationUpdateEvent = {
   c8y_Position: {

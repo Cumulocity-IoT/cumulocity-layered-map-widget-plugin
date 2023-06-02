@@ -6,7 +6,7 @@
 <div class="legend form-block">
   {{ "Layers" | translate }}
 </div>
-<layer-list [layers]="config.layers" (editLayer)="editLayer($event)" (deleteLayer)="deleteLayer($event)"></layer-list>
+<layer-list [layers]="config.layers" (editLayer)="editLayer($event)" (editPopover)="editPopover($event)" (deleteLayer)="deleteLayer($event)"></layer-list>
 <button
   title="{{ 'Add layer' | translate }}"
   class="btn btn-default btn-icon btn-sm m-t-8"

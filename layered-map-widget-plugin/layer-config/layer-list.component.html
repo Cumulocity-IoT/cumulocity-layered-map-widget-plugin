@@ -16,7 +16,10 @@
       ><p>{{ getContent(layer) }}</p></c8y-li-collapse
     >
     <c8y-li-action (click)="onEditLayer(layer)" icon="pencil">
-      {{ "Edit" | translate }}
+      {{ "Edit Layer" | translate }}
+    </c8y-li-action>
+    <c8y-li-action (click)="onEditPopover(layer)" icon="design">
+      {{ "Edit Popover" | translate }}
     </c8y-li-action>
     <c8y-li-action (click)="onDeleteLayer(layer)" icon="trash-o">
       {{ "Delete" | translate }}

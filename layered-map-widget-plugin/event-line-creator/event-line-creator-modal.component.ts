@@ -12,7 +12,7 @@ import {
   tileLayer,
 } from "leaflet";
 import { LayeredMapWidgetService } from "../service/layered-map-widget.service";
-import { isEmpty } from "lodash-es";
+import { isEmpty } from "lodash";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { ITrack } from "../layered-map-widget.model";
 

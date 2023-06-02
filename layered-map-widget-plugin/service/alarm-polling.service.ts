@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import {
   AlarmService,
-  IAlarm,
   IManagedObject,
   InventoryService,
 } from "@c8y/client";
@@ -13,7 +12,7 @@ import {
 } from "../../layered-map-widget-plugin/layered-map-widget.model";
 import { Observable, Subscriber } from "rxjs";
 import { QueryLayerService } from "./query-layer.service";
-import { isEmpty } from "lodash-es";
+import { isEmpty } from "lodash";
 
 const FETCH_INTERVAL = 5000;
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IManagedObject } from "@c8y/client";
 import { LatLng, latLng, LayerGroup, Marker } from "leaflet";
-import { get, has, isEmpty, set } from "lodash-es";
+import { get, has, isEmpty, set } from "lodash";
 import {
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,
@@ -150,7 +150,7 @@ export class LayerService {
   private createMarker(deviceId: string, coordinate: LatLng, layer: MyLayer) {
     // TODO: add layer specific stuff here
     const icon = this.markerIconService.getIcon(layer.config.icon);
-    const popup = this.popupService.getPopup({ deviceId, layer });
+    const popup = this.popupService.getPopup({ deviceId, layer});
 
     const marker = new Marker(coordinate, {
       icon,

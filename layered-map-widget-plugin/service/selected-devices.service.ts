@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IManagedObject, InventoryService } from "@c8y/client";
-import { has } from "lodash-es";
+import { has } from "lodash";
 
 @Injectable()
 export class SelectedDevicesService {

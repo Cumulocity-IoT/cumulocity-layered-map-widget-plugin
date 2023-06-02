@@ -1,12 +1,30 @@
-import { IManagedObject } from "@c8y/client";
+import { IAlarm, IEvent, IManagedObject, IOperation } from "@c8y/client";
 import { LatLng, LayerGroup, Marker } from "leaflet";
-import { has } from "lodash-es";
+import { has } from "lodash";
 
 export type BasicLayerConfig = {
   name: string;
   icon: string;
   color: string;
+  popoverConfig?: PopoverConfig;
 };
+
+export type PopoverConfig = {
+  showAlarms: boolean;
+  showDate: boolean;
+  actions: PopoverAction[];
+}
+
+export type OperationAction = { type: 'operation'; label: string; body: Partial<IOperation> };
+export type AlarmAction = { type: 'alarm'; label: string; body: Partial<IAlarm> };
+export type EventAction = { type: 'event'; label: string; body: Partial<IEvent> }
+export type PopoverAction = OperationAction | AlarmAction | EventAction;
+
+export const DEFAULT_CONFIG: PopoverConfig = {
+  showAlarms: true,
+  showDate: true,
+  actions: []
+}
 
 export type DeviceFragmentLayerConfig = BasicLayerConfig & {
   fragment: string;
