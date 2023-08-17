@@ -41,8 +41,8 @@ export class DynamicQueryFormComponent implements AfterViewInit {
 
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
-  @Input() filter = {};
-  @Input() params = [];
+  @Input() filter: any = {};
+  @Input() params: any[] = [];
 
   constructor(private jsonschema: C8yJSONSchema) {}
 

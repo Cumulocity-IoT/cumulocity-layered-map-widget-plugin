@@ -132,7 +132,7 @@ export class JsonEditorOptions {
   public enableSort: boolean;
   public enableTransform: boolean;
   public escapeUnicode: boolean;
-  public expandAll: boolean;
+  public expandAll?: boolean;
   public sortObjectKeys: boolean;
   public history: boolean;
   public mode: JsonEditorMode;

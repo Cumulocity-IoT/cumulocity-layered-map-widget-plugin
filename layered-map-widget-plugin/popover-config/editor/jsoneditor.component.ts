@@ -34,6 +34,7 @@ import {
   ChangeDetectionStrategy,
   ViewEncapsulation,
 } from '@angular/core';
+// @ts-ignore
 import JSONEditor from 'jsoneditor';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
@@ -42,6 +43,7 @@ import {
   JsonEditorTreeNode,
   IError,
 } from './jsoneditor-options';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'mapping-json-editor',
@@ -133,6 +135,7 @@ export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDest
     }
 
     if (optionsCopy.mode === 'text' || optionsCopy.mode === 'code') {
+      // @ts-ignore
       optionsCopy.onChangeJSON = null;
     }
     this.editor = new JSONEditor(this.jsonEditorContainer.nativeElement, optionsCopy, this._data);
@@ -160,12 +163,12 @@ export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDest
   }
 
   // Implemented as part of ControlValueAccessor
-  registerOnChange(fn) {
+  registerOnChange(fn: any) {
     this.onChangeModel = fn;
   }
 
   // Implemented as part of ControlValueAccessor.
-  registerOnTouched(fn) {
+  registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
@@ -175,16 +178,17 @@ export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDest
   }
 
   // Implemented as part of ControlValueAccessor.
+  // @ts-ignore
   private onTouched = () => {};
 
   // Implemented as part of ControlValueAccessor.
-  private onChangeModel = (e) => {};
+  private onChangeModel = () => {};
 
-  public onChange(e) {
+  public onChange() {
     if (this.editor) {
       try {
         const json = this.editor.get();
-        this.onChangeModel(json);
+        this.onChangeModel();
         this.change.emit(json);
       } catch (e) {
         if (this.debug) {
@@ -194,13 +198,13 @@ export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDest
     }
   }
 
-  public onFocus(e) {
+  public onFocus() {
     if (this.editor) {
       console.log('Was focused');
     }
   }
 
-  public onChangeJSON(e) {
+  public onChangeJSON() {
     if (this.editor) {
       try {
         this.jsonChange.emit(this.editor.get());
@@ -268,7 +272,7 @@ export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDest
     this.editor.setName(name);
   }
 
-  public setSelection(start, end) {
+  public setSelection(start: any, end: any) {
     this.editor.setSelection(start, end);
   }
 
@@ -386,17 +390,19 @@ export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDest
       }
       console.log('Changed level 0:', ns[0]);
     }
-    const levels = [];
+    const levels: string[] = [];
     //const patternArray = /.*(?=\[*)/
     const patternArray = /^[^\[]+/;
     const patternIndex = /(?<=\[)(-?\d*)(?=\])/;
     ns.forEach((l) => {
       const ar = l.match(patternArray);
-      if (ar?.length > 0) {
+      if (!isEmpty(ar)) {
+        // @ts-ignore
         levels.push(ar[0]);
       }
       const ind = l.match(patternIndex);
-      if (ind?.length > 0) {
+      if (!isEmpty(ind)) {
+        // @ts-ignore
         levels.push(ind[0]);
       }
     });

@@ -51,5 +51,6 @@ export class LayerListComponent {
     if (isQueryLayerConfig(cfg)) {
       return `${cfg.type} with query ${JSON.stringify(cfg.filter)}`;
     }
+    return '';
   }
 }
