@@ -1,40 +1,36 @@
-import { Component } from "@angular/core";
-import { ModalLabels } from "@c8y/ngx-components";
-import { IconSelectorService } from "@c8y/ngx-components/icon-selector";
-import { BsModalRef } from "ngx-bootstrap/modal";
-import { Subject } from "rxjs";
+import { Component } from '@angular/core';
+import { ModalLabels } from '@c8y/ngx-components';
+import { IconSelectorService } from '@c8y/ngx-components/icon-selector';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { Subject } from 'rxjs';
 import {
   BasicLayerConfig,
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   QueryLayerConfig,
-} from "../layered-map-widget.model";
+} from '../layered-map-widget.model';
 
-@Component({ templateUrl: "./layer-modal.component.html" })
+@Component({ templateUrl: './layer-modal.component.html' })
 export class LayerModalComponent {
-  title = "Create layer";
+  title = 'Create layer';
   closeSubject: Subject<BasicLayerConfig> = new Subject();
-  labels: ModalLabels = { ok: "Create", cancel: "Cancel" };
-  layer: BasicLayerConfig = { name: "", color: "", icon: "" };
+  labels: ModalLabels = { ok: 'Create', cancel: 'Cancel' };
+  layer: BasicLayerConfig = { name: '', color: '', icon: '' };
 
-  type: "DeviceFragmentLayerConfig" | "QueryLayerConfig" | "Unset" = "Unset";
-  queryType: "Alarm" | "Inventory" | "Event";
+  type: 'DeviceFragmentLayerConfig' | 'QueryLayerConfig' | 'Unset' = 'Unset';
+  queryType: 'Alarm' | 'Inventory' | 'Event';
 
-
-  constructor(
-    public bsModalRef: BsModalRef,
-    private iconSelector: IconSelectorService
-  ) {}
+  constructor(public bsModalRef: BsModalRef, private iconSelector: IconSelectorService) {}
 
   setLayer(layer: DeviceFragmentLayerConfig | QueryLayerConfig) {
     this.layer = layer;
-    this.title = "Edit layer";
-    this.labels.ok = "Update";
+    this.title = 'Edit layer';
+    this.labels.ok = 'Update';
     if (isDeviceFragmentLayerConfig(layer)) {
-      this.type = "DeviceFragmentLayerConfig";
+      this.type = 'DeviceFragmentLayerConfig';
     } else if (isQueryLayerConfig(layer)) {
-      this.type = "QueryLayerConfig";
+      this.type = 'QueryLayerConfig';
       this.queryType = layer.type;
     }
   }
@@ -48,41 +44,41 @@ export class LayerModalComponent {
 
   changeType(type: string) {
     const { name, color, icon } = this.layer;
-    if (type === "DeviceFragmentLayerConfig") {
+    if (type === 'DeviceFragmentLayerConfig') {
       this.layer = {
         name,
         color,
         icon,
-        ...{ fragment: "", value: "" },
+        ...{ fragment: '', value: '' },
       } as DeviceFragmentLayerConfig;
       this.type = type;
-    } else if (type === "AlarmQueryLayerConfig") {
+    } else if (type === 'AlarmQueryLayerConfig') {
       this.layer = {
         name,
         color,
         icon,
-        ...{ type: "Alarm", filter: {} },
+        ...{ type: 'Alarm', filter: {} },
       } as QueryLayerConfig;
-      this.type = "QueryLayerConfig";
-      this.queryType = "Alarm";
-    } else if (type === "EventQueryLayerConfig") {
+      this.type = 'QueryLayerConfig';
+      this.queryType = 'Alarm';
+    } else if (type === 'EventQueryLayerConfig') {
       this.layer = {
         name,
         color,
         icon,
-        ...{ type: "Event", filter: {} },
+        ...{ type: 'Event', filter: {} },
       } as QueryLayerConfig;
-      this.type = "QueryLayerConfig";
-      this.queryType = "Event";
-    } else if (type === "InventoryQueryLayerConfig") {
+      this.type = 'QueryLayerConfig';
+      this.queryType = 'Event';
+    } else if (type === 'InventoryQueryLayerConfig') {
       this.layer = {
         name,
         color,
         icon,
-        ...{ type: "Inventory", filter: {} },
+        ...{ type: 'Inventory', filter: {} },
       } as QueryLayerConfig;
-      this.type = "QueryLayerConfig";
-      this.queryType = "Inventory";
+      this.type = 'QueryLayerConfig';
+      this.queryType = 'Inventory';
     }
   }
 

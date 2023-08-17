@@ -13,9 +13,9 @@ import { LayeredMapWidgetModule } from './layered-map-widget-plugin/layered-map-
     ngRouterModule.forRoot([], { enableTracing: false, useHash: true }),
     RouterModule.forRoot(),
     CoreModule.forRoot(),
-    LayeredMapWidgetModule
+    LayeredMapWidgetModule,
   ],
   providers: [BsModalRef],
-  bootstrap: [BootstrapComponent]
+  bootstrap: [BootstrapComponent],
 })
 export class AppModule {}

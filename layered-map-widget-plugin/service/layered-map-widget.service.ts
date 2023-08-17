@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { IEvent, EventService } from "@c8y/client";
-import { has, isEmpty } from "lodash-es";
-import { LatLng, polyline, Polyline } from "leaflet";
-import { ILayeredMapWidgetConfig, ITrack } from "../layered-map-widget.model";
+import { Injectable } from '@angular/core';
+import { IEvent, EventService } from '@c8y/client';
+import { has, isEmpty } from 'lodash';
+import { LatLng, polyline, Polyline } from 'leaflet';
+import { ILayeredMapWidgetConfig, ITrack } from '../layered-map-widget.model';
 
 export interface ILocationUpdateEvent extends IEvent {
   c8y_Position: {
@@ -11,7 +11,7 @@ export interface ILocationUpdateEvent extends IEvent {
     lat: number;
     lng: number;
   };
-  type: "c8y_LocationUpdate";
+  type: 'c8y_LocationUpdate';
 }
 
 @Injectable()
@@ -20,8 +20,8 @@ export class LayeredMapWidgetService {
 
   getTrack(config: ILayeredMapWidgetConfig): ITrack | null {
     if (
-      has(config, "selectedTrack") &&
-      has(config, "tracks") &&
+      has(config, 'selectedTrack') &&
+      has(config, 'tracks') &&
       config.selectedTrack !== null &&
       !isEmpty(config.tracks)
     ) {
@@ -59,13 +59,11 @@ export class LayeredMapWidgetService {
     const filter = {
       dateFrom: startDate,
       dateTo: endDate,
-      fragmentType: "c8y_Position",
+      fragmentType: 'c8y_Position',
       pageSize: 2000,
       revert: true,
       source: deviceId,
     };
-    return this.eventService
-      .list(filter)
-      .then((result) => result.data as ILocationUpdateEvent[]);
+    return this.eventService.list(filter).then((result) => result.data as ILocationUpdateEvent[]);
   }
 }

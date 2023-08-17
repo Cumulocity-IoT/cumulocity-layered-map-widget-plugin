@@ -4,13 +4,13 @@ import {
   ComponentRef,
   Injectable,
   Injector,
-} from "@angular/core";
-import { PopupComponent } from "../popup/popup.component";
-import { MyLayer } from "layered-map-widget-plugin/layered-map-widget.model";
-import { Marker } from "leaflet";
-import { get } from "lodash-es";
+} from '@angular/core';
+import { PopupComponent } from '../popup/popup.component';
+import { MyLayer } from '../layered-map-widget.model';
+import { Marker } from 'leaflet';
+import { get } from 'lodash';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class PopUpService {
   constructor(
     private injector: Injector,
@@ -23,11 +23,10 @@ export class PopUpService {
     ref: ComponentRef<PopupComponent>;
   } {
     // Create element
-    const popup = document.createElement("popup-component");
+    const popup = document.createElement('popup-component');
 
     // Create the component and wire it up with the element
-    const factory =
-      this.componentFactoryResolver.resolveComponentFactory(PopupComponent);
+    const factory = this.componentFactoryResolver.resolveComponentFactory(PopupComponent);
     const popupComponentRef = factory.create(this.injector, [], popup);
 
     // Attach to the view so that the change detector knows to run
@@ -41,7 +40,7 @@ export class PopUpService {
   }
 
   getPopupComponent(marker: Marker<any>): PopupComponent {
-    const popup = get(marker.getPopup(), "ref") as ComponentRef<PopupComponent>;
+    const popup = get(marker.getPopup(), 'ref') as ComponentRef<PopupComponent>;
     return popup.instance;
   }
 }

@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { IManagedObject, InventoryService } from "@c8y/client";
-import { has } from "lodash-es";
+import { Injectable } from '@angular/core';
+import { IManagedObject, InventoryService } from '@c8y/client';
+import { has } from 'lodash';
 
 @Injectable()
 export class SelectedDevicesService {
@@ -8,11 +8,11 @@ export class SelectedDevicesService {
 
   async getDevices(device: IManagedObject) {
     let deviceMOs: IManagedObject[];
-    if (!has(device, "name") || !has(device, "type")) {
+    if (!has(device, 'name') || !has(device, 'type')) {
       device = (await this.inventory.detail(device.id)).data;
     }
 
-    if (has(device, "c8y_IsDeviceGroup")) {
+    if (has(device, 'c8y_IsDeviceGroup')) {
       deviceMOs = await this.getDevicesOfGroup(device);
     } else {
       deviceMOs = [device];
@@ -20,12 +20,10 @@ export class SelectedDevicesService {
     return deviceMOs;
   }
 
-  private async getDevicesOfGroup(
-    group: IManagedObject
-  ): Promise<IManagedObject[]> {
+  private async getDevicesOfGroup(group: IManagedObject): Promise<IManagedObject[]> {
     const filter = {
       pageSize: 2000,
-      query: "$filter=(has(c8y_IsDevice))",
+      query: '$filter=(has(c8y_IsDevice))',
       withTotalPages: false,
     };
     const { data } = await this.inventory.childAssetsList(group.id, filter);

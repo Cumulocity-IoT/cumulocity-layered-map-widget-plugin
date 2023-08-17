@@ -1,16 +1,18 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   LayerConfig,
-} from "../layered-map-widget.model";
+} from '../layered-map-widget.model';
 @Component({
-  templateUrl: "./layer-list.component.html",
-  selector: "layer-list",
+  templateUrl: './layer-list.component.html',
+  selector: 'layer-list',
 })
 export class LayerListComponent {
   @Output() deleteLayer = new EventEmitter<LayerConfig>();
   @Output() editLayer = new EventEmitter<LayerConfig>();
+  @Output() editPopover = new EventEmitter<LayerConfig>();
+
   @Output() activeLayerChange = new EventEmitter<{
     checked: boolean;
     config: LayerConfig;
@@ -30,6 +32,10 @@ export class LayerListComponent {
 
   onEditLayer(config: LayerConfig): void {
     this.editLayer.emit(config);
+  }
+
+  onEditPopover(config: LayerConfig): void {
+    this.editPopover.emit(config);
   }
 
   onDeleteLayer(config: LayerConfig): void {

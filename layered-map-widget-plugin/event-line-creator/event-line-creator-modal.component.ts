@@ -1,20 +1,12 @@
-import { AfterViewInit, Component } from "@angular/core";
-import { Subject } from "rxjs";
-import { IManagedObject } from "@c8y/client";
-import { ModalLabels } from "@c8y/ngx-components";
-import {
-  latLng,
-  LatLng,
-  Map as LMap,
-  MapOptions,
-  polyline,
-  Polyline,
-  tileLayer,
-} from "leaflet";
-import { LayeredMapWidgetService } from "../service/layered-map-widget.service";
-import { isEmpty } from "lodash-es";
-import { BsModalRef } from "ngx-bootstrap/modal";
-import { ITrack } from "../layered-map-widget.model";
+import { AfterViewInit, Component } from '@angular/core';
+import { Subject } from 'rxjs';
+import { IManagedObject } from '@c8y/client';
+import { ModalLabels } from '@c8y/ngx-components';
+import { latLng, LatLng, Map as LMap, MapOptions, polyline, Polyline, tileLayer } from 'leaflet';
+import { LayeredMapWidgetService } from '../service/layered-map-widget.service';
+import { isEmpty } from 'lodash';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { ITrack } from '../layered-map-widget.model';
 
 type IEventsForm = {
   deviceId: number;
@@ -27,14 +19,14 @@ type IEventsForm = {
 
 @Component({
   providers: [LayeredMapWidgetService],
-  templateUrl: "./event-line-creator-modal.component.html",
-  styleUrls: ["./event-line-creator-modal.component.less"],
+  templateUrl: './event-line-creator-modal.component.html',
+  styleUrls: ['./event-line-creator-modal.component.less'],
 })
 export class EventLineCreatorModalComponent implements AfterViewInit {
-  title = "Create track";
+  title = 'Create track';
   closeSubject: Subject<ITrack | null> = new Subject();
-  labels: ModalLabels = { ok: "Create", cancel: "Cancel" };
-  text = "No coordinates loaded yet.";
+  labels: ModalLabels = { ok: 'Create', cancel: 'Cancel' };
+  text = 'No coordinates loaded yet.';
 
   items: { id: string; name: string }[] = [];
 
@@ -56,7 +48,7 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
 
   options: MapOptions = {
     layers: [
-      tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
         maxZoom: 19,
         detectRetina: true,
@@ -68,10 +60,7 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
   };
   map: LMap;
 
-  constructor(
-    public bsModalRef: BsModalRef,
-    private trackService: LayeredMapWidgetService
-  ) {}
+  constructor(public bsModalRef: BsModalRef, private trackService: LayeredMapWidgetService) {}
 
   ngAfterViewInit(): void {
     this.map.invalidateSize();
@@ -110,14 +99,14 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
       f.endTime.getMinutes(),
       f.endTime.getSeconds()
     ).toISOString();
-    let coords = await this.trackService.fetchCoordinates(
+    const coords = await this.trackService.fetchCoordinates(
       startDateAndTime,
       endDateAndTime,
       f.deviceId
     );
     this.isLoadingEvents = false;
     if (isEmpty(coords)) {
-      this.text = "Could not find any coordinates for timeframe.";
+      this.text = 'Could not find any coordinates for timeframe.';
       return;
     }
 

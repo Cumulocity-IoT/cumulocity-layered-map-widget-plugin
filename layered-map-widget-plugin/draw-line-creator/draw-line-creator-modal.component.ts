@@ -1,6 +1,6 @@
-import { AfterViewInit, Component } from "@angular/core";
-import { Subject } from "rxjs";
-import { ModalLabels } from "@c8y/ngx-components";
+import { AfterViewInit, Component } from '@angular/core';
+import { Subject } from 'rxjs';
+import { ModalLabels } from '@c8y/ngx-components';
 import {
   latLng,
   LatLng,
@@ -10,23 +10,23 @@ import {
   polyline,
   Polyline,
   tileLayer,
-} from "leaflet";
-import { isEmpty } from "lodash-es";
-import { BsModalRef } from "ngx-bootstrap/modal";
-import { LocationGeocoderService } from "../service/location-geocoder.service";
-import { ITrack } from "../layered-map-widget.model";
+} from 'leaflet';
+import { isEmpty } from 'lodash';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { LocationGeocoderService } from '../service/location-geocoder.service';
+import { ITrack } from '../layered-map-widget.model';
 
 @Component({
   providers: [LocationGeocoderService],
-  templateUrl: "./draw-line-creator-modal.component.html",
-  styleUrls: ["./draw-line-creator-modal.component.less"],
+  templateUrl: './draw-line-creator-modal.component.html',
+  styleUrls: ['./draw-line-creator-modal.component.less'],
 })
 export class DrawLineCreatorModalComponent implements AfterViewInit {
-  title = "Create track";
+  title = 'Create track';
   closeSubject: Subject<ITrack | null> = new Subject();
   labels: ModalLabels = {
-    ok: "Create",
-    cancel: "Cancel",
+    ok: 'Create',
+    cancel: 'Cancel',
   };
 
   isDrawingLine = false;
@@ -40,7 +40,7 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
 
   options: MapOptions = {
     layers: [
-      tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
         maxZoom: 22,
         detectRetina: true,
@@ -52,10 +52,7 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
   };
   map: LMap;
 
-  constructor(
-    public bsModalRef: BsModalRef,
-    private geo: LocationGeocoderService
-  ) {}
+  constructor(public bsModalRef: BsModalRef, private geo: LocationGeocoderService) {}
 
   ngAfterViewInit(): void {
     this.map.invalidateSize();
@@ -80,13 +77,13 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
 
   startDrawingLine(): void {
     this.isDrawingLine = true;
-    document.getElementById("draw-line-map").style.cursor = "crosshair";
+    document.getElementById('draw-line-map').style.cursor = 'crosshair';
     this.map.dragging.disable();
   }
 
   pauseDrawingLine(): void {
     this.isDrawingLine = false;
-    document.getElementById("draw-line-map").style.cursor = "";
+    document.getElementById('draw-line-map').style.cursor = '';
     this.map.dragging.enable();
   }
 

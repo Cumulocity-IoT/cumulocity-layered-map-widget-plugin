@@ -2,5 +2,5 @@
 module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.js'],
-  transformIgnorePatterns: ['/!node_modules\\/lodash-es/']
+  transformIgnorePatterns: ['/!node_modules\\/lodash-es/'],
 };
