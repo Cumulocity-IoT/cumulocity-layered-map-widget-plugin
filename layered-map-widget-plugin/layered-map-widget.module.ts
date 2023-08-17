@@ -67,8 +67,8 @@ import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.compo
       provide: HOOK_COMPONENTS,
       multi: true,
       useValue: {
-        id: 'iot.cumulocity.advanced.map.widget',
-        label: 'Advanced map widget',
+        id: 'iot.cumulocity.layered.map.widget',
+        label: 'Layered map widget',
         description:
           'Displays a map with position markers for selected devices. Support for configuration of additional layers and custom markers.',
         component: LayeredMapWidgetComponent,
