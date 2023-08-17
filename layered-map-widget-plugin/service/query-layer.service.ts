@@ -1,14 +1,9 @@
-import { Injectable } from "@angular/core";
-import {
-  AlarmService,
-  EventService,
-  IManagedObject,
-  InventoryService,
-} from "@c8y/client";
-import { get, set } from "lodash";
+import { Injectable } from '@angular/core';
+import { AlarmService, EventService, IManagedObject, InventoryService } from '@c8y/client';
+import { get, set } from 'lodash';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class QueryLayerService {
   constructor(
@@ -104,7 +99,7 @@ export class QueryLayerService {
     return this.inventory.list({
       ids: ids.toString(),
       withTotalPages: false,
-      fragmentType: "c8y_Position",
+      fragmentType: 'c8y_Position',
       withChildren: false,
       pageSize: 50,
     });

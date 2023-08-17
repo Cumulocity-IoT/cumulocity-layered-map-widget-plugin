@@ -1,12 +1,12 @@
-import { Component, Input } from "@angular/core";
-import { IManagedObject, InventoryService } from "@c8y/client";
-import { MyLayer } from "layered-map-widget-plugin/layered-map-widget.model";
-import { latLng, LatLng } from "leaflet";
-import { isEmpty } from "lodash";
+import { Component, Input } from '@angular/core';
+import { IManagedObject, InventoryService } from '@c8y/client';
+import { MyLayer } from 'layered-map-widget-plugin/layered-map-widget.model';
+import { latLng, LatLng } from 'leaflet';
+import { isEmpty } from 'lodash';
 
 @Component({
-  selector: "popup-component",
-  templateUrl: "./popup.component.html",
+  selector: 'popup-component',
+  templateUrl: './popup.component.html',
 })
 export class PopupComponent {
   constructor(private inventory: InventoryService) {}
@@ -43,5 +43,6 @@ export class PopupComponent {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   onHide(): void {}
 }

@@ -1,46 +1,37 @@
-import {
-  AlertService,
-  DynamicComponent,
-  OnBeforeSave,
-} from "@c8y/ngx-components";
-import { IManagedObject } from "@c8y/client";
-import { Component, Input, OnInit } from "@angular/core";
-import { BsModalService } from "ngx-bootstrap/modal";
-import { take } from "rxjs/operators";
-import { clone, cloneDeep, has, isEmpty } from "lodash";
-import { EventLineCreatorModalComponent } from "./event-line-creator/event-line-creator-modal.component";
-import { DrawLineCreatorModalComponent } from "./draw-line-creator/draw-line-creator-modal.component";
+import { AlertService, DynamicComponent, OnBeforeSave } from '@c8y/ngx-components';
+import { IManagedObject } from '@c8y/client';
+import { Component, Input, OnInit } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { take } from 'rxjs/operators';
+import { clone, cloneDeep, has, isEmpty } from 'lodash';
+import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
+import { DrawLineCreatorModalComponent } from './draw-line-creator/draw-line-creator-modal.component';
 import {
   ILayeredMapWidgetConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
   ITrack,
   LayerConfig,
-} from "./layered-map-widget.model";
-import { LayerModalComponent } from "./layer-config/layer-modal.component";
+} from './layered-map-widget.model';
+import { LayerModalComponent } from './layer-config/layer-modal.component';
 
-export type WidgetConfigMode = "CREATE" | "UPDATE";
+export type WidgetConfigMode = 'CREATE' | 'UPDATE';
 
 @Component({
-  templateUrl: "./layered-map-widget-config.component.html",
+  templateUrl: './layered-map-widget-config.component.html',
 })
-export class LayeredMapWidgetConfig
-  implements OnInit, DynamicComponent, OnBeforeSave
-{
+export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBeforeSave {
   @Input() config: ILayeredMapWidgetConfig = {};
   ng1FormRef?: any;
   items: IManagedObject[] = [];
   mode: WidgetConfigMode;
 
-  constructor(
-    private bsModalService: BsModalService,
-    private alert: AlertService
-  ) {}
+  constructor(private bsModalService: BsModalService, private alert: AlertService) {}
 
   ngOnInit(): void {
-    this.mode = this.config.saved ? "UPDATE" : "CREATE";
+    this.mode = this.config.saved ? 'UPDATE' : 'CREATE';
 
-    if (!has(this.config, "layers")) {
+    if (!has(this.config, 'layers')) {
       this.config.layers = [];
     }
   }
@@ -80,25 +71,18 @@ export class LayeredMapWidgetConfig
   }
 
   async openEventTrackCreatorModal() {
-    const modalRef = this.bsModalService.show(
-      EventLineCreatorModalComponent,
-      {}
-    );
+    const modalRef = this.bsModalService.show(EventLineCreatorModalComponent, {});
     modalRef.content.items = clone(this.config.devices);
-    const openExportTemplateModal = modalRef.content.closeSubject
-      .pipe(take(1))
-      .toPromise();
+    const openExportTemplateModal = modalRef.content.closeSubject.pipe(take(1)).toPromise();
     const track = await openExportTemplateModal;
     this.addTrackToConfig(track);
   }
 
   async openDrawTrackCreatorModal() {
     const modalRef = this.bsModalService.show(DrawLineCreatorModalComponent, {
-      class: "modal-lg",
+      class: 'modal-lg',
     });
-    const openExportTemplateModal = modalRef.content.closeSubject
-      .pipe(take(1))
-      .toPromise();
+    const openExportTemplateModal = modalRef.content.closeSubject.pipe(take(1)).toPromise();
     const track = await openExportTemplateModal;
     this.addTrackToConfig(track);
   }
@@ -114,9 +98,7 @@ export class LayeredMapWidgetConfig
   }
 
   deleteTrack(track: ITrack): void {
-    this.config.tracks = this.config.tracks.filter(
-      (t) => t.name !== track.name
-    );
+    this.config.tracks = this.config.tracks.filter((t) => t.name !== track.name);
     if (this.config.selectedTrack === track.name) {
       this.config.selectedTrack = null;
     }
@@ -133,13 +115,8 @@ export class LayeredMapWidgetConfig
   }
 
   async onBeforeSave(config?: ILayeredMapWidgetConfig): Promise<boolean> {
-    if (
-      config.layers.find((l) => isDeviceFragmentLayerConfig(l)) &&
-      isEmpty(this.config.device)
-    ) {
-      this.alert.danger(
-        "Device Fragment layer requires you to select a group or device!"
-      );
+    if (config.layers.find((l) => isDeviceFragmentLayerConfig(l)) && isEmpty(this.config.device)) {
+      this.alert.danger('Device Fragment layer requires you to select a group or device!');
       return false;
     }
 

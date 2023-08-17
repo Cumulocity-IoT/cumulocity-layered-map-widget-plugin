@@ -7,6 +7,8 @@
     "start:shell": "c8ycli server -p 9326  -u https://entelios-dev.eu-latest.cumulocity.com/ --shell cockpit",
     "build": "c8ycli build",
     "zip": "zip -r -q ./sag-ps-iot-pkg-layered-map-widget-plugin.zip ./dist/apps/sag-ps-iot-pkg-layered-map-widget-plugin/*",
+    "lint": "eslint . --ext js,ts --quiet",
+    "format": "eslint . --ext js,ts --quiet --fix",
     "build:ci": "npm run build -- --ci",
     "deploy": "c8ycli deploy",
     "postinstall": "ngcc"

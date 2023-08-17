@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, Input } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { C8yJSONSchema } from "@c8y/ngx-components";
-import { FormlyFieldConfig } from "@ngx-formly/core";
-import { JSONSchema7 } from "json-schema";
-import { set } from "lodash";
+import { AfterViewInit, Component, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { C8yJSONSchema } from '@c8y/ngx-components';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import { JSONSchema7 } from 'json-schema';
+import { set } from 'lodash';
 
 @Component({
-  selector: "dynamic-query-form",
+  selector: 'dynamic-query-form',
   template: `<form class="card" [formGroup]="form">
     <div class="card-header">
       <h4 class="card-title">Query filter</h4>
@@ -23,11 +23,7 @@ import { set } from "lodash";
       </button>
 
       <div class="form-group m-t-16">
-        <formly-form
-          [form]="form"
-          [fields]="fields"
-          [model]="filter"
-        ></formly-form>
+        <formly-form [form]="form" [fields]="fields" [model]="filter"></formly-form>
       </div>
     </div>
   </form>`,
@@ -36,8 +32,8 @@ export class DynamicQueryFormComponent implements AfterViewInit {
   selectedFilters: { title: string }[] = [];
 
   queryFormJSON: JSONSchema7 = {
-    $schema: "https://json-schema.org/draft/2019-09/schema",
-    type: "object",
+    $schema: 'https://json-schema.org/draft/2019-09/schema',
+    type: 'object',
     properties: {},
     required: [],
     additionalProperties: false,
@@ -62,19 +58,19 @@ export class DynamicQueryFormComponent implements AfterViewInit {
   }
 
   getIcon(b: { type: string; enum?: [] }) {
-    if (b.type === "date") {
-      return "calendar-1";
-    } else if (b.type === "boolean") {
-      return "radio-button-on";
-    } else if (b.type === "string") {
+    if (b.type === 'date') {
+      return 'calendar-1';
+    } else if (b.type === 'boolean') {
+      return 'radio-button-on';
+    } else if (b.type === 'string') {
       if (b.enum) {
-        return "radio-button-on";
+        return 'radio-button-on';
       } else {
-        return "text-input";
+        return 'text-input';
       }
     }
 
-    return "";
+    return '';
   }
 
   queryParamClick(b: { title: string }) {

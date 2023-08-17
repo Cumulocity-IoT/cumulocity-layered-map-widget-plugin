@@ -1,6 +1,6 @@
-import { IManagedObject } from "@c8y/client";
-import { LatLng, LayerGroup, Marker } from "leaflet";
-import { has } from "lodash";
+import { IManagedObject } from '@c8y/client';
+import { LatLng, LayerGroup, Marker } from 'leaflet';
+import { has } from 'lodash';
 
 export type BasicLayerConfig = {
   name: string;
@@ -13,21 +13,17 @@ export type DeviceFragmentLayerConfig = BasicLayerConfig & {
   value: string;
 };
 
-export function isDeviceFragmentLayerConfig(
-  config: unknown
-): config is DeviceFragmentLayerConfig {
-  return has(config, "fragment") && has(config, "value");
+export function isDeviceFragmentLayerConfig(config: unknown): config is DeviceFragmentLayerConfig {
+  return has(config, 'fragment') && has(config, 'value');
 }
 
 export type QueryLayerConfig = BasicLayerConfig & {
   filter: object;
-  type: "Inventory" | "Alarm" | "Event";
+  type: 'Inventory' | 'Alarm' | 'Event';
 };
 
-export function isQueryLayerConfig(
-  config: BasicLayerConfig
-): config is QueryLayerConfig {
-  return has(config, "filter");
+export function isQueryLayerConfig(config: BasicLayerConfig): config is QueryLayerConfig {
+  return has(config, 'filter');
 }
 
 export type LayerConfig = {
