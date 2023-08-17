@@ -14,6 +14,7 @@ import {
   LayerConfig,
 } from './layered-map-widget.model';
 import { LayerModalComponent } from './layer-config/layer-modal.component';
+import { PopoverModalComponent } from './popover-config/popover-modal.component';
 
 export type WidgetConfigMode = 'CREATE' | 'UPDATE';
 
@@ -62,8 +63,25 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     }
   }
 
+  async openPopoverModal(layer: LayerConfig) {
+    const modalRef = this.bsModalService.show(PopoverModalComponent, {});
+    if (layer.config.popoverConfig) {
+      modalRef.content.setConfig(clone(layer.config.popoverConfig));
+    }
+
+    const close = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    const popoverConfig = await close;
+    if (popoverConfig) {
+      layer.config.popoverConfig = popoverConfig;
+    }
+  }
+
   editLayer(layer: LayerConfig) {
     this.openLayerModal(layer);
+  }
+
+  editPopover(layer: LayerConfig) {
+    this.openPopoverModal(layer);
   }
 
   deleteLayer(layer: LayerConfig) {

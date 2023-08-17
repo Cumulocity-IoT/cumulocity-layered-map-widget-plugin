@@ -89,7 +89,8 @@ export class DynamicQueryFormComponent implements AfterViewInit {
   private reloadForm() {
     this.fields = [
       this.jsonschema.toFieldConfig(this.queryFormJSON, {
-        map(mappedField: FormlyFieldConfig) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        map(mappedField: FormlyFieldConfig, _mapSource: JSONSchema7) {
           return mappedField;
         },
       }),

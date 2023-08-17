@@ -26,7 +26,12 @@ export class InventoryQueryFormComponent {
     {
       title: 'query',
       type: 'string',
-      description: 'Use query language to perform operations and/or filter the results. ',
+      examples: [
+        '$filter=(has(c8y_Position) and c8y_ActiveAlarmsStatus.critical gt 0)',
+        `$filter=(has(c8y_Position) and type eq 'c8y_MqttDevice')`,
+      ],
+      description:
+        'Use query language to perform operations and/or filter the results. See: https://cumulocity.com/api/core/#tag/Query-language',
     },
     {
       title: 'text',

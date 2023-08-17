@@ -23,6 +23,11 @@ import { DynamicQueryFormComponent } from './layer-config/query-forms/dynamic-qu
 import { EventQueryFormComponent } from './layer-config/query-forms/event-query-form.component';
 import { InventoryQueryFormComponent } from './layer-config/query-forms/inventory-query-form.component';
 import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.component';
+import { PopoverModalComponent } from './popover-config/popover-modal.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { JsonEditorComponent } from './popover-config/editor/jsoneditor.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ActionIconPipe } from './popup/action-icon.pipe';
 
 @NgModule({
   imports: [
@@ -35,6 +40,8 @@ import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.compo
     AngularResizeEventModule,
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
+    CollapseModule.forRoot(),
+    TooltipModule,
     HttpClientJsonpModule,
   ],
   declarations: [
@@ -44,6 +51,8 @@ import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.compo
     EventLineCreatorModalComponent,
     DrawLineCreatorModalComponent,
     LayerModalComponent,
+    PopoverModalComponent,
+    JsonEditorComponent,
     LayerListComponent,
     TrackListComponent,
     DynamicQueryFormComponent,
@@ -51,6 +60,7 @@ import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.compo
     EventQueryFormComponent,
     InventoryQueryFormComponent,
     PopupComponent,
+    ActionIconPipe,
     AlarmDisplayComponent,
   ],
   entryComponents: [
@@ -58,6 +68,7 @@ import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.compo
     LayeredMapWidgetComponent,
     EventLineCreatorModalComponent,
     DrawLineCreatorModalComponent,
+    PopoverModalComponent,
     TrackListComponent,
     PopupComponent,
   ],
@@ -68,7 +79,7 @@ import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.compo
       multi: true,
       useValue: {
         id: 'iot.cumulocity.layered.map.widget',
-        label: 'Layered map widget',
+        label: 'Layered Map',
         description:
           'Displays a map with position markers for selected devices. Support for configuration of additional layers and custom markers.',
         component: LayeredMapWidgetComponent,
