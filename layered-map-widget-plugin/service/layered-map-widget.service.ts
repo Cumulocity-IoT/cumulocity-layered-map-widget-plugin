@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IEvent, EventService } from "@c8y/client";
-import { has, isEmpty } from "lodash-es";
+import { has, isEmpty } from "lodash";
 import { LatLng, polyline, Polyline } from "leaflet";
 import { ILayeredMapWidgetConfig, ITrack } from "../layered-map-widget.model";
 

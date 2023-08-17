@@ -7,7 +7,7 @@ import { IManagedObject } from "@c8y/client";
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalService } from "ngx-bootstrap/modal";
 import { take } from "rxjs/operators";
-import { clone, cloneDeep, has, isEmpty } from "lodash-es";
+import { clone, cloneDeep, has, isEmpty } from "lodash";
 import { EventLineCreatorModalComponent } from "./event-line-creator/event-line-creator-modal.component";
 import { DrawLineCreatorModalComponent } from "./draw-line-creator/draw-line-creator-modal.component";
 import {

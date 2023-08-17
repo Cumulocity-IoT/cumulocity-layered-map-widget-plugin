@@ -5,7 +5,7 @@ import {
   IManagedObject,
   InventoryService,
 } from "@c8y/client";
-import { get, set } from "lodash-es";
+import { get, set } from "lodash";
 
 @Injectable({
   providedIn: "root",

@@ -1,8 +1,8 @@
 import { Component, Input } from "@angular/core";
-import { IEvent, IManagedObject, InventoryService } from "@c8y/client";
+import { IManagedObject, InventoryService } from "@c8y/client";
 import { MyLayer } from "layered-map-widget-plugin/layered-map-widget.model";
 import { latLng, LatLng } from "leaflet";
-import { isEmpty } from "lodash-es";
+import { isEmpty } from "lodash";
 
 @Component({
   selector: "popup-component",

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { FetchClient } from "@c8y/client";
 import { LatLng } from "leaflet";
-import { isEmpty } from "lodash-es";
+import { isEmpty } from "lodash";
 
 @Injectable()
 export class LocationGeocoderService {

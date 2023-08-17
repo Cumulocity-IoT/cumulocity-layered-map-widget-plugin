@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { C8yJSONSchema } from "@c8y/ngx-components";
 import { FormlyFieldConfig } from "@ngx-formly/core";
 import { JSONSchema7 } from "json-schema";
-import { set } from "lodash-es";
+import { set } from "lodash";
 
 @Component({
   selector: "dynamic-query-form",
@@ -45,8 +45,8 @@ export class DynamicQueryFormComponent implements AfterViewInit {
 
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [];
-  @Input() filter = {};
-  @Input() params = [];
+  @Input() filter: any = {};
+  @Input() params: any[] = [];
 
   constructor(private jsonschema: C8yJSONSchema) {}
 
@@ -93,7 +93,7 @@ export class DynamicQueryFormComponent implements AfterViewInit {
   private reloadForm() {
     this.fields = [
       this.jsonschema.toFieldConfig(this.queryFormJSON, {
-        map(mappedField: FormlyFieldConfig, _mapSource: JSONSchema7) {
+        map(mappedField: FormlyFieldConfig) {
           return mappedField;
         },
       }),

@@ -18,7 +18,7 @@ import { ModalModule as BsModalModule, BsModalRef } from "ngx-bootstrap/modal";
 import { EventLineCreatorModalComponent } from "./event-line-creator/event-line-creator-modal.component";
 import { TrackListComponent } from "./track-list/track-list.component";
 import { DrawLineCreatorModalComponent } from "./draw-line-creator/draw-line-creator-modal.component";
-import { AngularResizedEventModule } from "angular-resize-event";
+import { AngularResizeEventModule } from 'angular-resize-event';
 import { HttpClientJsonpModule } from "@angular/common/http";
 import { PopupComponent } from "./popup/popup.component";
 import { LayerModalComponent } from "./layer-config/layer-modal.component";
@@ -37,7 +37,7 @@ import { AlarmDisplayComponent } from "./popup/alarm-display/alarm-display.compo
     LeafletModule,
     BsModalModule,
     ModalModule,
-    AngularResizedEventModule,
+    AngularResizeEventModule,
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
     HttpClientJsonpModule,

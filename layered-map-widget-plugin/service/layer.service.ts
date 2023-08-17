@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IManagedObject } from "@c8y/client";
 import { LatLng, latLng, LayerGroup, Marker } from "leaflet";
-import { get, has, isEmpty, set } from "lodash-es";
+import { get, has, isEmpty, set } from "lodash";
 import {
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,

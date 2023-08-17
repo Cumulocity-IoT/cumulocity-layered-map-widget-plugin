@@ -11,7 +11,7 @@ import {
   Polyline,
   tileLayer,
 } from "leaflet";
-import { isEmpty } from "lodash-es";
+import { isEmpty } from "lodash";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { LocationGeocoderService } from "../service/location-geocoder.service";
 import { ITrack } from "../layered-map-widget.model";

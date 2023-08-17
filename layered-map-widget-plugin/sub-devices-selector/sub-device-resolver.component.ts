@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { IManagedObject } from "@c8y/client";
 import { InventoryService } from "@c8y/ngx-components/api";
-import { has } from "lodash-es";
+import { has } from "lodash";
 
 @Component({ template: "", selector: "sub-device-resolver" })
 export class SubDeviceResolverComponent {

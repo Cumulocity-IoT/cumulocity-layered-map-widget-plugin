@@ -16,7 +16,7 @@ import {
   tileLayer,
 } from "leaflet";
 import { LayeredMapWidgetService } from "./service/layered-map-widget.service";
-import { get, isEmpty } from "lodash-es";
+import { get, isEmpty } from "lodash";
 import { Subscription } from "rxjs";
 import { IManagedObject } from "@c8y/client";
 import * as MarkerImage from "./marker-icon";

@@ -1,6 +1,6 @@
 import { IManagedObject } from "@c8y/client";
 import { LatLng, LayerGroup, Marker } from "leaflet";
-import { has } from "lodash-es";
+import { has } from "lodash";
 
 export type BasicLayerConfig = {
   name: string;
