@@ -42,6 +42,11 @@ node v 14.x
 npm v 6.x
 
 ## Plugin versions
+v 2.x of the plugin uses:
+Angular v 14.x
+WebSDK v 1017.0.x
+
+v 1.x of the plugin uses:
 Angular v 14.x
 WebSDK v 1016.0.x
 
