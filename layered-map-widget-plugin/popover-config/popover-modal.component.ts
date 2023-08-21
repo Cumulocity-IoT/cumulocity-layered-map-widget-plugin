@@ -22,7 +22,7 @@ interface Tab {
 })
 export class PopoverModalComponent {
   title = 'Popover config';
-  closeSubject: Subject<PopoverConfig> = new Subject();
+  closeSubject: Subject<PopoverConfig | null> = new Subject();
   labels: ModalLabels = { ok: 'Save', cancel: 'Cancel' };
 
   SAMPLE_TEMPLATES_C8Y = SAMPLE_TEMPLATES_C8Y;
@@ -46,7 +46,7 @@ export class PopoverModalComponent {
     },
   ];
 
-  currentTab: Tab['id'] = this.tabs.find((t) => t.active).id;
+  currentTab: Tab['id'] = this.tabs.find((t) => t.active)?.id ?? this.tabs[2].id;
 
   form = new FormGroup({});
   fields: FormlyFieldConfig[] = [
@@ -71,7 +71,7 @@ export class PopoverModalComponent {
 
   isActionsFormCollapsed = true;
   jsonEditorData: object = clone(SAMPLE_TEMPLATES_C8Y.OPERATION);
-  jsonErrorMessage: string;
+  jsonErrorMessage?: string;
 
   constructor(public bsModalRef: BsModalRef) {}
 

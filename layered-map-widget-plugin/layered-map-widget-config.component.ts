@@ -22,7 +22,9 @@ export type WidgetConfigMode = 'CREATE' | 'UPDATE';
   templateUrl: './layered-map-widget-config.component.html',
 })
 export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBeforeSave {
-  @Input() config: ILayeredMapWidgetConfig = {};
+  @Input() config: ILayeredMapWidgetConfig = {
+    layers: [],
+  };
   ng1FormRef?: any;
   items: IManagedObject[] = [];
   mode: WidgetConfigMode;
@@ -44,18 +46,18 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
   async openLayerModal(layer?: LayerConfig) {
     const modalRef = this.bsModalService.show(LayerModalComponent, {});
 
-    const close = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
     if (!layer) {
       // create mode
       const created = await close;
-      if (isDeviceFragmentLayerConfig(created) || isQueryLayerConfig(created)) {
-        this.config.layers.push({ config: created, active: true });
+      if (!!created && (isDeviceFragmentLayerConfig(created) || isQueryLayerConfig(created))) {
+        this.config.layers?.push({ config: created, active: true });
         this.config.layers = [...this.config.layers];
       }
     } else {
       // edit mode
       const original = cloneDeep(layer.config);
-      modalRef.content.setLayer(layer.config);
+      modalRef.content?.setLayer(layer.config);
       const updated = await close;
       if (!updated) {
         layer.config = original;
@@ -66,10 +68,10 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
   async openPopoverModal(layer: LayerConfig) {
     const modalRef = this.bsModalService.show(PopoverModalComponent, {});
     if (layer.config.popoverConfig) {
-      modalRef.content.setConfig(clone(layer.config.popoverConfig));
+      modalRef.content?.setConfig(clone(layer.config.popoverConfig));
     }
 
-    const close = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
     const popoverConfig = await close;
     if (popoverConfig) {
       layer.config.popoverConfig = popoverConfig;
@@ -90,19 +92,23 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
 
   async openEventTrackCreatorModal() {
     const modalRef = this.bsModalService.show(EventLineCreatorModalComponent, {});
-    modalRef.content.items = clone(this.config.devices);
-    const openExportTemplateModal = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    modalRef.content!.items = clone(this.config.devices ?? []);
+    const openExportTemplateModal = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
     const track = await openExportTemplateModal;
-    this.addTrackToConfig(track);
+    if (track) {
+      this.addTrackToConfig(track);
+    }
   }
 
   async openDrawTrackCreatorModal() {
     const modalRef = this.bsModalService.show(DrawLineCreatorModalComponent, {
       class: 'modal-lg',
     });
-    const openExportTemplateModal = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    const openExportTemplateModal = modalRef.content!.closeSubject.pipe(take(1)).toPromise();
     const track = await openExportTemplateModal;
-    this.addTrackToConfig(track);
+    if (track) {
+      this.addTrackToConfig(track);
+    }
   }
 
   private addTrackToConfig(track: ITrack | null): void {
@@ -116,9 +122,9 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
   }
 
   deleteTrack(track: ITrack): void {
-    this.config.tracks = this.config.tracks.filter((t) => t.name !== track.name);
+    this.config.tracks = this.config.tracks?.filter((t) => t.name !== track.name);
     if (this.config.selectedTrack === track.name) {
-      this.config.selectedTrack = null;
+      this.config.selectedTrack = undefined;
     }
   }
 
@@ -128,11 +134,15 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
       // check and select a new element (automatically unchecks other ones)
       this.config.selectedTrack = track.name;
     } else if (track.name === this.config.selectedTrack) {
-      this.config.selectedTrack = null;
+      this.config.selectedTrack = undefined;
     }
   }
 
   async onBeforeSave(config?: ILayeredMapWidgetConfig): Promise<boolean> {
+    if (!config) {
+      return false;
+    }
+
     if (config.layers.find((l) => isDeviceFragmentLayerConfig(l)) && isEmpty(this.config.device)) {
       this.alert.danger('Device Fragment layer requires you to select a group or device!');
       return false;

@@ -62,7 +62,7 @@ export class MyLayer implements LayerAttributes {
   devices: string[] = [];
   coordinates = new Map<string, LatLng>();
   markerCache = new Map<string, Marker<any>>();
-  group: LayerGroup = null;
+  group = new LayerGroup();
   active = true;
 }
 
@@ -77,7 +77,7 @@ export interface ILayeredMapWidgetConfig {
   selectedTrack?: string;
   tracks?: ITrack[];
   saved?: boolean;
-  layers?: LayerConfig[];
+  layers: LayerConfig[];
 }
 
 export interface ITrack {

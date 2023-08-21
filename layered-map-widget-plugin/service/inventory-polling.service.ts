@@ -81,7 +81,7 @@ export class InventoryPollingService {
     while (res.data.length) {
       res.data.forEach((mo) => result.push(mo));
 
-      if (!res.paging.nextPage) {
+      if (!res.paging?.nextPage) {
         break;
       }
       res = await res.paging.next();

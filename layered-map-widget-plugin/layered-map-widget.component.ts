@@ -7,6 +7,7 @@ import {
   MapOptions,
   polyline,
   Polyline,
+  Popup,
   tileLayer,
 } from 'leaflet';
 import { LayeredMapWidgetService } from './service/layered-map-widget.service';
@@ -73,7 +74,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   };
 
   private layerSubs: Map<MyLayer, Subscription> = new Map();
-  private positionUpdateSub: Subscription = null;
+  private positionUpdateSub: Subscription | null = null;
   circuit: Polyline;
 
   constructor(
@@ -116,7 +117,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     layerControl.addBaseLayer(osm, 'Open Street Map');
     osm.addTo(this.map);
 
-    if (!isEmpty(config.layers)) {
+    if (config.layers && !isEmpty(config.layers)) {
       const layers = this.layerService.createLayers(config.layers, devices);
       for (const layer of layers) {
         layerControl.addOverlay(layer.group, layer.config.name);
@@ -128,15 +129,18 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     }
 
     this.map.on('popupopen', (event) => {
-      const popup = event.popup;
-      const ref: ComponentRef<PopupComponent> = get(popup, 'ref');
+      const popup = event.popup as Popup & { ref: ComponentRef<PopupComponent> };
+      const ref = get(popup, 'ref');
       ref.instance.onShow();
-      this.map.setView(popup.getLatLng(), 13);
+      const latLng = popup.getLatLng();
+      if (latLng) {
+        this.map.setView(latLng, 13);
+      }
     });
 
     this.map.on('popupclose', (event) => {
-      const popup = event.popup;
-      const ref: ComponentRef<PopupComponent> = get(popup, 'ref');
+      const popup = event.popup as Popup & { ref: ComponentRef<PopupComponent> };
+      const ref = get(popup, 'ref');
       ref.instance.onHide();
     });
 
@@ -153,11 +157,11 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   private updateRealtimeSubs(layers: MyLayer[], config: ILayeredMapWidgetConfig): void {
     for (const layer of layers) {
       if (this.layerSubs.has(layer)) {
-        this.layerSubs.get(layer).unsubscribe();
+        this.layerSubs.get(layer)!.unsubscribe();
         this.layerSubs.delete(layer);
       }
       const cfg = layer.config;
-      if (isDeviceFragmentLayerConfig(cfg)) {
+      if (config.device && isDeviceFragmentLayerConfig(cfg)) {
         const query = `(bygroupid(${config.device.id}) or id eq '${config.device.id}') and has(c8y_Position) and ${cfg.fragment} eq '${cfg.value}'`;
         const sub = this.inventoryPollingService
           .createPolling$({ query }, layer)
@@ -219,6 +223,6 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     if (!isEmpty(this.layerSubs)) {
       this.layerSubs.forEach((sub) => sub.unsubscribe());
     }
-    this.positionUpdateSub.unsubscribe();
+    this.positionUpdateSub?.unsubscribe();
   }
 }

@@ -30,7 +30,6 @@ export class LayerService {
     const layer = Object.assign(new MyLayer(), setup);
 
     if (isQueryLayerConfig(setup.config)) {
-      layer.group = new LayerGroup();
       const config = setup.config;
       if (config.type === 'Alarm') {
         this.queryLayerService.fetchByAlarmQuery(config.filter).then((devices) => {
@@ -86,7 +85,7 @@ export class LayerService {
       classNames = 'status warning';
     }
 
-    const marker = layer.markerCache.get(deviceId);
+    const marker = layer.markerCache.get(deviceId)!;
     const icon = this.markerIconService.getIcon(layer.config.icon, classNames);
     marker.setIcon(icon);
   }
@@ -119,7 +118,7 @@ export class LayerService {
         layer.coordinates.delete(toDeleteId);
       }
       if (layer.markerCache.has(toDeleteId)) {
-        const markerToDelete = layer.markerCache.get(toDeleteId);
+        const markerToDelete = layer.markerCache.get(toDeleteId)!;
         layer.group.removeLayer(markerToDelete);
         layer.markerCache.delete(toDeleteId);
       }
@@ -128,7 +127,7 @@ export class LayerService {
 
   createLayerGroup(layer: MyLayer): void {
     const markers = [...layer.coordinates.keys()].map((key) => {
-      const coord = layer.coordinates.get(key);
+      const coord = layer.coordinates.get(key)!;
       const marker = this.createMarker(key, coord, layer);
       layer.markerCache.set(key, marker);
       return marker;
@@ -168,9 +167,9 @@ export class LayerService {
       layer.markerCache.set(id, marker);
       layer.group.addLayer(marker);
     } else {
-      const oldCoord = layer.coordinates.get(id);
+      const oldCoord = layer.coordinates.get(id)!;
       const newCoord = latLng(position);
-      marker = layer.markerCache.get(id);
+      marker = layer.markerCache.get(id)!;
       if (oldCoord.distanceTo(newCoord) > 0) {
         layer.coordinates.set(id, newCoord);
         marker.setLatLng(newCoord);
