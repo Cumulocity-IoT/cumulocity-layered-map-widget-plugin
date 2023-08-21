@@ -86,7 +86,7 @@ export class LayerModalComponent {
 
   // called if cancel is pressed
   onDismiss(): void {
-    this.closeSubject.next(null);
+    this.closeSubject.next(undefined);
   }
 
   // called if save is pressed

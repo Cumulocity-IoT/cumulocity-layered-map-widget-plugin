@@ -85,7 +85,7 @@ export class EventPollingService {
       let res = await this.inventory.list({ ...filter, withTotalPages: true });
       while (res.data.length) {
         mos.push(...res.data);
-        if (!res.paging.nextPage) {
+        if (!res.paging?.nextPage) {
           break;
         }
         res = await res.paging.next();
@@ -109,7 +109,7 @@ export class EventPollingService {
         .map((event) => event.source.id);
       ids.forEach((id) => result.add(id));
 
-      if (!res.paging.nextPage) {
+      if (!res.paging?.nextPage) {
         break;
       }
       res = await res.paging.next();

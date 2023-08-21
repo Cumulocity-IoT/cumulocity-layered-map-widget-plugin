@@ -18,16 +18,16 @@ export interface ILocationUpdateEvent extends IEvent {
 export class LayeredMapWidgetService {
   constructor(private eventService: EventService) {}
 
-  getTrack(config: ILayeredMapWidgetConfig): ITrack | null {
+  getTrack(config: ILayeredMapWidgetConfig): ITrack | undefined {
     if (
       has(config, 'selectedTrack') &&
       has(config, 'tracks') &&
       config.selectedTrack !== null &&
       !isEmpty(config.tracks)
     ) {
-      return config.tracks.find((t) => t.name === config.selectedTrack);
+      return config.tracks?.find((t) => t.name === config.selectedTrack);
     }
-    return null;
+    return undefined;
   }
 
   createLines(coords: LatLng[]): Polyline[] {

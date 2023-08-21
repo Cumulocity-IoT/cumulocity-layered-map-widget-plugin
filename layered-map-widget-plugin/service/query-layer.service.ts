@@ -12,7 +12,7 @@ export class QueryLayerService {
     private event: EventService
   ) {}
 
-  async fetchByAlarmQuery(params: object) {
+  async fetchByAlarmQuery(params: object): Promise<IManagedObject[]> {
     const result = new Map<string, IManagedObject | null>();
     const filter = {
       withTotalPages: true,
@@ -34,14 +34,14 @@ export class QueryLayerService {
         )
       );
 
-      if (!res.paging.nextPage) {
+      if (!res.paging?.nextPage) {
         break;
       }
       res = await res.paging.next();
     }
 
     await Promise.all(resolvers);
-    return [...result.values()].filter((mo) => !!mo);
+    return [...result.values()].filter((mo) => mo !== null) as IManagedObject[];
   }
 
   async fetchByInventoryQuery(params: object) {
@@ -55,10 +55,10 @@ export class QueryLayerService {
     let res = await this.inventory.list(filter);
     while (res.data.length) {
       result.push(...res.data);
-      if (res.data.length < res.paging.pageSize) {
+      if (res.data.length < (res.paging?.pageSize ?? -1)) {
         break;
       }
-      if (!res.paging.nextPage) {
+      if (!res.paging?.nextPage) {
         break;
       }
       res = await res.paging.next();
@@ -66,7 +66,7 @@ export class QueryLayerService {
     return result;
   }
 
-  async fetchByEventQuery(params: object) {
+  async fetchByEventQuery(params: object): Promise<IManagedObject[]> {
     const result = new Map<string, IManagedObject | null>();
     const filter = {
       withTotalPages: true,
@@ -86,13 +86,13 @@ export class QueryLayerService {
           mos.data.forEach((mo) => result.set(mo.id, mo))
         )
       );
-      if (!res.paging.nextPage) {
+      if (!res.paging?.nextPage) {
         break;
       }
       res = await res.paging.next();
     }
     await Promise.all(resolvers);
-    return [...result.values()].filter((mo) => !!mo);
+    return [...result.values()].filter((mo) => mo !== null) as IManagedObject[];
   }
 
   resolveManagedObjects(ids: string[]) {
