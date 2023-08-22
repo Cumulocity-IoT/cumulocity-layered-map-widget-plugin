@@ -13,20 +13,22 @@ import {
 import { MarkerIconService } from './marker-icon.service';
 import { PopUpService } from './popup.service';
 import { QueryLayerService } from './query-layer.service';
+import { SelectedDevicesService } from './selected-devices.service';
 
 @Injectable({ providedIn: 'root' })
 export class LayerService {
   constructor(
     private popupService: PopUpService,
     private markerIconService: MarkerIconService,
-    private queryLayerService: QueryLayerService
+    private queryLayerService: QueryLayerService,
+    private selectedDevicesService: SelectedDevicesService
   ) {}
 
-  createLayers(configs: LayerConfig[], devices: IManagedObject[]) {
-    return configs.map((cfg) => this.createLayer(cfg, devices));
+  createLayers(configs: LayerConfig[]) {
+    return Promise.all(configs.map((cfg) => this.createLayer(cfg)));
   }
 
-  createLayer(setup: LayerConfig, devices: IManagedObject[]) {
+  async createLayer(setup: LayerConfig) {
     const layer = Object.assign(new MyLayer(), setup);
 
     if (isQueryLayerConfig(setup.config)) {
@@ -51,6 +53,8 @@ export class LayerService {
         });
       }
     } else {
+      const config = setup.config as DeviceFragmentLayerConfig;
+      const devices = await this.selectedDevicesService.getDevices(config.device);
       const matches = this.getMatches(setup.config, devices || []);
       // assign devices mathcing the layer criteria
       layer.devices = matches.map((d) => d.id);

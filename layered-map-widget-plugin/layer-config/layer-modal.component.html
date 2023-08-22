@@ -22,9 +22,7 @@
     <label translate for="iconInput">Icon</label>
     <div class="input-group">
       <div class="input-group-btn">
-        <button class="btn btn-primary" (click)="openIconModal()">
-          Pick icon
-        </button>
+        <button class="btn btn-primary" (click)="openIconModal()">Pick icon</button>
       </div>
       <input
         id="iconInput"
@@ -33,9 +31,7 @@
         name="iconInput"
         [(ngModel)]="layer.icon"
       />
-      <span *ngIf="layer.icon" class="input-group-addon"
-        ><i [c8yIcon]="layer.icon"></i
-      ></span>
+      <span *ngIf="layer.icon" class="input-group-addon"><i [c8yIcon]="layer.icon"></i></span>
     </div>
   </div>
   <div class="form-group">
@@ -49,10 +45,7 @@
         (change)="changeType(typeSelect.value)"
       >
         <option value="" selected disabled>Select a type</option>
-        <option
-          value="DeviceFragmentLayerConfig"
-          [selected]="type === 'DeviceFragmentLayerConfig'"
-        >
+        <option value="DeviceFragmentLayerConfig" [selected]="type === 'DeviceFragmentLayerConfig'">
           Device-Fragment
         </option>
         <option
@@ -79,6 +72,28 @@
 
   <span *ngIf="type === 'DeviceFragmentLayerConfig'">
     <div class="legend form-block center">Device Fragment Configuration</div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header separator">
+          </div>
+          <div class="card-block d-flex d-col p-t-0 p-b-0 bg-level-1" style="height: 300px">
+            <c8y-asset-selector-miller
+              [(ngModel)]="layer.device"
+              [config]="{
+                groupsSelectable: true,
+                singleColumn: true,
+                columnHeaders: true,
+                showFilter: true,
+                search: true
+              }"
+            ></c8y-asset-selector-miller>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="form-group">
       <label for="fragment" translate>Fragment</label>
       <input
@@ -101,20 +116,12 @@
     </div>
   </span>
   <span *ngIf="type === 'QueryLayerConfig'">
-    <div class="legend form-block center">
-      {{queryType}} Query Configuration
-    </div>
+    <div class="legend form-block center">{{ queryType }} Query Configuration</div>
     <inventory-query-form
       *ngIf="queryType === 'Inventory'"
       [filter]="layer.filter"
     ></inventory-query-form>
-    <alarm-query-form
-      *ngIf="queryType === 'Alarm'"
-      [filter]="layer.filter"
-    ></alarm-query-form>
-    <event-query-form
-      *ngIf="queryType === 'Event'"
-      [filter]="layer.filter"
-    ></event-query-form>
+    <alarm-query-form *ngIf="queryType === 'Alarm'" [filter]="layer.filter"></alarm-query-form>
+    <event-query-form *ngIf="queryType === 'Event'" [filter]="layer.filter"></event-query-form>
   </span>
 </c8y-modal>

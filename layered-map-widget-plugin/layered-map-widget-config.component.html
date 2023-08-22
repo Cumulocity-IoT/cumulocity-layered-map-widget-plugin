@@ -2,51 +2,59 @@
   [device]="config?.device"
   (subDevices)="onSubDevicesChanged($event)"
 ></sub-device-resolver> -->
-
-<div class="legend form-block">
-  {{ "Layers" | translate }}
-</div>
-<layer-list [layers]="config.layers" (editLayer)="editLayer($event)" (editPopover)="editPopover($event)" (deleteLayer)="deleteLayer($event)"></layer-list>
-<button
-  title="{{ 'Add layer' | translate }}"
-  class="btn btn-default btn-icon btn-sm m-t-8"
-  (click)="openLayerModal()"
->
-  <i c8yIcon="plus-circle"></i>
-  <span translate>Add layer</span>
-</button>
-
-<div class="legend form-block">
-  {{ "Tracks" | translate }}
-</div>
-
-<track-list
-  [tracks]="config?.tracks"
-  [selectedTrackName]="config?.selectedTrack"
-  [selectable]="true"
-  (deleteTrack)="deleteTrack($event)"
-  (userChangedSelection)="userChangedSelection($event)"
-></track-list>
-
-<div class="form-inline m-t-8">
-  <div class="form-group">
-    <button
-      type="button"
-      class="btn btn-default btn-icon btn-sm"
-      [disabled]="!config.devices || config.devices.length === 0"
-      (click)="openEventTrackCreatorModal()"
-    >
-      <i c8yIcon="history"></i>&nbsp;Create track from events
-    </button>
+<div class="p-24">
+  <div class="legend form-block">
+    {{ 'Layers' | translate }}
   </div>
 
-  <div class="form-group">
-    <button
-      type="button"
-      class="btn btn-default btn-icon btn-sm"
-      (click)="openDrawTrackCreatorModal()"
-    >
-      <i c8yIcon="pencil"></i>&nbsp;Draw track
-    </button>
+  <button
+    title="{{ 'Add layer' | translate }}"
+    class="btn btn-default btn-icon btn-sm m-t-8"
+    (click)="openLayerModal()"
+  >
+    <i c8yIcon="plus-circle"></i>
+    <span translate>Add layer</span>
+  </button>
+
+  <layer-list
+    [layers]="config.layers"
+    (editLayer)="editLayer($event)"
+    (editPopover)="editPopover($event)"
+    (deleteLayer)="deleteLayer($event)"
+  ></layer-list>
+
+  <div class="legend form-block">
+    {{ 'Tracks' | translate }}
+  </div>
+
+  <track-list
+    [tracks]="config?.tracks"
+    [selectedTrackName]="config?.selectedTrack"
+    [selectable]="true"
+    (deleteTrack)="deleteTrack($event)"
+    (userChangedSelection)="userChangedSelection($event)"
+  ></track-list>
+
+  <div class="form-inline m-t-8">
+    <div class="form-group">
+      <button
+        type="button"
+        class="btn btn-default btn-icon btn-sm"
+        [disabled]="!config.devices || config.devices.length === 0"
+        (click)="openEventTrackCreatorModal()"
+      >
+        <i c8yIcon="history"></i>&nbsp;Create track from events
+      </button>
+    </div>
+
+    <div class="form-group">
+      <button
+        type="button"
+        class="btn btn-default btn-icon btn-sm"
+        (click)="openDrawTrackCreatorModal()"
+      >
+        <i c8yIcon="pencil"></i>&nbsp;Draw track
+      </button>
+    </div>
   </div>
 </div>

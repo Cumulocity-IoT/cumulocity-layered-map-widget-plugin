@@ -22,7 +22,6 @@ import {
   isQueryLayerConfig,
   MyLayer,
 } from './layered-map-widget.model';
-import { SelectedDevicesService } from './service/selected-devices.service';
 import { LayerService } from './service/layer.service';
 import { PopupComponent } from './popup/popup.component';
 import { InventoryPollingService } from './service/inventory-polling.service';
@@ -35,7 +34,6 @@ import { EventPollingService } from './service/event-polling.service';
   selector: 'layered-map-widget',
   providers: [
     LayeredMapWidgetService,
-    SelectedDevicesService,
     InventoryPollingService,
     AlarmPollingService,
     EventPollingService,
@@ -59,10 +57,8 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   @Input() set config(cfg: ILayeredMapWidgetConfig) {
     if (cfg) {
       this.cfg = cfg;
-      if (this.map && cfg.device) {
-        this.selectedDevicesService
-          .getDevices(cfg.device)
-          .then((devices) => this.draw(cfg, devices));
+      if (this.map) {
+        this.draw(cfg);
       }
     }
   }
@@ -79,7 +75,6 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private widgetService: LayeredMapWidgetService,
-    private selectedDevicesService: SelectedDevicesService,
     private layerService: LayerService,
     private inventoryPollingService: InventoryPollingService,
     private positionPollingService: PositionPollingService,
@@ -93,10 +88,8 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
 
   onMapReady(map: LMap): void {
     this.map = map;
-    if (this.cfg?.device) {
-      this.selectedDevicesService
-        .getDevices(this.cfg.device)
-        .then((devices) => this.draw(this.cfg, devices));
+    if (this.cfg) {
+      this.draw(this.cfg);
     }
   }
 
@@ -106,7 +99,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private draw(config: ILayeredMapWidgetConfig, devices: IManagedObject[]) {
+  private async draw(config: ILayeredMapWidgetConfig) {
     const osm = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       opacity: 0.7,
       maxZoom: 19,
@@ -118,7 +111,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     osm.addTo(this.map);
 
     if (config.layers && !isEmpty(config.layers)) {
-      const layers = this.layerService.createLayers(config.layers, devices);
+      const layers = await this.layerService.createLayers(config.layers);
       for (const layer of layers) {
         layerControl.addOverlay(layer.group, layer.config.name);
         if (layer.active) {
@@ -151,18 +144,18 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
       this.map.fitBounds(line.getBounds());
     }
 
-    this.updateRealtimeSubs(this.allLayers, config);
+    this.updateRealtimeSubs(this.allLayers);
   }
 
-  private updateRealtimeSubs(layers: MyLayer[], config: ILayeredMapWidgetConfig): void {
+  private updateRealtimeSubs(layers: MyLayer[]): void {
     for (const layer of layers) {
       if (this.layerSubs.has(layer)) {
         this.layerSubs.get(layer)!.unsubscribe();
         this.layerSubs.delete(layer);
       }
       const cfg = layer.config;
-      if (config.device && isDeviceFragmentLayerConfig(cfg)) {
-        const query = `(bygroupid(${config.device.id}) or id eq '${config.device.id}') and has(c8y_Position) and ${cfg.fragment} eq '${cfg.value}'`;
+      if (isDeviceFragmentLayerConfig(cfg)) {
+        const query = `(bygroupid(${cfg.device.id}) or id eq '${cfg.device.id}') and has(c8y_Position) and ${cfg.fragment} eq '${cfg.value}'`;
         const sub = this.inventoryPollingService
           .createPolling$({ query }, layer)
           .subscribe((delta) => this.layerService.updatePollingDelta(delta, layer));

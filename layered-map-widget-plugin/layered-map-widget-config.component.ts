@@ -1,9 +1,9 @@
-import { AlertService, DynamicComponent, OnBeforeSave } from '@c8y/ngx-components';
+import { DynamicComponent, OnBeforeSave } from '@c8y/ngx-components';
 import { IManagedObject } from '@c8y/client';
 import { Component, Input, OnInit } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { take } from 'rxjs/operators';
-import { clone, cloneDeep, has, isEmpty } from 'lodash';
+import { clone, cloneDeep, has } from 'lodash';
 import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
 import { DrawLineCreatorModalComponent } from './draw-line-creator/draw-line-creator-modal.component';
 import {
@@ -29,7 +29,7 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
   items: IManagedObject[] = [];
   mode: WidgetConfigMode;
 
-  constructor(private bsModalService: BsModalService, private alert: AlertService) {}
+  constructor(private bsModalService: BsModalService) {}
 
   ngOnInit(): void {
     this.mode = this.config.saved ? 'UPDATE' : 'CREATE';
@@ -92,7 +92,7 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
 
   async openEventTrackCreatorModal() {
     const modalRef = this.bsModalService.show(EventLineCreatorModalComponent, {});
-    modalRef.content!.items = clone(this.config.devices ?? []);
+    modalRef.content!.items = clone(this.config.devices ?? []); // TODO: remove this and add device selection in event modal
     const openExportTemplateModal = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
     const track = await openExportTemplateModal;
     if (track) {
@@ -140,11 +140,6 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
 
   async onBeforeSave(config?: ILayeredMapWidgetConfig): Promise<boolean> {
     if (!config) {
-      return false;
-    }
-
-    if (config.layers.find((l) => isDeviceFragmentLayerConfig(l)) && isEmpty(this.config.device)) {
-      this.alert.danger('Device Fragment layer requires you to select a group or device!');
       return false;
     }
 

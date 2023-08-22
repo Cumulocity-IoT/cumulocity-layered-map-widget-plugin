@@ -2,20 +2,25 @@ import { Injectable } from '@angular/core';
 import { IManagedObject, InventoryService } from '@c8y/client';
 import { has } from 'lodash';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SelectedDevicesService {
   constructor(private inventory: InventoryService) {}
 
-  async getDevices(device: IManagedObject) {
+  async getDevices(input: IManagedObject | { id: string }) {
     let deviceMOs: IManagedObject[];
-    if (!has(device, 'name') || !has(device, 'type')) {
-      device = (await this.inventory.detail(device.id)).data;
+    let mo: IManagedObject;
+    if (!has(input, 'name') || !has(input, 'type')) {
+      mo = (await this.inventory.detail(input.id)).data;
+    } else {
+      mo = input as IManagedObject;
     }
 
-    if (has(device, 'c8y_IsDeviceGroup')) {
-      deviceMOs = await this.getDevicesOfGroup(device);
+    if (has(mo, 'c8y_IsDeviceGroup')) {
+      deviceMOs = await this.getDevicesOfGroup(mo);
     } else {
-      deviceMOs = [device];
+      deviceMOs = [mo];
     }
     return deviceMOs;
   }
