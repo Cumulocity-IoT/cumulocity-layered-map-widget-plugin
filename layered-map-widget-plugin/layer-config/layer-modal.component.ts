@@ -26,7 +26,7 @@ export class LayerModalComponent {
   setLayer(layer: DeviceFragmentLayerConfig | QueryLayerConfig) {
     this.layer = layer;
     this.title = 'Edit layer';
-    this.labels.ok = 'Update';
+    this.labels = { ok: 'Update', cancel: 'Cancel' };
     if (isDeviceFragmentLayerConfig(layer)) {
       this.type = 'DeviceFragmentLayerConfig';
     } else if (isQueryLayerConfig(layer)) {
@@ -49,7 +49,7 @@ export class LayerModalComponent {
         name,
         color,
         icon,
-        ...{ fragment: '', value: '' },
+        ...{ fragment: '', value: '', device: { id: '', name: '' } },
       } as DeviceFragmentLayerConfig;
       this.type = type;
     } else if (type === 'AlarmQueryLayerConfig') {

@@ -28,6 +28,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { JsonEditorComponent } from './popover-config/editor/jsoneditor.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ActionIconPipe } from './popup/action-icon.pipe';
+import { AssetSelectorModule } from '@c8y/ngx-components/assets-navigator';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { ActionIconPipe } from './popup/action-icon.pipe';
     BsModalModule,
     ModalModule,
     AngularResizeEventModule,
+    AssetSelectorModule,
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
     CollapseModule.forRoot(),
@@ -91,8 +93,8 @@ import { ActionIconPipe } from './popup/action-icon.pipe';
             noNewWidgets: false, // Set this to true, to don't allow adding new widgets.
             ng1: {
               options: {
-                noDeviceTarget: false, // Set this to true to hide the device selector.
-                groupsSelectable: true, // Set this, if not only devices should be selectable.
+                noDeviceTarget: true, // Set this to true to hide the device selector.
+                groupsSelectable: false, // Set this, if not only devices should be selectable.
               },
             },
           },

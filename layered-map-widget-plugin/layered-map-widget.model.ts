@@ -29,6 +29,7 @@ export const DEFAULT_CONFIG: PopoverConfig = {
 export type DeviceFragmentLayerConfig = BasicLayerConfig & {
   fragment: string;
   value: string;
+  device: { id: string; name: string };
 };
 
 export function isDeviceFragmentLayerConfig(config: unknown): config is DeviceFragmentLayerConfig {
@@ -72,7 +73,6 @@ export type PollingDelta = {
 };
 
 export interface ILayeredMapWidgetConfig {
-  device?: IManagedObject;
   devices?: { name: string; id: string }[];
   selectedTrack?: string;
   tracks?: ITrack[];
