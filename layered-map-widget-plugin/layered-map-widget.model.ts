@@ -45,8 +45,19 @@ export function isQueryLayerConfig(config: BasicLayerConfig): config is QueryLay
   return has(config, 'filter');
 }
 
+export type WebMapServiceLayerConfig = BasicLayerConfig & {
+  url: string;
+  wmsLayers: { name: string }[];
+};
+
+export function isWebMapServiceLayerConfig(
+  config: BasicLayerConfig
+): config is WebMapServiceLayerConfig {
+  return has(config, 'url') && has(config, 'wmsLayers');
+}
+
 export type LayerConfig = {
-  config: DeviceFragmentLayerConfig | QueryLayerConfig;
+  config: DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig;
   active: boolean;
 };
 
@@ -78,6 +89,10 @@ export interface ILayeredMapWidgetConfig {
   tracks?: ITrack[];
   saved?: boolean;
   layers: LayerConfig[];
+  positionPolling?: {
+    enabled: boolean;
+    interval: number;
+  };
 }
 
 export interface ITrack {

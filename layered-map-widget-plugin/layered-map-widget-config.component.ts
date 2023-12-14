@@ -6,13 +6,7 @@ import { take } from 'rxjs/operators';
 import { clone, cloneDeep, has } from 'lodash';
 import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
 import { DrawLineCreatorModalComponent } from './draw-line-creator/draw-line-creator-modal.component';
-import {
-  ILayeredMapWidgetConfig,
-  isDeviceFragmentLayerConfig,
-  isQueryLayerConfig,
-  ITrack,
-  LayerConfig,
-} from './layered-map-widget.model';
+import { ILayeredMapWidgetConfig, ITrack, LayerConfig } from './layered-map-widget.model';
 import { LayerModalComponent } from './layer-config/layer-modal.component';
 import { PopoverModalComponent } from './popover-config/popover-modal.component';
 
@@ -37,6 +31,17 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     if (!has(this.config, 'layers')) {
       this.config.layers = [];
     }
+
+    if (!has(this.config, 'positionPolling')) {
+      this.config.positionPolling = {
+        enabled: true,
+        interval: 3,
+      };
+    }
+  }
+
+  togglePositionPolling() {
+    this.config.positionPolling.enabled = !this.config.positionPolling.enabled;
   }
 
   // onSubDevicesChanged(devices: IManagedObject[]): void {
@@ -50,7 +55,7 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     if (!layer) {
       // create mode
       const created = await close;
-      if (!!created && (isDeviceFragmentLayerConfig(created) || isQueryLayerConfig(created))) {
+      if (!!created) {
         this.config.layers?.push({ config: created, active: true });
         this.config.layers = [...this.config.layers];
       }

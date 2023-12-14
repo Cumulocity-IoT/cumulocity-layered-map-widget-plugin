@@ -4,26 +4,32 @@ import { IconSelectorService } from '@c8y/ngx-components/icon-selector';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import {
-  BasicLayerConfig,
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
+  isWebMapServiceLayerConfig,
   QueryLayerConfig,
+  WebMapServiceLayerConfig,
 } from '../layered-map-widget.model';
 
 @Component({ templateUrl: './layer-modal.component.html' })
 export class LayerModalComponent {
   title = 'Create layer';
-  closeSubject: Subject<BasicLayerConfig> = new Subject();
+  closeSubject: Subject<DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig> =
+    new Subject();
   labels: ModalLabels = { ok: 'Create', cancel: 'Cancel' };
-  layer: BasicLayerConfig = { name: '', color: '', icon: '' };
+  layer: Partial<DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig> = {
+    name: '',
+    color: '',
+    icon: '',
+  };
 
-  type: 'DeviceFragmentLayerConfig' | 'QueryLayerConfig' | 'Unset' = 'Unset';
+  type: 'DeviceFragmentLayerConfig' | 'QueryLayerConfig' | 'Unset' | 'WebMapServiceLayer' = 'Unset';
   queryType: 'Alarm' | 'Inventory' | 'Event';
 
   constructor(public bsModalRef: BsModalRef, private iconSelector: IconSelectorService) {}
 
-  setLayer(layer: DeviceFragmentLayerConfig | QueryLayerConfig) {
+  setLayer(layer: DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig) {
     this.layer = layer;
     this.title = 'Edit layer';
     this.labels = { ok: 'Update', cancel: 'Cancel' };
@@ -32,6 +38,8 @@ export class LayerModalComponent {
     } else if (isQueryLayerConfig(layer)) {
       this.type = 'QueryLayerConfig';
       this.queryType = layer.type;
+    } else if (isWebMapServiceLayerConfig(layer)) {
+      this.type = 'WebMapServiceLayer';
     }
   }
 
@@ -79,7 +87,23 @@ export class LayerModalComponent {
       } as QueryLayerConfig;
       this.type = 'QueryLayerConfig';
       this.queryType = 'Inventory';
+    } else if (type === 'WebMapServiceLayer') {
+      this.layer = {
+        name,
+        color,
+        icon,
+        ...{ type: 'ExternalGIS', url: '', wmsLayers: [{ name: '' }] },
+      } as WebMapServiceLayerConfig;
+      this.type = 'WebMapServiceLayer';
     }
+  }
+
+  addWMSLayer() {
+    (<WebMapServiceLayerConfig>this.layer).wmsLayers.push({ name: '' });
+  }
+
+  removeWMSLayer(index: number) {
+    (<WebMapServiceLayerConfig>this.layer).wmsLayers.splice(index, 1);
   }
 
   // - MODAL section
@@ -91,6 +115,6 @@ export class LayerModalComponent {
 
   // called if save is pressed
   onClose(): void {
-    this.closeSubject.next(this.layer);
+    this.closeSubject.next(this.layer as any);
   }
 }

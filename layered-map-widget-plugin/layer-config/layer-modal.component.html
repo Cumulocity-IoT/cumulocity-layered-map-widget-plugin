@@ -66,6 +66,9 @@
         >
           Event Query
         </option>
+        <option value="WebMapServiceLayer" [selected]="type === 'WebMapServiceLayer'">
+          WebMapServiceLayer
+        </option>
       </select>
     </div>
   </div>
@@ -76,8 +79,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <div class="card-header separator">
-          </div>
+          <div class="card-header separator"></div>
           <div class="card-block d-flex d-col p-t-0 p-b-0 bg-level-1" style="height: 300px">
             <c8y-asset-selector-miller
               [(ngModel)]="layer.device"
@@ -123,5 +125,39 @@
     ></inventory-query-form>
     <alarm-query-form *ngIf="queryType === 'Alarm'" [filter]="layer.filter"></alarm-query-form>
     <event-query-form *ngIf="queryType === 'Event'" [filter]="layer.filter"></event-query-form>
+  </span>
+
+  <span *ngIf="type === 'WebMapServiceLayer'">
+    <div class="legend form-block center">Web Map Service</div>
+    <div class="form-group">
+      <label for="url" translate>URL</label>
+      <input
+        name="url"
+        id="url"
+        type="url"
+        class="form-control"
+        placeholder="http://ows.mundialis.de/services/service?"
+        [(ngModel)]="layer.url"
+        required
+      />
+    </div>
+    <ul class="list-unstyled">
+      <li class="m-b-8" *ngFor="let item of layer.wmsLayers; let i = index">
+        <c8y-input-group-list
+          [index]="i"
+          (onAdd)="addWMSLayer()"
+          (onRemove)="removeWMSLayer($event)"
+        >
+          <input
+            type="text"
+            name="wsLayer"
+            class="form-control m-r-4"
+            placeholder="{{ 'WMS Layer, e.g. TOPO-OSM-WMS' | translate }}"
+            style="flex-grow: 2"
+            [(ngModel)]="item.name"
+            [required]="true"
+        /></c8y-input-group-list>
+      </li>
+    </ul>
   </span>
 </c8y-modal>

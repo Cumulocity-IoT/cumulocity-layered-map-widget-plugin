@@ -20,7 +20,9 @@ import {
   ILayeredMapWidgetConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
+  isWebMapServiceLayerConfig,
   MyLayer,
+  WebMapServiceLayerConfig,
 } from './layered-map-widget.model';
 import { LayerService } from './service/layer.service';
 import { PopupComponent } from './popup/popup.component';
@@ -111,7 +113,26 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     osm.addTo(this.map);
 
     if (config.layers && !isEmpty(config.layers)) {
-      const layers = await this.layerService.createLayers(config.layers);
+      config.layers
+        .filter((l) => isWebMapServiceLayerConfig(l.config))
+        .forEach((l) => {
+          const cfg = l.config as WebMapServiceLayerConfig;
+          const layers = cfg.wmsLayers.map((l) => l.name).toString();
+          const layer = tileLayer.wms(cfg.url, {
+            layers,
+            transparent: true,
+          });
+
+          layerControl.addOverlay(layer, cfg.name);
+          if (l.active) {
+            layer.addTo(this.map);
+          }
+        });
+
+      const markerBasedLayers = config.layers.filter(
+        (l) => isDeviceFragmentLayerConfig(l.config) || isQueryLayerConfig(l.config)
+      );
+      const layers = await this.layerService.createLayers(markerBasedLayers);
       for (const layer of layers) {
         layerControl.addOverlay(layer.group, layer.config.name);
         if (layer.active) {
@@ -181,13 +202,16 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
         }
       }
     }
-    this.createPositionUpdatePolling(layers);
+    if (!this.cfg.positionPolling || this.cfg.positionPolling.enabled) {
+      this.createPositionUpdatePolling(layers);
+    }
   }
 
   private createPositionUpdatePolling(layers: MyLayer[]) {
     if (!this.positionUpdateSub) {
+      const interval = +this.cfg.positionPolling?.interval * 1000 || 3000;
       this.positionUpdateSub = this.positionPollingService
-        .createPolling$()
+        .createPolling$('has(c8y_Position)', interval)
         .pipe(filter((updates) => !isEmpty(updates)))
         .subscribe((positionUpdates) => this.onPositionUpdate(layers, positionUpdates));
     }

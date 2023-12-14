@@ -3,6 +3,39 @@
   (subDevices)="onSubDevicesChanged($event)"
 ></sub-device-resolver> -->
 <div class="p-24">
+  <div class="legend form-block" *ngIf="config.positionPolling">
+    {{ 'General' | translate }}
+  </div>
+
+  <div class="form-inline">
+    <div class="form-group">
+      <span>{{ 'Toggle location update polling' | translate }}</span>
+      <label class="c8y-switch" title="{{ 'Toggle location update polling' | translate }}">
+        <input
+          type="checkbox"
+          [(ngModel)]="config.positionPolling.enabled"
+          name="positionPolling"
+          (change)="togglePositionPolling()"
+        />
+        <span></span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="intervalSlider">Interval in seconds</label>
+      <input
+        id="intervalSlider"
+        type="range"
+        min="1"
+        max="60"
+        step="1"
+        [(ngModel)]="config.positionPolling.interval"
+        [disabled]="!config.positionPolling.enabled"
+      />
+      <span>{{ config.positionPolling.interval }} {{ 'seconds' | translate }}</span>
+    </div>
+  </div>
+
   <div class="legend form-block">
     {{ 'Layers' | translate }}
   </div>

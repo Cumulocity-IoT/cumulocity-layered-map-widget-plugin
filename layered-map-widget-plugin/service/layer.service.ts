@@ -6,6 +6,7 @@ import {
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
+  isWebMapServiceLayerConfig,
   LayerConfig,
   MyLayer,
   PollingDelta,
@@ -52,7 +53,7 @@ export class LayerService {
           devices.forEach((d) => this.updatePosition(layer, d.id, d.c8y_Position));
         });
       }
-    } else {
+    } else if (isDeviceFragmentLayerConfig(setup.config)) {
       const config = setup.config as DeviceFragmentLayerConfig;
       const devices = await this.selectedDevicesService.getDevices(config.device);
       const matches = this.getMatches(setup.config, devices || []);
@@ -64,6 +65,8 @@ export class LayerService {
         .forEach((d) => layer.coordinates.set(d.id, latLng(d.c8y_Position)));
 
       this.createLayerGroup(layer);
+    } else if (isWebMapServiceLayerConfig(setup.config)) {
+      // do nothing atm
     }
 
     return layer;

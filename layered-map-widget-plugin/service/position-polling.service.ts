@@ -2,16 +2,11 @@ import { Injectable } from '@angular/core';
 import { IManagedObject, InventoryService } from '@c8y/client';
 import { Observable, Subscriber } from 'rxjs';
 
-const FETCH_INTERVAL = 3000;
-
 @Injectable()
 export class PositionPollingService {
   constructor(private inventory: InventoryService) {}
 
-  createPolling$(
-    filterQuery = 'has(c8y_Position)',
-    interval = FETCH_INTERVAL
-  ): Observable<IManagedObject[]> {
+  createPolling$(filterQuery: string, interval: number): Observable<IManagedObject[]> {
     return new Observable<IManagedObject[]>((observer) => {
       const currentDate = new Date().toISOString();
       this.iterateAfter(observer, currentDate, filterQuery, interval);
