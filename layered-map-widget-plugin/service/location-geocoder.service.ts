@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 
 @Injectable()
 export class LocationGeocoderService {
-  mapKey = 'MgOKczqMYTkXK5jiMgEYGvjnTHf562mA';
+  mapKey = '';
   geoCodeSearchUrl = `http://www.mapquestapi.com/geocoding/v1/address`;
 
   async geoCode(address: string): Promise<LatLng | null> {

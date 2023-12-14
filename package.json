@@ -1,11 +1,11 @@
 {
-  "name": "layered-map-widget-plugin",
+  "name": "sag-ps-iot-pkg-layered-map-widget-plugin",
   "version": "2.0.0",
   "description": "Show markers on a layer basis. Create layers based on filter criteria.",
   "scripts": {
     "start": "c8ycli server",
     "start:shell": "c8ycli server -p 9326  -u https://entelios-dev.eu-latest.cumulocity.com/ --shell cockpit",
-    "build": "c8ycli build",
+    "build": "rimraf dist && c8ycli build",
     "zip": "zip -r -q ./sag-ps-iot-pkg-layered-map-widget-plugin.zip ./dist/apps/sag-ps-iot-pkg-layered-map-widget-plugin/*",
     "lint": "eslint . --ext js,ts --quiet",
     "format": "eslint . --ext js,ts --quiet --fix",
