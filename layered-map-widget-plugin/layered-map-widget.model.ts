@@ -48,6 +48,7 @@ export function isQueryLayerConfig(config: BasicLayerConfig): config is QueryLay
 export type WebMapServiceLayerConfig = BasicLayerConfig & {
   url: string;
   wmsLayers: { name: string }[];
+  token?: string;
 };
 
 export function isWebMapServiceLayerConfig(
@@ -56,8 +57,10 @@ export function isWebMapServiceLayerConfig(
   return has(config, 'url') && has(config, 'wmsLayers');
 }
 
-export type LayerConfig = {
-  config: DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig;
+export type LayerType = DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig;
+
+export type LayerConfig<LayerType> = {
+  config: LayerType;
   active: boolean;
 };
 
@@ -88,7 +91,7 @@ export interface ILayeredMapWidgetConfig {
   selectedTrack?: string;
   tracks?: ITrack[];
   saved?: boolean;
-  layers: LayerConfig[];
+  layers: LayerConfig<BasicLayerConfig>[];
   positionPolling?: {
     enabled: boolean;
     interval: number;

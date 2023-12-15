@@ -10,19 +10,17 @@ import {
   Popup,
   tileLayer,
 } from 'leaflet';
+
 import { LayeredMapWidgetService } from './service/layered-map-widget.service';
 import { get, isEmpty } from 'lodash';
 import { Subscription } from 'rxjs';
-import { IManagedObject } from '@c8y/client';
 import * as MarkerImage from './marker-icon';
 
 import {
   ILayeredMapWidgetConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
-  isWebMapServiceLayerConfig,
   MyLayer,
-  WebMapServiceLayerConfig,
 } from './layered-map-widget.model';
 import { LayerService } from './service/layer.service';
 import { PopupComponent } from './popup/popup.component';
@@ -31,6 +29,8 @@ import { filter } from 'rxjs/operators';
 import { AlarmPollingService } from './service/alarm-polling.service';
 import { PositionPollingService } from './service/position-polling.service';
 import { EventPollingService } from './service/event-polling.service';
+import { WMSLayerService } from './service/wms-layer.service';
+import { IManagedObject } from '@c8y/client';
 
 @Component({
   selector: 'layered-map-widget',
@@ -40,6 +40,7 @@ import { EventPollingService } from './service/event-polling.service';
     AlarmPollingService,
     EventPollingService,
     PositionPollingService,
+    WMSLayerService,
   ],
   styleUrls: ['./layered-map-widget.component.less'],
   templateUrl: './layered-map-widget.component.html',
@@ -81,7 +82,8 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     private inventoryPollingService: InventoryPollingService,
     private positionPollingService: PositionPollingService,
     private eventPollingService: EventPollingService,
-    private alarmPollingService: AlarmPollingService
+    private alarmPollingService: AlarmPollingService,
+    private wmsLayerService: WMSLayerService
   ) {}
 
   ngAfterViewInit(): void {
@@ -113,21 +115,16 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     osm.addTo(this.map);
 
     if (config.layers && !isEmpty(config.layers)) {
-      config.layers
-        .filter((l) => isWebMapServiceLayerConfig(l.config))
-        .forEach((l) => {
-          const cfg = l.config as WebMapServiceLayerConfig;
-          const layers = cfg.wmsLayers.map((l) => l.name).toString();
-          const layer = tileLayer.wms(cfg.url, {
-            layers,
-            transparent: true,
-          });
+      const wmsLayers = this.wmsLayerService.filterWMSLayers(config);
 
-          layerControl.addOverlay(layer, cfg.name);
-          if (l.active) {
+      wmsLayers.map((layerConfig) =>
+        this.wmsLayerService.createWMSLayer(layerConfig).then((layer) => {
+          layerControl.addOverlay(layer, layerConfig.config.name);
+          if (layerConfig.active) {
             layer.addTo(this.map);
           }
-        });
+        })
+      );
 
       const markerBasedLayers = config.layers.filter(
         (l) => isDeviceFragmentLayerConfig(l.config) || isQueryLayerConfig(l.config)

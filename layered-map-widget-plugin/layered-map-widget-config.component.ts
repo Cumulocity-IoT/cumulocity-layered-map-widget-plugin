@@ -6,7 +6,12 @@ import { take } from 'rxjs/operators';
 import { clone, cloneDeep, has } from 'lodash';
 import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
 import { DrawLineCreatorModalComponent } from './draw-line-creator/draw-line-creator-modal.component';
-import { ILayeredMapWidgetConfig, ITrack, LayerConfig } from './layered-map-widget.model';
+import {
+  BasicLayerConfig,
+  ILayeredMapWidgetConfig,
+  ITrack,
+  LayerConfig,
+} from './layered-map-widget.model';
 import { LayerModalComponent } from './layer-config/layer-modal.component';
 import { PopoverModalComponent } from './popover-config/popover-modal.component';
 
@@ -40,15 +45,15 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     }
   }
 
-  togglePositionPolling() {
-    this.config.positionPolling.enabled = !this.config.positionPolling.enabled;
-  }
+  // togglePositionPolling() {
+  //   this.config.positionPolling.enabled = !this.config.positionPolling.enabled;
+  // }
 
   // onSubDevicesChanged(devices: IManagedObject[]): void {
   //   this.config.devices = devices;
   // }
 
-  async openLayerModal(layer?: LayerConfig) {
+  async openLayerModal(layer?: LayerConfig<BasicLayerConfig>) {
     const modalRef = this.bsModalService.show(LayerModalComponent, {});
 
     const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
@@ -70,7 +75,7 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     }
   }
 
-  async openPopoverModal(layer: LayerConfig) {
+  async openPopoverModal(layer: LayerConfig<BasicLayerConfig>) {
     const modalRef = this.bsModalService.show(PopoverModalComponent, {});
     if (layer.config.popoverConfig) {
       modalRef.content?.setConfig(clone(layer.config.popoverConfig));
@@ -83,15 +88,15 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     }
   }
 
-  editLayer(layer: LayerConfig) {
+  editLayer(layer: LayerConfig<BasicLayerConfig>) {
     this.openLayerModal(layer);
   }
 
-  editPopover(layer: LayerConfig) {
+  editPopover(layer: LayerConfig<BasicLayerConfig>) {
     this.openPopoverModal(layer);
   }
 
-  deleteLayer(layer: LayerConfig) {
+  deleteLayer(layer: LayerConfig<BasicLayerConfig>) {
     this.config.layers = this.config.layers.filter((l) => l !== layer);
   }
 

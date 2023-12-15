@@ -46,28 +46,28 @@
       >
         <option value="" selected disabled>Select a type</option>
         <option value="DeviceFragmentLayerConfig" [selected]="type === 'DeviceFragmentLayerConfig'">
-          Device-Fragment
+          {{ 'Device-Fragment' | translate }}
         </option>
         <option
           value="InventoryQueryLayerConfig"
           [selected]="type === 'QueryLayerConfig' && queryType === 'Inventory'"
         >
-          Inventory Query
+          {{ 'Inventory Query' | translate }}
         </option>
         <option
           value="AlarmQueryLayerConfig"
           [selected]="type === 'QueryLayerConfig' && queryType === 'Alarm'"
         >
-          Alarm Query
+          {{ 'Alarm Query' | translate }}
         </option>
         <option
           value="EventQueryLayerConfig"
           [selected]="type === 'QueryLayerConfig' && queryType === 'Event'"
         >
-          Event Query
+          {{ 'Event Query' | translate }}
         </option>
         <option value="WebMapServiceLayer" [selected]="type === 'WebMapServiceLayer'">
-          WebMapServiceLayer
+          {{ 'Web Map Service (WMS)' | translate }}
         </option>
       </select>
     </div>
@@ -138,10 +138,12 @@
         class="form-control"
         placeholder="http://ows.mundialis.de/services/service?"
         [(ngModel)]="layer.url"
+        (ngModelChange)="onWmsURLChange($event)"
         required
       />
     </div>
     <ul class="list-unstyled">
+      <label translate>WMS Layers</label>
       <li class="m-b-8" *ngFor="let item of layer.wmsLayers; let i = index">
         <c8y-input-group-list
           [index]="i"
@@ -159,5 +161,29 @@
         /></c8y-input-group-list>
       </li>
     </ul>
+
+    <div class="form-group">
+      <label for="username" translate>Username</label>
+      <input
+        name="username"
+        id="username"
+        type="text"
+        class="form-control"
+        [(ngModel)]="wmsCredentials.username"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password" translate>Password</label>
+      <input
+        name="password"
+        id="password"
+        type="password"
+        class="form-control"
+        [(ngModel)]="wmsCredentials.password"
+      />
+    </div>
+    <button *ngIf="layer.token" class="btn btn-danger" type="button" (click)="clearAllPasswords()">
+      {{ 'Clear all passwords' | translate }}
+    </button>
   </span>
 </c8y-modal>

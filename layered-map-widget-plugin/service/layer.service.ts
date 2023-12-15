@@ -3,6 +3,7 @@ import { IManagedObject } from '@c8y/client';
 import { LatLng, latLng, LayerGroup, Marker } from 'leaflet';
 import { get, has, isEmpty, set } from 'lodash';
 import {
+  BasicLayerConfig,
   DeviceFragmentLayerConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
@@ -25,11 +26,11 @@ export class LayerService {
     private selectedDevicesService: SelectedDevicesService
   ) {}
 
-  createLayers(configs: LayerConfig[]) {
+  createLayers(configs: LayerConfig<BasicLayerConfig>[]) {
     return Promise.all(configs.map((cfg) => this.createLayer(cfg)));
   }
 
-  async createLayer(setup: LayerConfig) {
+  async createLayer(setup: LayerConfig<BasicLayerConfig>) {
     const layer = Object.assign(new MyLayer(), setup);
 
     if (isQueryLayerConfig(setup.config)) {
@@ -73,7 +74,7 @@ export class LayerService {
   }
   updateMarkerIcon(
     deviceId: string,
-    layer: MyLayer & LayerConfig,
+    layer: MyLayer & LayerConfig<BasicLayerConfig>,
     status: {
       critical?: number;
       major?: number;
