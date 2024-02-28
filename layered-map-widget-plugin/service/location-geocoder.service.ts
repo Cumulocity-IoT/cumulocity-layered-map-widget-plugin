@@ -1,32 +1,44 @@
 import { Injectable } from '@angular/core';
 import { FetchClient } from '@c8y/client';
 import { LatLng } from 'leaflet';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 
+interface NominatimLocationData {
+  place_id: number;
+  licence: string;
+  osm_type: string;
+  osm_id: number;
+  lat: string;
+  lon: string;
+  class: string;
+  type: string;
+  place_rank: number;
+  importance: number;
+  addresstype: string;
+  name: string;
+  display_name: string;
+  boundingbox: [string, string, string, string];
+}
 @Injectable()
 export class LocationGeocoderService {
-  mapKey = '';
-  geoCodeSearchUrl = `http://www.mapquestapi.com/geocoding/v1/address`;
+  geoCodeSearchUrl = `https://nominatim.openstreetmap.org`;
 
   async geoCode(address: string): Promise<LatLng | null> {
-    const response = await new FetchClient(this.geoCodeSearchUrl).fetch('', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({ location: address, maxResults: 1 }),
-      params: {
-        key: this.mapKey,
-      },
-    });
+    const response = await new FetchClient(`${this.geoCodeSearchUrl}`).fetch(
+      `search?city=${address}&format=json`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }
+    );
 
-    const data = (await response.json()) as {
-      results: [{ locations: [{ latLng: { lat: number; lng: number } }] }];
-    };
-    if (!isEmpty(data?.results) && !isEmpty(data.results[0]?.locations)) {
-      const { lat, lng } = data.results[0].locations[0].latLng;
-      return new LatLng(lat, lng);
+    const data = (await response.json()) as NominatimLocationData[];
+    if (isArray(data) && !isEmpty(data)) {
+      const { lat, lon } = data[0];
+      return new LatLng(+lat, +lon);
     }
 
     return null;

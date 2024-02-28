@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ComponentRef, Input, OnDestroy } from '@angul
 import {
   Control,
   icon,
+  LatLng,
   latLng,
   Map as LMap,
   MapOptions,
@@ -10,10 +11,10 @@ import {
   Popup,
   tileLayer,
 } from 'leaflet';
+
 import { LayeredMapWidgetService } from './service/layered-map-widget.service';
 import { get, isEmpty } from 'lodash';
-import { Subscription } from 'rxjs';
-import { IManagedObject } from '@c8y/client';
+import { Subject, Subscription } from 'rxjs';
 import * as MarkerImage from './marker-icon';
 
 import {
@@ -25,10 +26,13 @@ import {
 import { LayerService } from './service/layer.service';
 import { PopupComponent } from './popup/popup.component';
 import { InventoryPollingService } from './service/inventory-polling.service';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { AlarmPollingService } from './service/alarm-polling.service';
 import { PositionPollingService } from './service/position-polling.service';
 import { EventPollingService } from './service/event-polling.service';
+import { WMSLayerService } from './service/wms-layer.service';
+import { IManagedObject } from '@c8y/client';
+import { DashboardChildComponent } from '@c8y/ngx-components';
 
 @Component({
   selector: 'layered-map-widget',
@@ -38,12 +42,13 @@ import { EventPollingService } from './service/event-polling.service';
     AlarmPollingService,
     EventPollingService,
     PositionPollingService,
+    WMSLayerService,
   ],
   styleUrls: ['./layered-map-widget.component.less'],
   templateUrl: './layered-map-widget.component.html',
 })
 export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
-  map: LMap;
+  map?: LMap;
   allLayers: MyLayer[] = [];
 
   icon = icon({
@@ -73,14 +78,27 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   private positionUpdateSub: Subscription | null = null;
   circuit: Polyline;
 
+  private destroy$ = new Subject();
+
   constructor(
     private widgetService: LayeredMapWidgetService,
     private layerService: LayerService,
     private inventoryPollingService: InventoryPollingService,
     private positionPollingService: PositionPollingService,
     private eventPollingService: EventPollingService,
-    private alarmPollingService: AlarmPollingService
-  ) {}
+    private alarmPollingService: AlarmPollingService,
+    private wmsLayerService: WMSLayerService,
+    child: DashboardChildComponent
+  ) {
+    child.changeEnd
+      .pipe(
+        filter((child) => child.lastChange === 'resize'),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.map?.invalidateSize();
+      });
+  }
 
   ngAfterViewInit(): void {
     this.map.invalidateSize();
@@ -90,12 +108,6 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     this.map = map;
     if (this.cfg) {
       this.draw(this.cfg);
-    }
-  }
-
-  onResized(): void {
-    if (this.map) {
-      this.map.invalidateSize();
     }
   }
 
@@ -111,13 +123,37 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     osm.addTo(this.map);
 
     if (config.layers && !isEmpty(config.layers)) {
-      const layers = await this.layerService.createLayers(config.layers);
+      const wmsLayers = this.wmsLayerService.filterWMSLayers(config);
+
+      wmsLayers.map((layerConfig) =>
+        this.wmsLayerService.createWMSLayer(layerConfig).then((layer) => {
+          layerControl.addOverlay(layer, layerConfig.config.name);
+          if (layerConfig.active) {
+            layer.addTo(this.map);
+          }
+        })
+      );
+
+      const markerBasedLayers = config.layers.filter(
+        (l) => isDeviceFragmentLayerConfig(l.config) || isQueryLayerConfig(l.config)
+      );
+      const layers = await this.layerService.createLayers(markerBasedLayers);
       for (const layer of layers) {
         layerControl.addOverlay(layer.group, layer.config.name);
         if (layer.active) {
           layer.group.addTo(this.map);
         }
         this.allLayers.push(layer);
+      }
+
+      if (config.autoCenter) {
+        Promise.all(layers.map((layer) => layer.initialLoad)).then(() => {
+          const bounds = this.layerService.extractMinMaxBounds(this.allLayers);
+          this.map.fitBounds(bounds);
+        });
+      } else if (config.manualCenter) {
+        const bounds = new LatLng(config.manualCenter.lat, config.manualCenter.long);
+        this.map.setView(bounds, config.manualCenter.zoomLevel ?? 13);
       }
     }
 
@@ -154,40 +190,47 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
         this.layerSubs.delete(layer);
       }
       const cfg = layer.config;
+      if (!cfg.enablePolling || cfg.enablePolling === 'false') {
+        continue;
+      }
+
       if (isDeviceFragmentLayerConfig(cfg)) {
         const query = `(bygroupid(${cfg.device.id}) or id eq '${cfg.device.id}') and has(c8y_Position) and ${cfg.fragment} eq '${cfg.value}'`;
         const sub = this.inventoryPollingService
-          .createPolling$({ query }, layer)
+          .createPolling$({ query }, layer, cfg.pollingInterval * 1000)
           .subscribe((delta) => this.layerService.updatePollingDelta(delta, layer));
         this.layerSubs.set(layer, sub);
       }
 
-      if (isQueryLayerConfig(layer.config)) {
-        if (layer.config.type === 'Alarm') {
+      if (isQueryLayerConfig(cfg)) {
+        if (cfg.type === 'Alarm') {
           const sub = this.alarmPollingService
-            .createPolling$(layer)
+            .createPolling$(layer, cfg.pollingInterval * 1000)
             .subscribe((delta) => this.layerService.updatePollingDelta(delta, layer));
           this.layerSubs.set(layer, sub);
-        } else if (layer.config.type === 'Inventory') {
+        } else if (cfg.type === 'Inventory') {
           const sub = this.inventoryPollingService
-            .createPolling$(layer.config.filter, layer)
+            .createPolling$(cfg.filter, layer, cfg.pollingInterval * 1000)
             .subscribe((delta) => this.layerService.updatePollingDelta(delta, layer));
           this.layerSubs.set(layer, sub);
-        } else if (layer.config.type === 'Event') {
+        } else if (cfg.type === 'Event') {
           const sub = this.eventPollingService
-            .createPolling$(layer)
+            .createPolling$(layer, cfg.pollingInterval * 1000)
             .subscribe((delta) => this.layerService.updatePollingDelta(delta, layer));
           this.layerSubs.set(layer, sub);
         }
       }
     }
-    this.createPositionUpdatePolling(layers);
+    if (this.cfg.positionPolling?.enabled === 'true') {
+      this.createPositionUpdatePolling(layers);
+    }
   }
 
   private createPositionUpdatePolling(layers: MyLayer[]) {
     if (!this.positionUpdateSub) {
+      const interval = +this.cfg.positionPolling?.interval * 1000 || 5000;
       this.positionUpdateSub = this.positionPollingService
-        .createPolling$()
+        .createPolling$('has(c8y_Position)', interval)
         .pipe(filter((updates) => !isEmpty(updates)))
         .subscribe((positionUpdates) => this.onPositionUpdate(layers, positionUpdates));
     }
@@ -203,6 +246,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
     try {
       this.tearDownRealtime();
       this.map.clearAllEventListeners;

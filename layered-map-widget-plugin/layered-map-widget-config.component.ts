@@ -7,14 +7,14 @@ import { clone, cloneDeep, has } from 'lodash';
 import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
 import { DrawLineCreatorModalComponent } from './draw-line-creator/draw-line-creator-modal.component';
 import {
+  BasicLayerConfig,
   ILayeredMapWidgetConfig,
-  isDeviceFragmentLayerConfig,
-  isQueryLayerConfig,
   ITrack,
   LayerConfig,
 } from './layered-map-widget.model';
 import { LayerModalComponent } from './layer-config/layer-modal.component';
 import { PopoverModalComponent } from './popover-config/popover-modal.component';
+import { CenterMapModalComponent } from './center-map/center-map-modal.component';
 
 export type WidgetConfigMode = 'CREATE' | 'UPDATE';
 
@@ -37,20 +37,43 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     if (!has(this.config, 'layers')) {
       this.config.layers = [];
     }
+
+    if (!has(this.config, 'autoCenter')) {
+      this.config.autoCenter = 'true';
+    }
+
+    if (!has(this.config, 'manualCenter')) {
+      this.config.manualCenter = {
+        zoomLevel: 10,
+        lat: null,
+        long: null,
+      };
+    }
+
+    if (!has(this.config, 'positionPolling')) {
+      this.config.positionPolling = {
+        enabled: 'true',
+        interval: 10,
+      };
+    }
   }
+
+  // togglePositionPolling() {
+  //   this.config.positionPolling.enabled = !this.config.positionPolling.enabled;
+  // }
 
   // onSubDevicesChanged(devices: IManagedObject[]): void {
   //   this.config.devices = devices;
   // }
 
-  async openLayerModal(layer?: LayerConfig) {
+  async openLayerModal(layer?: LayerConfig<BasicLayerConfig>) {
     const modalRef = this.bsModalService.show(LayerModalComponent, {});
 
     const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
     if (!layer) {
       // create mode
       const created = await close;
-      if (!!created && (isDeviceFragmentLayerConfig(created) || isQueryLayerConfig(created))) {
+      if (!!created) {
         this.config.layers?.push({ config: created, active: true });
         this.config.layers = [...this.config.layers];
       }
@@ -65,7 +88,7 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     }
   }
 
-  async openPopoverModal(layer: LayerConfig) {
+  async openPopoverModal(layer: LayerConfig<BasicLayerConfig>) {
     const modalRef = this.bsModalService.show(PopoverModalComponent, {});
     if (layer.config.popoverConfig) {
       modalRef.content?.setConfig(clone(layer.config.popoverConfig));
@@ -78,15 +101,27 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
     }
   }
 
-  editLayer(layer: LayerConfig) {
+  async openCenterMapModal() {
+    const modalRef = this.bsModalService.show(CenterMapModalComponent, {});
+    if (this.config.manualCenter) {
+      modalRef.content!.setCenter(clone(this.config.manualCenter));
+    }
+    const modal = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
+    const manualCenter = await modal;
+    if (manualCenter) {
+      this.config.manualCenter = manualCenter;
+    }
+  }
+
+  editLayer(layer: LayerConfig<BasicLayerConfig>) {
     this.openLayerModal(layer);
   }
 
-  editPopover(layer: LayerConfig) {
+  editPopover(layer: LayerConfig<BasicLayerConfig>) {
     this.openPopoverModal(layer);
   }
 
-  deleteLayer(layer: LayerConfig) {
+  deleteLayer(layer: LayerConfig<BasicLayerConfig>) {
     this.config.layers = this.config.layers.filter((l) => l !== layer);
   }
 

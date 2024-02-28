@@ -3,6 +3,86 @@
   (subDevices)="onSubDevicesChanged($event)"
 ></sub-device-resolver> -->
 <div class="p-24">
+  <div class="legend form-block" *ngIf="config.positionPolling">
+    {{ 'General' | translate }}
+  </div>
+
+  <div class="row p-t-8">
+    <div class="col-xs-3">
+      <div class="form-group form-group-sm">
+        <label for="autoCenter" class="control-label">{{ 'Auto-Center' | translate }}</label>
+        <div class="c8y-select-wrapper">
+          <select class="form-control" id="autoCenter" [(ngModel)]="config.autoCenter">
+            <option value="true" title="Center map automatically to fit all markers">Fit all markers</option>
+            <option value="false" title="Set zoom-level and center manually">Set zoom-level and center map manually</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <div class="form-group form-group-sm">
+        <label for="zoomLevel" class="control-label">{{ 'Zoom level' | translate }}</label>
+        <c8y-range [(ngModel)]="config.manualCenter.zoomLevel" [disabled]="config.autoCenter | stringToBool">
+          <input
+            id="zoomLevel"
+            type="range"
+            min="1"
+            max="20"
+            step="1"
+            [disabled]="config.autoCenter | stringToBool"
+          />
+        </c8y-range>
+      </div>
+     </div>
+     <div class="col-xs-6">
+      <div class="form-group form-group-sm m-b-8">
+        <label translate>Center bound</label>
+        <div class="input-group input-group-sm">
+          <input type="number" required placeholder="lat (required)" name="centerLat" class="form-control" [(ngModel)]="config.manualCenter.lat" [disabled]="config.autoCenter">
+          <input type="number" required placeholder="lng (required)" name="centerLng" class="form-control" [(ngModel)]="config.manualCenter.long" [disabled]="config.autoCenter">
+          <div class="input-group-btn">
+            <button 
+              container="body" 
+              placement="top"
+              (click)="openCenterMapModal()" 
+              class="btn btn-default" 
+              [disabled]="config.autoCenter | stringToBool">
+              <i c8yIcon="target"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+     </div>
+  </div>
+  <div class="row d-flex a-i-center">
+    <div class="col-xs-3">
+      <div class="form-group m-b-0 form-group-sm">
+        <label for="positionPolling" class="control-label">{{ 'Position Polling' | translate }}</label>
+        <div class="c8y-select-wrapper">
+          <select class="form-control" [(ngModel)]="config.positionPolling.enabled" id="positionPolling">
+            <option value="false" title="Only refreshing on interaction">  No automatic polling  </option>
+            <option value="true" title="Refreshing after a give interval and on interaction"> Use position polling </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <div class="form-group form-group-sm m-b-0">
+        <label for="positionPollingSlider" class="control-label">{{ 'Polling interval in seconds' | translate }}</label>
+        <c8y-range [(ngModel)]="config.positionPolling.interval" [disabled]="!(config.positionPolling.enabled | stringToBool)">
+          <input
+            id="positionPollingSlider"
+            type="range"
+            min="1"
+            max="180"
+            step="1"
+            [disabled]="!(config.positionPolling.enabled | stringToBool)"
+          />
+        </c8y-range>
+      </div>
+    </div>
+  </div>
+
   <div class="legend form-block">
     {{ 'Layers' | translate }}
   </div>

@@ -1,0 +1,79 @@
+<c8y-modal
+  title="{{ title | translate }}"
+  (onClose)="onClose()"
+  (onDismiss)="onDismiss()"
+  [labels]="labels"
+  style="width: 100%"
+>
+
+    <div class="form-group">
+        <div class="input-group input-group-search">
+        <input
+            type="text"
+            #searchAddress
+            placeholder="{{ 'Enter address' | translate }}"
+            class="form-control"
+            (keyup.enter)="navigateToAddress(searchAddress.value)"
+        />
+        <span class="input-group-btn">
+            <button
+            class="btn btn-link"
+            type="submit"
+            (click)="navigateToAddress(searchAddress.value)"
+            >
+            <i c8yIcon="search"></i>
+            </button>
+        </span>
+        </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4">
+      <div class="form-group form-group-sm">
+        <label for="zoomLevel" class="control-label">{{ 'Zoom level' | translate }}</label>
+        <c8y-range [(ngModel)]="manualCenter.zoomLevel" (change)="onUserChangedZoomLevel()">
+          <input
+            id="zoomLevel"
+            type="range"
+            min="1"
+            max="20"
+            step="1"
+          />
+        </c8y-range>
+      </div>
+     </div>
+     <div class="col-xs-8">
+        <div class="form-group form-group-sm m-b-8">
+            <label translate>Center bound</label>
+            <div class="input-group input-group-sm">
+              <input type="number" required placeholder="lat (required)" name="centerLat" class="form-control" [(ngModel)]="manualCenter.lat" >
+              <input type="number" required placeholder="lng (required)" name="centerLng" class="form-control" [(ngModel)]="manualCenter.long">
+              <div class="input-group-btn">
+                <button
+                  container="body" 
+                  placement="top"
+                  title="Use your location"
+                  (click)="detectUserLocation()" 
+                  class="btn btn-default">
+                  <i c8yIcon="location-arrow"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+     </div>
+  </div>
+ 
+  
+
+  <div class="form-group" style="height: 400px">
+    <div
+      id="center-map-demo"
+      class="map-container"
+      [leafletOptions]="options"
+      (leafletZoomChange)="onZoomChange($event)"
+      (leafletCenterChange)="onCenterChange($event)"
+      (leafletMapReady)="onMapReady($event)"
+      leaflet
+    ></div>
+  </div>
+</c8y-modal>

@@ -1,11 +1,13 @@
 import { IAlarm, IEvent, IManagedObject, IOperation } from '@c8y/client';
-import { LatLng, LayerGroup, Marker } from 'leaflet';
+import { FeatureGroup, LatLng, Marker } from 'leaflet';
 import { has } from 'lodash';
 
 export type BasicLayerConfig = {
   name: string;
   icon: string;
   color: string;
+  pollingInterval: number;
+  enablePolling: 'true' | 'false';
   popoverConfig?: PopoverConfig;
 };
 
@@ -45,8 +47,22 @@ export function isQueryLayerConfig(config: BasicLayerConfig): config is QueryLay
   return has(config, 'filter');
 }
 
-export type LayerConfig = {
-  config: DeviceFragmentLayerConfig | QueryLayerConfig;
+export type WebMapServiceLayerConfig = BasicLayerConfig & {
+  url: string;
+  wmsLayers: { name: string }[];
+  token?: string;
+};
+
+export function isWebMapServiceLayerConfig(
+  config: BasicLayerConfig
+): config is WebMapServiceLayerConfig {
+  return has(config, 'url') && has(config, 'wmsLayers');
+}
+
+export type LayerType = DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig;
+
+export type LayerConfig<LayerType> = {
+  config: LayerType;
   active: boolean;
 };
 
@@ -55,7 +71,7 @@ export type LayerAttributes = {
   devices: string[];
   coordinates: Map<string, LatLng>;
   markerCache: Map<string, Marker<any>>;
-  group: LayerGroup;
+  group: FeatureGroup;
 };
 
 export class MyLayer implements LayerAttributes {
@@ -63,7 +79,8 @@ export class MyLayer implements LayerAttributes {
   devices: string[] = [];
   coordinates = new Map<string, LatLng>();
   markerCache = new Map<string, Marker<any>>();
-  group = new LayerGroup();
+  group = new FeatureGroup();
+  initialLoad: Promise<void>;
   active = true;
 }
 
@@ -77,7 +94,17 @@ export interface ILayeredMapWidgetConfig {
   selectedTrack?: string;
   tracks?: ITrack[];
   saved?: boolean;
-  layers: LayerConfig[];
+  layers: LayerConfig<BasicLayerConfig>[];
+  positionPolling?: {
+    enabled: 'true' | 'false';
+    interval: number;
+  };
+  autoCenter?: 'true' | 'false';
+  manualCenter?: {
+    lat: number;
+    long: number;
+    zoomLevel: number;
+  };
 }
 
 export interface ITrack {

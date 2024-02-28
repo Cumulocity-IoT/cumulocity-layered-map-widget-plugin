@@ -1,7 +1,7 @@
 <c8y-modal
   title="{{ title | translate }}"
-  (onClose)="onClose($event)"
-  (onDismiss)="onDismiss($event)"
+  (onClose)="onClose()"
+  (onDismiss)="onDismiss()"
   [labels]="labels"
   [disabled]="!trackName || !coordinates.length"
   style="width: 100%"
@@ -9,13 +9,7 @@
   <!-- <div class="legend form-block">Draw track by LocationUpdate events</div> -->
   <div class="form-group">
     <label for="trackName">Track name</label>
-    <input
-      id="trackName"
-      class="form-control"
-      type="string"
-      [(ngModel)]="trackName"
-      required
-    />
+    <input id="trackName" class="form-control" type="string" [(ngModel)]="trackName" required />
   </div>
   <div class="form-inline"></div>
   <div class="form-group">
@@ -49,7 +43,7 @@
     </button>
   </div>
 
-  <div class="form-group">
+  <!-- <div class="form-group">
     <div class="input-group input-group-search">
       <input
         type="text"
@@ -68,16 +62,16 @@
         </button>
       </span>
     </div>
-  </div>
+  </div> -->
 
-  <div class="form-group" (resized)="onResized()" style="height: 400px">
+  <div class="form-group" style="height: 400px">
     <div
       id="draw-line-map"
       class="map-container"
       [leafletOptions]="options"
       (leafletMouseDown)="onMouseDown($event)"
       (leafletMouseMove)="onMouseMove($event)"
-      (leafletMouseOut)="onMouseOut($event)"
+      (leafletMouseOut)="onMouseOut()"
       (leafletMapReady)="onMapReady($event)"
       leaflet
     ></div>

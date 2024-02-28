@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
+  BasicLayerConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
+  isWebMapServiceLayerConfig,
   LayerConfig,
 } from '../layered-map-widget.model';
 @Component({
@@ -9,18 +11,18 @@ import {
   selector: 'layer-list',
 })
 export class LayerListComponent {
-  @Output() deleteLayer = new EventEmitter<LayerConfig>();
-  @Output() editLayer = new EventEmitter<LayerConfig>();
-  @Output() editPopover = new EventEmitter<LayerConfig>();
+  @Output() deleteLayer = new EventEmitter<LayerConfig<BasicLayerConfig>>();
+  @Output() editLayer = new EventEmitter<LayerConfig<BasicLayerConfig>>();
+  @Output() editPopover = new EventEmitter<LayerConfig<BasicLayerConfig>>();
 
   @Output() activeLayerChange = new EventEmitter<{
     checked: boolean;
-    config: LayerConfig;
+    config: LayerConfig<BasicLayerConfig>;
   }>();
 
-  @Input() layers: LayerConfig[];
+  @Input() layers: LayerConfig<BasicLayerConfig>[];
 
-  onUserChangedSelection(event: Event, config: LayerConfig): void {
+  onUserChangedSelection(event: Event, config: LayerConfig<BasicLayerConfig>): void {
     const checked = (<HTMLInputElement>event.currentTarget).checked;
 
     // this.activeLayerChange.emit({
@@ -30,19 +32,19 @@ export class LayerListComponent {
     config.active = checked;
   }
 
-  onEditLayer(config: LayerConfig): void {
+  onEditLayer(config: LayerConfig<BasicLayerConfig>): void {
     this.editLayer.emit(config);
   }
 
-  onEditPopover(config: LayerConfig): void {
+  onEditPopover(config: LayerConfig<BasicLayerConfig>): void {
     this.editPopover.emit(config);
   }
 
-  onDeleteLayer(config: LayerConfig): void {
+  onDeleteLayer(config: LayerConfig<BasicLayerConfig>): void {
     this.deleteLayer.emit(config);
   }
 
-  getContent(layer: LayerConfig): string {
+  getContent(layer: LayerConfig<BasicLayerConfig>): string {
     const cfg = layer.config;
 
     if (isDeviceFragmentLayerConfig(cfg)) {
@@ -51,6 +53,11 @@ export class LayerListComponent {
     if (isQueryLayerConfig(cfg)) {
       return `${cfg.type} with query ${JSON.stringify(cfg.filter)}`;
     }
+
+    if (isWebMapServiceLayerConfig(cfg)) {
+      return `WMS Server: ${cfg.url}`;
+    }
+
     return '';
   }
 }

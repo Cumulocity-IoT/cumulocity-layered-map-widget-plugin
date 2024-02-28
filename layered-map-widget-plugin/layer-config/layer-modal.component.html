@@ -18,6 +18,7 @@
       [(ngModel)]="layer.name"
     />
   </div>
+  <div class="legend form-block center">Marker</div>
   <div class="form-group">
     <label translate for="iconInput">Icon</label>
     <div class="input-group">
@@ -34,6 +35,21 @@
       <span *ngIf="layer.icon" class="input-group-addon"><i [c8yIcon]="layer.icon"></i></span>
     </div>
   </div>
+  <div class="form-group" *ngIf="!((type === 'QueryLayerConfig' && queryType === 'Alarm') || (type === 'WebMapServiceLayer'))">
+    <label translate for="iconColorInput">Icon Color</label>
+    <div class="form-control" style="width: 36px; cursor: pointer" title="Click to select a marker color.">
+      <div class="c8y-colorpicker">
+        <input
+          id="iconColorInput"
+          type="color"
+          [attr.aria-label]="'Color' | translate"
+          [(ngModel)]="layer.color"
+          (click)="$event.stopPropagation()"
+        />
+        <span [style.background-color]="layer.color"></span>
+      </div>
+    </div>
+  </div>
   <div class="form-group">
     <label translate for="layerType">Layer Type</label>
     <div class="c8y-select-wrapper" title="{{ 'Select type' | translate }}">
@@ -46,25 +62,28 @@
       >
         <option value="" selected disabled>Select a type</option>
         <option value="DeviceFragmentLayerConfig" [selected]="type === 'DeviceFragmentLayerConfig'">
-          Device-Fragment
+          {{ 'Device-Fragment' | translate }}
         </option>
         <option
           value="InventoryQueryLayerConfig"
           [selected]="type === 'QueryLayerConfig' && queryType === 'Inventory'"
         >
-          Inventory Query
+          {{ 'Inventory Query' | translate }}
         </option>
         <option
           value="AlarmQueryLayerConfig"
           [selected]="type === 'QueryLayerConfig' && queryType === 'Alarm'"
         >
-          Alarm Query
+          {{ 'Alarm Query' | translate }}
         </option>
         <option
           value="EventQueryLayerConfig"
           [selected]="type === 'QueryLayerConfig' && queryType === 'Event'"
         >
-          Event Query
+          {{ 'Event Query' | translate }}
+        </option>
+        <option value="WebMapServiceLayer" [selected]="type === 'WebMapServiceLayer'">
+          {{ 'Web Map Service (WMS)' | translate }}
         </option>
       </select>
     </div>
@@ -76,8 +95,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <div class="card-header separator">
-          </div>
+          <div class="card-header separator"></div>
           <div class="card-block d-flex d-col p-t-0 p-b-0 bg-level-1" style="height: 300px">
             <c8y-asset-selector-miller
               [(ngModel)]="layer.device"
@@ -124,4 +142,95 @@
     <alarm-query-form *ngIf="queryType === 'Alarm'" [filter]="layer.filter"></alarm-query-form>
     <event-query-form *ngIf="queryType === 'Event'" [filter]="layer.filter"></event-query-form>
   </span>
+
+  <span *ngIf="type === 'WebMapServiceLayer'">
+    <div class="legend form-block center">Web Map Service</div>
+    <div class="form-group">
+      <label for="url" translate>URL</label>
+      <input
+        name="url"
+        id="url"
+        type="url"
+        class="form-control"
+        placeholder="http://ows.mundialis.de/services/service?"
+        [(ngModel)]="layer.url"
+        (ngModelChange)="onWmsURLChange($event)"
+        required
+      />
+    </div>
+    <ul class="list-unstyled">
+      <label translate>WMS Layers</label>
+      <li class="m-b-8" *ngFor="let item of layer.wmsLayers; let i = index">
+        <c8y-input-group-list
+          [index]="i"
+          (onAdd)="addWMSLayer()"
+          (onRemove)="removeWMSLayer($event)"
+        >
+          <input
+            type="text"
+            name="wsLayer"
+            class="form-control m-r-4"
+            placeholder="{{ 'WMS Layer, e.g. TOPO-OSM-WMS' | translate }}"
+            style="flex-grow: 2"
+            [(ngModel)]="item.name"
+            [required]="true"
+        /></c8y-input-group-list>
+      </li>
+    </ul>
+
+    <div class="form-group">
+      <label for="username" translate>Username</label>
+      <input
+        name="username"
+        id="username"
+        type="text"
+        class="form-control"
+        [(ngModel)]="wmsCredentials.username"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password" translate>Password</label>
+      <input
+        name="password"
+        id="password"
+        type="password"
+        class="form-control"
+        [(ngModel)]="wmsCredentials.password"
+      />
+    </div>
+    <button *ngIf="layer.token" class="btn btn-danger" type="button" (click)="clearAllPasswords()">
+      {{ 'Clear all passwords' | translate }}
+    </button>
+  </span>
+
+  <div *ngIf="type === 'QueryLayerConfig'" class="legend form-block center">Polling</div>
+
+  <div *ngIf="type === 'QueryLayerConfig'" class="row d-flex a-i-center">
+    <div class="col-xs-6">
+      <div class="form-group m-b-0 form-group-sm">
+        <label for="positionPolling" class="control-label">{{ 'Polling' | translate }}</label>
+        <div class="c8y-select-wrapper">
+          <select class="form-control" id="positionPolling" [(ngModel)]="layer.enablePolling">
+            <option value="false" title="Only refreshing on interaction">  No automatic polling  </option>
+            <option value="true" title="Refreshing after a give interval and on interaction"> Activate polling </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="form-group form-group-sm m-b-0">
+        <label for="pollingSlider" class="control-label">{{ 'Polling interval in seconds' | translate }}</label>
+        <c8y-range [(ngModel)]="layer.pollingInterval" [disabled]="!(layer.enablePolling | stringToBool)" class="label-bottom">
+          <input
+            id="pollingSlider"
+            type="range"
+            min="1"
+            max="180"
+            step="1"
+            [disabled]="!(layer.enablePolling | stringToBool)"
+          />
+        </c8y-range>
+      </div>
+    </div>
+  </div>
 </c8y-modal>
