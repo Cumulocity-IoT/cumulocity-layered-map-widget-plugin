@@ -1,11 +1,13 @@
 import { IAlarm, IEvent, IManagedObject, IOperation } from '@c8y/client';
-import { LatLng, LayerGroup, Marker } from 'leaflet';
+import { FeatureGroup, LatLng, Marker } from 'leaflet';
 import { has } from 'lodash';
 
 export type BasicLayerConfig = {
   name: string;
   icon: string;
   color: string;
+  pollingInterval: number;
+  enablePolling: 'true' | 'false';
   popoverConfig?: PopoverConfig;
 };
 
@@ -69,7 +71,7 @@ export type LayerAttributes = {
   devices: string[];
   coordinates: Map<string, LatLng>;
   markerCache: Map<string, Marker<any>>;
-  group: LayerGroup;
+  group: FeatureGroup;
 };
 
 export class MyLayer implements LayerAttributes {
@@ -77,7 +79,8 @@ export class MyLayer implements LayerAttributes {
   devices: string[] = [];
   coordinates = new Map<string, LatLng>();
   markerCache = new Map<string, Marker<any>>();
-  group = new LayerGroup();
+  group = new FeatureGroup();
+  initialLoad: Promise<void>;
   active = true;
 }
 
@@ -93,8 +96,14 @@ export interface ILayeredMapWidgetConfig {
   saved?: boolean;
   layers: LayerConfig<BasicLayerConfig>[];
   positionPolling?: {
-    enabled: boolean;
+    enabled: 'true' | 'false';
     interval: number;
+  };
+  autoCenter?: 'true' | 'false';
+  manualCenter?: {
+    lat: number;
+    long: number;
+    zoomLevel: number;
   };
 }
 

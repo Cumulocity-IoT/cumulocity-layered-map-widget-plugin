@@ -3,6 +3,7 @@ import {
   BasicLayerConfig,
   isDeviceFragmentLayerConfig,
   isQueryLayerConfig,
+  isWebMapServiceLayerConfig,
   LayerConfig,
 } from '../layered-map-widget.model';
 @Component({
@@ -52,6 +53,11 @@ export class LayerListComponent {
     if (isQueryLayerConfig(cfg)) {
       return `${cfg.type} with query ${JSON.stringify(cfg.filter)}`;
     }
+
+    if (isWebMapServiceLayerConfig(cfg)) {
+      return `WMS Server: ${cfg.url}`;
+    }
+
     return '';
   }
 }

@@ -27,7 +27,7 @@ export class TenantOptionCredentialsService {
 
     const password = this.tenantOptions.create({
       category: this.CATEGORY,
-      key: `${token}.password`,
+      key: `credentials.${token}.password`,
       value: credentials.password,
     });
 
@@ -42,7 +42,7 @@ export class TenantOptionCredentialsService {
   getCredentials(token: string) {
     return Promise.all([
       this.tenantOptions.detail({ category: this.CATEGORY, key: `${token}.username` }),
-      this.tenantOptions.detail({ category: this.CATEGORY, key: `${token}.password` }),
+      this.tenantOptions.detail({ category: this.CATEGORY, key: `credentials.${token}.password` }),
     ]).then(([username, password]) => ({
       username: username.data.value,
       password: password.data.value,
@@ -57,7 +57,7 @@ export class TenantOptionCredentialsService {
   deleteCredentials(token: string) {
     return Promise.all([
       this.tenantOptions.delete({ category: this.CATEGORY, key: `${token}.username` }),
-      this.tenantOptions.delete({ category: this.CATEGORY, key: `${token}.password` }),
+      this.tenantOptions.delete({ category: this.CATEGORY, key: `credentials.${token}.password` }),
     ]);
   }
 

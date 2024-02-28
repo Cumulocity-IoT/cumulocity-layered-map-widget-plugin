@@ -62,12 +62,6 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
     this.map = map;
   }
 
-  onResized(): void {
-    if (this.map) {
-      this.map.invalidateSize();
-    }
-  }
-
   async navigateToAddress(address: string): Promise<void> {
     const coords = await this.geo.geoCode(address);
     if (coords !== null) {

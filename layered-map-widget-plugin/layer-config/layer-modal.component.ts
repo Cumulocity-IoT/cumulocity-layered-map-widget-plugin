@@ -24,6 +24,8 @@ export class LayerModalComponent {
     name: '',
     color: '',
     icon: '',
+    enablePolling: 'true',
+    pollingInterval: 60,
   };
 
   type: 'DeviceFragmentLayerConfig' | 'QueryLayerConfig' | 'Unset' | 'WebMapServiceLayer' = 'Unset';
@@ -58,19 +60,21 @@ export class LayerModalComponent {
   }
 
   async openIconModal() {
-    const icon = await this.iconSelector.selectIcon();
+    const icon = await this.iconSelector.selectIcon({ currentSelection: this.layer.icon });
     if (icon) {
       this.layer.icon = icon;
     }
   }
 
   changeType(type: string) {
-    const { name, color, icon } = this.layer;
+    const { name, color, icon, pollingInterval, enablePolling } = this.layer;
     if (type === 'DeviceFragmentLayerConfig') {
       this.layer = {
         name,
         color,
         icon,
+        pollingInterval,
+        enablePolling,
         ...{ fragment: '', value: '', device: { id: '', name: '' } },
       } as DeviceFragmentLayerConfig;
       this.type = type;
@@ -79,6 +83,8 @@ export class LayerModalComponent {
         name,
         color,
         icon,
+        pollingInterval,
+        enablePolling,
         ...{ type: 'Alarm', filter: {} },
       } as QueryLayerConfig;
       this.type = 'QueryLayerConfig';
@@ -88,6 +94,8 @@ export class LayerModalComponent {
         name,
         color,
         icon,
+        pollingInterval,
+        enablePolling,
         ...{ type: 'Event', filter: {} },
       } as QueryLayerConfig;
       this.type = 'QueryLayerConfig';
@@ -97,6 +105,8 @@ export class LayerModalComponent {
         name,
         color,
         icon,
+        pollingInterval,
+        enablePolling,
         ...{ type: 'Inventory', filter: {} },
       } as QueryLayerConfig;
       this.type = 'QueryLayerConfig';
@@ -106,6 +116,8 @@ export class LayerModalComponent {
         name,
         color,
         icon,
+        pollingInterval,
+        enablePolling,
         ...{ type: 'ExternalGIS', url: '', wmsLayers: [{ name: '' }] },
       } as WebMapServiceLayerConfig;
       this.type = 'WebMapServiceLayer';

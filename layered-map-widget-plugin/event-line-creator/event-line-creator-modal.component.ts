@@ -70,12 +70,6 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
     this.map = map;
   }
 
-  onResized(): void {
-    if (this.map) {
-      this.map.invalidateSize();
-    }
-  }
-
   userAppliedCircuitDevice(devices: IManagedObject[]): void {
     this.eventsForm.deviceId = +devices[0].id;
   }

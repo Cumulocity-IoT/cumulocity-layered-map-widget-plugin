@@ -10,7 +10,9 @@
     <c8y-li-body>
       <p class="text-truncate" title="{{ layer.config.name }}">
         {{ layer.config.name }}
+        <i *ngIf="layer.config.color" c8yIcon="circle" [style.color]="layer.config.color" class="m-l-4"></i>
       </p>
+     
     </c8y-li-body>
     <c8y-li-collapse
       ><p>{{ getContent(layer) }}</p></c8y-li-collapse
