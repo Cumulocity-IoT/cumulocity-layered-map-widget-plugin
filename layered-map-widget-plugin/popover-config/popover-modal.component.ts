@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalLabels } from '@c8y/ngx-components';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
@@ -24,6 +24,16 @@ export class PopoverModalComponent {
   title = 'Popover config';
   closeSubject: Subject<PopoverConfig | null> = new Subject();
   labels: ModalLabels = { ok: 'Save', cancel: 'Cancel' };
+
+  @Input() set cfg(value: PopoverConfig) {
+    if (value) {
+      this.config = value;
+      const [dateField, iconField] = this.fields;
+      dateField.defaultValue = value.showDate;
+      iconField.defaultValue = value.showAlarms;
+    }
+  }
+  config: PopoverConfig = { showAlarms: true, showDate: true, actions: [] };
 
   SAMPLE_TEMPLATES_C8Y = SAMPLE_TEMPLATES_C8Y;
 
@@ -67,20 +77,12 @@ export class PopoverModalComponent {
       defaultValue: true,
     },
   ];
-  protected cfg: PopoverConfig = { showAlarms: true, showDate: true, actions: [] };
 
   isActionsFormCollapsed = true;
   jsonEditorData: object = clone(SAMPLE_TEMPLATES_C8Y.OPERATION);
   jsonErrorMessage?: string;
 
   constructor(public bsModalRef: BsModalRef) {}
-
-  setConfig(cfg: PopoverConfig): void {
-    this.cfg = cfg;
-    const [dateField, iconField] = this.fields;
-    dateField.defaultValue = cfg.showDate;
-    iconField.defaultValue = cfg.showAlarms;
-  }
 
   changeTab(tabId: Tab['id']): void {
     this.tabs.map((t) => {
@@ -124,7 +126,7 @@ export class PopoverModalComponent {
   }
 
   addAction(currentTab: Tab['id']) {
-    this.cfg.actions.push({
+    this.config.actions.push({
       label: `Create ${currentTab}`,
       body: this.jsonEditorData,
       type: currentTab,
@@ -133,7 +135,7 @@ export class PopoverModalComponent {
   }
 
   removeAction(action: object): void {
-    this.cfg.actions = this.cfg.actions.filter((a) => a !== action);
+    this.config.actions = this.config.actions.filter((a) => a !== action);
   }
 
   cancelAdd(): void {
@@ -150,6 +152,6 @@ export class PopoverModalComponent {
 
   // called if save is pressed
   onClose(): void {
-    this.closeSubject.next(this.cfg);
+    this.closeSubject.next(this.config);
   }
 }

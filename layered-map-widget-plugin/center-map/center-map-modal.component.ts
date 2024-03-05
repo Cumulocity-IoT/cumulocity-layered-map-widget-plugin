@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ModalLabels } from '@c8y/ngx-components';
 import { LatLng, latLng, Map as LMap, MapOptions, tileLayer } from 'leaflet';
@@ -22,59 +22,61 @@ export class CenterMapModalComponent implements AfterViewInit {
     cancel: 'Cancel',
   };
 
-  manualCenter = {
-    lat: 0,
-    long: 0,
-    zoomLevel: 10,
+  @Input() center: {
+    lat: number;
+    long: number;
+    zoomLevel: number;
   };
 
   options: MapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        opacity: 0.7,
         maxZoom: 22,
         detectRetina: true,
       }),
     ],
-    zoom: this.manualCenter.zoomLevel,
-    center: latLng(this.manualCenter.lat ?? 0, this.manualCenter.long ?? 0),
+    zoom: 10,
+    center: latLng(0, 0),
     attributionControl: false,
   };
   map: LMap;
 
   constructor(public bsModalRef: BsModalRef, private geo: LocationGeocoderService) {}
 
-  setCenter(center: { lat: number; long: number; zoomLevel: number }) {
-    this.manualCenter = center;
-    this.map.setView(latLng(center.lat, center.long), center.zoomLevel);
-    this.map.invalidateSize();
-  }
-
   ngAfterViewInit(): void {
-    this.map.invalidateSize();
+    if (this.map) {
+      const { lat, long, zoomLevel } = this.center;
+      if (lat && long && zoomLevel) {
+        const bounds = new LatLng(lat, long);
+        this.map.setView(bounds, zoomLevel);
+      }
+    }
   }
 
   onMapReady(map: LMap): void {
     this.map = map;
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 1000);
   }
 
   onZoomChange(zoom: number): void {
-    this.manualCenter.zoomLevel = zoom;
+    this.center.zoomLevel = zoom;
   }
 
   onCenterChange(center: LatLng): void {
-    this.manualCenter.lat = center.lat;
-    this.manualCenter.long = center.lng;
+    this.center.lat = center.lat;
+    this.center.long = center.lng;
   }
 
   onUserChangedZoomLevel(): void {
-    this.map.setZoom(this.manualCenter.zoomLevel);
+    this.map.setZoom(this.center.zoomLevel);
   }
 
   async navigateToAddress(address: string): Promise<void> {
-    const coords = await this.geo.geoCode(address);
-    if (coords !== null) {
-      this.map.flyTo(coords, this.manualCenter.zoomLevel, { duration: 1 });
+    const { lat, lon } = await this.geo.geoCode(address);
+    if (!isNaN(lat) && !isNaN(lon)) {
+      this.map.flyTo([lat, lon], this.center.zoomLevel, { duration: 1 });
     }
   }
 
@@ -82,9 +84,9 @@ export class CenterMapModalComponent implements AfterViewInit {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
-        this.manualCenter.lat = latitude;
-        this.manualCenter.long = longitude;
-        this.map.flyTo([latitude, longitude], this.manualCenter.zoomLevel, { duration: 1 });
+        this.center.lat = latitude;
+        this.center.long = longitude;
+        this.map.flyTo([latitude, longitude], this.center.zoomLevel, { duration: 1 });
       });
     }
   }
@@ -98,6 +100,6 @@ export class CenterMapModalComponent implements AfterViewInit {
 
   // called if save is pressed
   onClose(): void {
-    this.closeSubject.next(this.manualCenter);
+    this.closeSubject.next(this.center);
   }
 }

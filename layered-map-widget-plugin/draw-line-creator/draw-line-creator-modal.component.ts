@@ -63,9 +63,9 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
   }
 
   async navigateToAddress(address: string): Promise<void> {
-    const coords = await this.geo.geoCode(address);
-    if (coords !== null) {
-      this.map.flyTo(coords, 17, { duration: 1 });
+    const { lat, lon } = await this.geo.geoCode(address);
+    if (!isNaN(lat) && !isNaN(lon)) {
+      this.map.flyTo([lat, lon], 17, { duration: 1 });
     }
   }
 

@@ -76,9 +76,9 @@ export class AlarmPollingService {
       ids: ids.toString(),
       fragmentType: 'c8y_Position',
       withChildren: false,
-      pageSize: 50,
+      pageSize: 100,
     };
-    if (ids.length <= 50) {
+    if (ids.length <= 100) {
       return this.inventory.list({ ...filter, withTotalPages: false }).then((res) => res.data);
     } else {
       const mos: IManagedObject[] = [];
@@ -98,7 +98,7 @@ export class AlarmPollingService {
     const result = new Set<string>();
     const filter = {
       withTotalPages: true,
-      pageSize: 50,
+      pageSize: 100,
       ...this.queryLayerService.normalize(config.filter),
     };
 

@@ -54,7 +54,7 @@ export class WMSLayerService {
   //   }
   // }
 
-  async createWMSLayer(layerConfig: LayerConfig<WebMapServiceLayerConfig>) {
+  createWMSLayer(layerConfig: LayerConfig<WebMapServiceLayerConfig>) {
     const cfg = layerConfig.config as WebMapServiceLayerConfig;
     const layers = cfg.wmsLayers.map((l) => l.name).toString();
     const shortUrl = cfg.url.includes('?') ? cfg.url.split('?')[0] : cfg.url;

@@ -73,7 +73,7 @@ export class InventoryPollingService {
     const result = new Array<IManagedObject>();
     const filter = {
       withTotalPages: true,
-      pageSize: 50,
+      pageSize: 2000,
       ...this.queryLayerService.normalize(layerFilter),
     };
 

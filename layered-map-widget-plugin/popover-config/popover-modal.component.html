@@ -9,12 +9,12 @@
     <formly-form
       [form]="form"
       [fields]="fields"
-      [model]="cfg"
+      [model]="config"
     ></formly-form>
   </div>
   <div class="form-group m-t-16">
     <label>Actions</label>
-      <span *ngFor="let action of cfg.actions" class="row m-0">
+      <span *ngFor="let action of config.actions" class="row m-0">
         <input
           class="form-control input-sm col-sm-10"
           type="text"

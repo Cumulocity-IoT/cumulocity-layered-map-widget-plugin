@@ -16,7 +16,7 @@ export class QueryLayerService {
     const result = new Map<string, IManagedObject | null>();
     const filter = {
       withTotalPages: true,
-      pageSize: 50,
+      pageSize: 200,
       ...this.normalize(params),
     };
 
@@ -70,7 +70,7 @@ export class QueryLayerService {
     const result = new Map<string, IManagedObject | null>();
     const filter = {
       withTotalPages: true,
-      pageSize: 50,
+      pageSize: 200,
       ...this.normalize(params),
     };
     const resolvers: Promise<void>[] = [];
@@ -101,7 +101,7 @@ export class QueryLayerService {
       withTotalPages: false,
       fragmentType: 'c8y_Position',
       withChildren: false,
-      pageSize: 50,
+      pageSize: 200,
     });
   }
 
