@@ -4,7 +4,7 @@
   "description": "Show markers on a layer basis. Create layers based on filter criteria.",
   "scripts": {
     "start": "c8ycli server",
-    "start:shell": "c8ycli server -p 9326  -u https://netmon-rheinenergie.emea.cumulocity.com/ --shell cockpit",
+    "start:shell": "c8ycli server -p 9326  -u https://your-tenant.cumulocity.com/ --shell cockpit",
     "build": "rimraf dist && c8ycli build",
     "lint": "eslint . --ext js,ts --quiet",
     "format": "eslint . --ext js,ts --quiet --fix",
