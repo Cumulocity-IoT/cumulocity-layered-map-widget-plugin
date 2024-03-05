@@ -30,50 +30,56 @@ export class LayerService {
     return Promise.all(configs.map((cfg) => this.createLayer(cfg)));
   }
 
+  load(layer: MyLayer) {
+    const cfg = layer.config;
+    if (isQueryLayerConfig(cfg)) {
+      layer.initialLoad = this.fechtRequestForType(cfg.type, cfg.filter).then((devices) =>
+        this.responseHandlerForType(cfg.type, devices, layer)
+      );
+    } else if (isDeviceFragmentLayerConfig(cfg)) {
+      layer.initialLoad = this.selectedDevicesService.getDevices(cfg.device).then((devices) => {
+        const matches = this.getMatches(cfg, devices || []);
+        // assign devices mathcing the layer criteria
+        layer.devices = matches.map((d) => d.id);
+        // create coordinate cache for devices having the c8y_Position fragment
+        matches
+          .filter((d) => has(d, 'c8y_Position') && !isEmpty(d.c8y_Position))
+          .forEach((d) => layer.coordinates.set(d.id, latLng(d.c8y_Position)));
+
+        this.createLayerGroup(layer);
+      });
+    }
+  }
+
+  private fechtRequestForType(type: string, filter: object) {
+    switch (type) {
+      case 'Alarm':
+        return this.queryLayerService.fetchByAlarmQuery(filter);
+      case 'Inventory':
+        return this.queryLayerService.fetchByInventoryQuery(filter);
+      case 'Event':
+        return this.queryLayerService.fetchByEventQuery(filter);
+      default:
+        return Promise.reject(`Unknown type: ${type}`);
+    }
+  }
+
+  private responseHandlerForType(type: string, devices: IManagedObject[], layer: MyLayer) {
+    layer.devices = devices.map((d) => d.id);
+    if (type === 'Alarm') {
+      devices.forEach((d) => {
+        this.updatePosition(layer, d.id, d.c8y_Position);
+        this.updateMarkerIcon(d.id, layer, d.c8y_ActiveAlarmsStatus);
+      });
+    } else {
+      layer.devices = devices.map((d) => d.id);
+      devices.forEach((d) => this.updatePosition(layer, d.id, d.c8y_Position));
+    }
+  }
+
   async createLayer(setup: LayerConfig<BasicLayerConfig>) {
     const layer = Object.assign(new MyLayer(), setup);
-
-    if (isQueryLayerConfig(setup.config)) {
-      const config = setup.config;
-      if (config.type === 'Alarm') {
-        layer.initialLoad = this.queryLayerService
-          .fetchByAlarmQuery(config.filter)
-          .then((devices) => {
-            layer.devices = devices.map((d) => d.id);
-            devices.forEach((d) => {
-              this.updatePosition(layer, d.id, d.c8y_Position);
-              this.updateMarkerIcon(d.id, layer, d.c8y_ActiveAlarmsStatus);
-            });
-          });
-      } else if (config.type === 'Inventory') {
-        layer.initialLoad = this.queryLayerService
-          .fetchByInventoryQuery(config.filter)
-          .then((devices) => {
-            layer.devices = devices.map((d) => d.id);
-            devices.forEach((d) => this.updatePosition(layer, d.id, d.c8y_Position));
-          });
-      } else if (config.type === 'Event') {
-        layer.initialLoad = this.queryLayerService
-          .fetchByEventQuery(config.filter)
-          .then((devices) => {
-            layer.devices = devices.map((d) => d.id);
-            devices.forEach((d) => this.updatePosition(layer, d.id, d.c8y_Position));
-          });
-      }
-    } else if (isDeviceFragmentLayerConfig(setup.config)) {
-      const config = setup.config as DeviceFragmentLayerConfig;
-      const devices = await this.selectedDevicesService.getDevices(config.device);
-      const matches = this.getMatches(setup.config, devices || []);
-      // assign devices mathcing the layer criteria
-      layer.devices = matches.map((d) => d.id);
-      // create coordinate cache for devices having the c8y_Position fragment
-      matches
-        .filter((d) => has(d, 'c8y_Position') && !isEmpty(d.c8y_Position))
-        .forEach((d) => layer.coordinates.set(d.id, latLng(d.c8y_Position)));
-
-      this.createLayerGroup(layer);
-      layer.initialLoad = Promise.resolve();
-    } else if (isWebMapServiceLayerConfig(setup.config)) {
+    if (isWebMapServiceLayerConfig(setup.config)) {
       layer.config.enablePolling = 'false';
       layer.config.icon = 'globe1';
       layer.initialLoad = Promise.resolve();
@@ -81,6 +87,7 @@ export class LayerService {
 
     return layer;
   }
+
   updateMarkerIcon(
     deviceId: string,
     layer: MyLayer & LayerConfig<BasicLayerConfig>,
@@ -156,8 +163,8 @@ export class LayerService {
   }
 
   private createMarker(deviceId: string, coordinate: LatLng, layer: MyLayer) {
-    const color = layer.config.color?.length ? layer.config.color : '#fff';
-    const icon = this.markerIconService.getIcon(layer.config.icon, '', color);
+    const color = layer.config.color?.length ? layer.config.color : '#ffffff';
+    const icon = this.markerIconService.getIcon(layer.config.icon, 'text-primary', color);
     const popup = this.popupService.getPopup({ deviceId, layer });
 
     const marker = new Marker(coordinate, {

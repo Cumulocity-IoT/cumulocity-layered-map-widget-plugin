@@ -31,12 +31,12 @@
     <div class="col-xs-4">
       <div class="form-group form-group-sm">
         <label for="zoomLevel" class="control-label">{{ 'Zoom level' | translate }}</label>
-        <c8y-range [(ngModel)]="manualCenter.zoomLevel" (change)="onUserChangedZoomLevel()">
+        <c8y-range [(ngModel)]="center.zoomLevel" (change)="onUserChangedZoomLevel()">
           <input
             id="zoomLevel"
             type="range"
-            min="1"
-            max="20"
+            min="2"
+            max="18"
             step="1"
           />
         </c8y-range>
@@ -46,8 +46,8 @@
         <div class="form-group form-group-sm m-b-8">
             <label translate>Center bound</label>
             <div class="input-group input-group-sm">
-              <input type="number" required placeholder="lat (required)" name="centerLat" class="form-control" [(ngModel)]="manualCenter.lat" >
-              <input type="number" required placeholder="lng (required)" name="centerLng" class="form-control" [(ngModel)]="manualCenter.long">
+              <input type="number" required placeholder="lat (required)" name="centerLat" class="form-control" [(ngModel)]="center.lat" >
+              <input type="number" required placeholder="lng (required)" name="centerLng" class="form-control" [(ngModel)]="center.long">
               <div class="input-group-btn">
                 <button
                   container="body" 
@@ -67,7 +67,6 @@
 
   <div class="form-group" style="height: 400px">
     <div
-      id="center-map-demo"
       class="map-container"
       [leafletOptions]="options"
       (leafletZoomChange)="onZoomChange($event)"

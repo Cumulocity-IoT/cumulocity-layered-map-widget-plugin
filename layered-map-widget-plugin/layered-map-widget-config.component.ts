@@ -89,11 +89,10 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
   }
 
   async openPopoverModal(layer: LayerConfig<BasicLayerConfig>) {
-    const modalRef = this.bsModalService.show(PopoverModalComponent, {});
-    if (layer.config.popoverConfig) {
-      modalRef.content?.setConfig(clone(layer.config.popoverConfig));
-    }
-
+    const initialState = {
+      cfg: cloneDeep(layer.config.popoverConfig),
+    };
+    const modalRef = this.bsModalService.show(PopoverModalComponent, { initialState });
     const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
     const popoverConfig = await close;
     if (popoverConfig) {
@@ -102,14 +101,14 @@ export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBefor
   }
 
   async openCenterMapModal() {
-    const modalRef = this.bsModalService.show(CenterMapModalComponent, {});
-    if (this.config.manualCenter) {
-      modalRef.content!.setCenter(clone(this.config.manualCenter));
-    }
-    const modal = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
-    const manualCenter = await modal;
-    if (manualCenter) {
-      this.config.manualCenter = manualCenter;
+    const initialState = {
+      center: cloneDeep(this.config.manualCenter),
+    };
+    const modalRef = this.bsModalService.show(CenterMapModalComponent, { initialState });
+    const modal = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    const center = await modal;
+    if (center) {
+      this.config.manualCenter = center;
     }
   }
 

@@ -28,7 +28,7 @@ export class SubDeviceResolverComponent {
 
   private async getDevicesOfGroup(group: IManagedObject): Promise<IManagedObject[]> {
     const filter = {
-      pageSize: 50,
+      pageSize: 2000,
       query: '$filter=(has(c8y_IsDevice))',
       withTotalPages: false,
     };

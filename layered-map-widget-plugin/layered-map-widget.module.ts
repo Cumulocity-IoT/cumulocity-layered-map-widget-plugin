@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CoreModule, CommonModule, ModalModule, hookComponent } from '@c8y/ngx-components';
+import { CoreModule, CommonModule, hookComponent } from '@c8y/ngx-components';
 
 import { ContextWidgetConfig } from '@c8y/ngx-components/context-dashboard';
 import { LayeredMapWidgetConfig } from './layered-map-widget-config.component';
@@ -10,7 +10,6 @@ import { SubDeviceResolverComponent } from './sub-devices-selector/sub-device-re
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { ModalModule as BsModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
 import { TrackListComponent } from './track-list/track-list.component';
@@ -31,21 +30,14 @@ import { CenterMapModalComponent } from './center-map/center-map-modal.component
 import { StringToBoolPipe } from './pipes/string-to-bool.pipe';
 import { IconSelectorModule } from '@c8y/ngx-components/icon-selector';
 
-const BOOSTRAP_MODULES = [
-  BsModalModule,
-  BsDatepickerModule.forRoot(),
-  TimepickerModule.forRoot(),
-  CollapseModule.forRoot(),
-  TooltipModule,
-];
+const BOOSTRAP_MODULES = [BsDatepickerModule, TimepickerModule, CollapseModule, TooltipModule];
 @NgModule({
   imports: [
-    CoreModule,
     CommonModule,
     FormsModule,
+    CoreModule,
     LeafletModule,
     ...BOOSTRAP_MODULES,
-    ModalModule,
     IconSelectorModule,
     AssetSelectorModule,
   ],
@@ -70,17 +62,7 @@ const BOOSTRAP_MODULES = [
     ActionIconPipe,
     AlarmDisplayComponent,
   ],
-  entryComponents: [
-    LayeredMapWidgetConfig,
-    LayeredMapWidgetComponent,
-    EventLineCreatorModalComponent,
-    DrawLineCreatorModalComponent,
-    PopoverModalComponent,
-    TrackListComponent,
-    PopupComponent,
-  ],
   providers: [
-    BsModalRef,
     hookComponent({
       id: 'iot.cumulocity.layered.map.widget',
       label: 'Layered Map',
