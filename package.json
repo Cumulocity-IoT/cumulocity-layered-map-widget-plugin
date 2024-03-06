@@ -1,6 +1,6 @@
 {
   "name": "layered-map-widget-plugin",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Show markers on a layer basis. Create layers based on filter criteria.",
   "scripts": {
     "start": "c8ycli server",
@@ -21,6 +21,10 @@
     "layered",
     "WMS"
   ],
+  "private": true,
+  "workspaces": [
+    "lib/cumulocity-leaflet-wms-header"
+  ],
   "author": "Hendrik Naether",
   "license": "Apache-2.0",
   "dependencies": {
@@ -35,13 +39,13 @@
     "@angular/router": "14.0.6",
     "@angular/upgrade": "14.0.6",
     "@asymmetrik/ngx-leaflet": "^14.0.1",
+    "cumulocity-leaflet-wms-header": "0.0.1",
     "@c8y/client": "1018.0.233",
     "@c8y/ngx-components": "1018.0.233",
     "@c8y/style": "1018.0.233",
     "@ngx-translate/core": "14.0.0",
     "jsoneditor": "^9.10.2",
     "leaflet": "^1.9.4",
-    "leaflet-wms-header": "^1.0.13",
     "moment": "^2.29.4",
     "ngx-bootstrap": "9.0.0",
     "rxjs": "~6.6.3",
