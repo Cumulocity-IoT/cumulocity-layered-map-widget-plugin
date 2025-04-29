@@ -13,7 +13,7 @@ export interface IError {
 
 export class JsonEditorOptions {
   public ace: any;
-  public ajv: Object;
+  public ajv?: object;
 
   /**
    *   {function} onChange  Callback method, triggered
@@ -22,7 +22,7 @@ export class JsonEditorOptions {
   See also `onChangeJSON` and
   `onChangeText`.
    */
-  public onChange: () => void;
+  public onChange?: () => void;
 
   /**
 *   // {function} onChangeJSON  Callback method, triggered
@@ -32,11 +32,11 @@ export class JsonEditorOptions {
 //     Only applicable for modes
 //     'tree', 'view', and 'form'.
 */
-  public onChangeJSON: () => void;
+  public onChangeJSON?: () => void;
 
-  public onNodeName: () => void;
-  public onCreateMenu: () => void;
-  public onColorPicker: () => void;
+  public onNodeName?: () => void;
+  public onCreateMenu?: () => void;
+  public onColorPicker?: () => void;
 
   /**
 *   // {function} onChangeText  Callback method, triggered
@@ -44,7 +44,7 @@ export class JsonEditorOptions {
 //     passing the changed contents
 //     as stringified JSON.
 */
-  public onChangeText: (jsonstr: string) => void;
+  public onChangeText?: (jsonstr: string) => void;
 
   /**
    *   {function} onSelectionChange Callback method,
@@ -52,14 +52,14 @@ export class JsonEditorOptions {
   Only applicable for modes
   'tree', 'view', and 'form'
    */
-  public onSelectionChange: () => void;
+  public onSelectionChange?: () => void;
 
   /**
 *     {function} onTextSelectionChange Callback method,
   triggered on text selection change
   Only applicable for modes
 */
-  public onTextSelectionChange: () => void;
+  public onTextSelectionChange?: () => void;
 
   /**
    *   // {function} onEvent Callback method, triggered
@@ -69,21 +69,21 @@ export class JsonEditorOptions {
     // modes 'form', 'tree' and
     // 'view'
    */
-  public onEvent: () => void;
+  public onEvent?: () => void;
 
   /**
-* // *   {function} onFocus  Callback method, triggered
-//  when the editor comes into focus,
-//  passing an object {type, target},
-//  Applicable for all modes
+  onFocus  Callback method, triggered
+  when the editor comes into focus,
+  passing an object {type, target},
+  Applicable for all modes
 */
-  public onFocus: () => void;
+  public onFocus?: () => void;
 
   // *   {function} onBlur   Callback method, triggered
   //  when the editor goes out of focus,
   //  passing an object {type, target},
   //  Applicable for all modes
-  public onBlur: () => void;
+  public onBlur?: () => void;
 
   /**
 *  // *   {function} onClassName Callback method, triggered
@@ -93,18 +93,18 @@ export class JsonEditorOptions {
 // modes 'form', 'tree' and
 // 'view'
 */
-  public onClassName: () => void;
+  public onClassName?: () => void;
 
-  public onEditable: (node: JsonEditorTreeNode | {}) => boolean | { field: boolean; value: boolean };
+  public onEditable?: (node: JsonEditorTreeNode | {}) => boolean | { field: boolean; value: boolean };
 
   /**
    *   {function} onError   Callback method, triggered
   when an error occurs
    */
-  public onError: (error: any) => void;
-  public onModeChange: (newMode: JsonEditorMode, oldMode: JsonEditorMode) => void;
-  public onValidate: (json: Object) => IError[];
-  public onValidationError: (errors: object[]) => void;
+  public onError?: (error: any) => void;
+  public onModeChange?: (newMode: JsonEditorMode, oldMode: JsonEditorMode) => void;
+  public onValidate?: (json: Object) => IError[];
+  public onValidationError?: (errors: object[]) => void;
 
   public enableSort: boolean;
   public enableTransform: boolean;
@@ -113,21 +113,21 @@ export class JsonEditorOptions {
   public sortObjectKeys: boolean;
   public history: boolean;
   public mode: JsonEditorMode;
-  public modes: JsonEditorMode[];
-  public name: String;
-  public schema: Object;
+  public modes: JsonEditorMode[] = [];
+  public name?: string;
+  public schema?: Object;
   public search: boolean;
   public indentation: Number;
-  public template: Object;
-  public theme: Number;
-  public language: String;
-  public languages: Object;
+  public template?: object;
+  public theme?: number;
+  public language?: String;
+  public languages?: object;
 
   /**
    * Adds main menu bar - Contains format, sort, transform, search etc. functionality. True
    * by default. Applicable in all types of mode.
    */
-  public mainMenuBar: boolean;
+  public mainMenuBar = true;
 
   /**
    * Adds navigation bar to the menu - the navigation bar visualize the current position on
@@ -135,7 +135,7 @@ export class JsonEditorOptions {
    * True by default.
    * Only applicable when mode is 'tree', 'form' or 'view'.
    */
-  public navigationBar: boolean;
+  public navigationBar = false;
 
   /**
    * Adds status bar to the bottom of the editor - the status bar shows the cursor position
@@ -143,7 +143,7 @@ export class JsonEditorOptions {
    * True by default.
    * Only applicable when mode is 'code' or 'text'.
    */
-  public statusBar: boolean;
+  public statusBar = false;
 
   constructor() {
     this.mainMenuBar = false;

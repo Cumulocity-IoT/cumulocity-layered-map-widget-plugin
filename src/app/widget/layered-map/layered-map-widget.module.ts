@@ -24,11 +24,11 @@ import { EventQueryFormComponent } from './layer-config/query-forms/event-query-
 import { InventoryQueryFormComponent } from './layer-config/query-forms/inventory-query-form.component';
 import { AlarmDisplayComponent } from './popup/alarm-display/alarm-display.component';
 import { PopoverModalComponent } from './popover-config/popover-modal.component';
-import { JsonEditorComponent } from './popover-config/editor/jsoneditor.component';
 import { ActionIconPipe } from './popup/action-icon.pipe';
 import { CenterMapModalComponent } from './center-map/center-map-modal.component';
 import { StringToBoolPipe } from './pipes/string-to-bool.pipe';
 import { assetPaths } from '../../../assets/assets';
+import { JsonEditorComponent } from './popover-config/editor/jsoneditor.component';
 
 const BOOSTRAP_MODULES = [BsDatepickerModule, TimepickerModule, CollapseModule, TooltipModule];
 @NgModule({
