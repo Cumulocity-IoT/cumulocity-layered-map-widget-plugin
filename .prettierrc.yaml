@@ -1,8 +1,0 @@
-singleQuote: true
-trailingComma: 'es5'
-printWidth: 100
-overrides:
-  - files: '{modules,packages}/**/*.html'
-    options:
-      parser: angular
-editor.formatOnSave: true
