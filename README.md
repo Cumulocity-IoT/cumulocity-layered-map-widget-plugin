@@ -14,6 +14,9 @@ Alarm details can be found in the popover of the device. The popover is built to
 ## New features of version 3.0.0
 - Upgraded to WebSDK version 1018
 
+## New features of version 4.0.0
+- Upgraded to WebSDK version 1021
+
 ### General settings
 - Configure which bounds the map should show at startup
 ![](/docs/center-map.png)
@@ -32,7 +35,7 @@ You want to monitor some wind farm? Then disable location update polling. You wa
 ![](/docs/wms-example.png)
 You want to add an additional layer to your map via a WMS? This is now possible! Just add the base url of your WMS and configure the (WMS-)layers you want to show.
 Optionally, you can also configure basic authentication. Be aware that an additional Microservice is required, if credentials are provided.
-If you want to learn more about that topic, make sure to check out https://leafletjs.com/examples/wms/wms.html and get in contact with me (hendrik.naether@softwareag.com).
+If you want to learn more about that topic, make sure to check out https://leafletjs.com/examples/wms/wms.html and get in contact with me (hendrik.naether@cumulocity.com).
 
 - Specify a color for a marker
 Style your markers do that they are distinct of markers from other layers!
@@ -86,19 +89,25 @@ Filter for all assets having a position and being connected and active
 - clustering of markers
 
 ## Plugin versions
-v 3.0.x of the plugin uses:
+>= 4.0.0
+Angular v 18.x
+WebSDK v 1021.0.x
+node v 20.x
+npm v 10.x
+
+>= 3.0.0
 Angular v 14.x
 WebSDK v 1018.0.x
 node v 16.x
 npm v 8.x
 
-v 2.x of the plugin uses:
+>= 2.0.0
 Angular v 14.x
 WebSDK v 1017.0.x
 node v 14.x
 npm v 6.x
 
-v 1.x of the plugin uses:
+>= 1.0.0
 Angular v 14.x
 WebSDK v 1016.0.x
 
@@ -125,20 +134,17 @@ Also deploying needs no special handling and can be simply done via `npm run dep
 ## Useful links 
 
 📘 Explore the Knowledge Base   
-Dive into a wealth of Cumulocity IoT tutorials and articles in our [Tech Community Knowledge Base](https://tech.forums.softwareag.com/tags/c/knowledge-base/6/cumulocity-iot).  
-
-💡 Get Expert Answers    
-Stuck or just curious? Ask the Cumulocity IoT experts directly on our [Forum](https://tech.forums.softwareag.com/tags/c/forum/1/Cumulocity-IoT).   
+Dive into a wealth of Cumulocity IoT tutorials and articles in our [Tech Community Knowledge Base](https://techcommunity.cumulocity.com/).  
 
 🚀 Try Cumulocity IoT    
-See Cumulocity IoT in action with a [Free Trial](https://techcommunity.softwareag.com/en_en/downloads.html).   
+See Cumulocity IoT in action with a [Free Trial](https://www.cumulocity.com/start-your-journey/free-trial/).   
 
 ✍️ Share Your Feedback    
-Your input drives our innovation. If you find a bug, please create an issue in the repository. If you’d like to share your ideas or feedback, please post them [here](https://tech.forums.softwareag.com/c/feedback/2). 
+Your input drives our innovation. If you find a bug, please create an issue in the repository. 
 
 More to discover
-* [Cumulocity IoT Web Development Tutorial - Part 1: Start your journey](https://tech.forums.softwareag.com/t/cumulocity-iot-web-development-tutorial-part-1-start-your-journey/259613)  
-* [How to install a Microfrontend Plugin on a tenant and use it in an app?](https://tech.forums.softwareag.com/t/how-to-install-a-microfrontend-plugin-on-a-tenant-and-use-it-in-an-app/268981)  
-* [The power of micro frontends – How to dynamically extend Cumulocity IoT Frontends](https://tech.forums.softwareag.com/t/the-power-of-micro-frontends-how-to-dynamically-extend-cumulocity-iot-frontends/266665)  
+* [Cumulocity IoT Web Development Tutorial - Part 1: Start your journey](https://techcommunity.cumulocity.com/t/cumulocity-iot-web-development-tutorial-part-1-start-your-journey/4124)  
+* [How to install a Microfrontend Plugin on a tenant and use it in an app?](https://techcommunity.cumulocity.com/t/how-to-install-a-microfrontend-plugin-on-a-tenant-and-use-it-in-an-app/3034)  
+* [The power of micro frontends – How to dynamically extend Cumulocity IoT Frontends](https://techcommunity.cumulocity.com/t/the-power-of-micro-frontends-how-to-dynamically-extend-cumulocity-iot-frontends/2577)  
 ------------------------------
-These tools are provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
+These tools are provided as-is and without warranty or support. They do not constitute part of the Cumulocity GmbH product suite. Users are free to use, fork and modify them, subject to the license agreement. While Cumulocity GmbH welcomes contributions, we cannot guarantee to include every contribution in the master project.
