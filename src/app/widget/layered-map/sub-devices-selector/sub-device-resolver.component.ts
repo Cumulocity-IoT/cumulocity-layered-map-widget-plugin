@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IManagedObject } from '@c8y/client';
-import { InventoryService } from '@c8y/ngx-components/api';
+import { InventoryService } from '@c8y/client';
 import { has } from 'lodash';
 
 @Component({ 
