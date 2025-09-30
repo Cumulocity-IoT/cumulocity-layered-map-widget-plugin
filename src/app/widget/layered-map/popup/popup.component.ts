@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
   selector: 'popup-component',
   templateUrl: './popup.component.html',
   providers: [PopoverActionService],
+  standalone: false
 })
 export class PopupComponent {
   constructor(private inventory: InventoryService, private events: EventService, private actions: PopoverActionService) {}

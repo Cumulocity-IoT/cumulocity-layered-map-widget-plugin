@@ -14,7 +14,9 @@ import {
 } from '../layered-map-widget.model';
 import { TenantOptionCredentialsService } from '../service/tenant-option-credentials.service';
 
-@Component({ templateUrl: './layer-modal.component.html' })
+@Component({ templateUrl: './layer-modal.component.html',
+  standalone: false
+ })
 export class LayerModalComponent {
   title = 'Create layer';
   closeSubject: Subject<DeviceFragmentLayerConfig | QueryLayerConfig | WebMapServiceLayerConfig | undefined> = new Subject();
@@ -24,7 +26,7 @@ export class LayerModalComponent {
     color: '',
     icon: '',
     enablePolling: 'true',
-    pollingInterval: 60,
+    pollingInterval: 60
   };
 
   type: 'DeviceFragmentLayerConfig' | 'QueryLayerConfig' | 'Unset' | 'WebMapServiceLayer' = 'Unset';
@@ -47,6 +49,7 @@ export class LayerModalComponent {
       this.type = 'WebMapServiceLayer';
       if (layer.token) {
         this.tenantOptionCredentials.getCredentials(layer.token).then((creds) => {
+          if (!creds)
           this.wmsCredentials = creds;
         });
       }

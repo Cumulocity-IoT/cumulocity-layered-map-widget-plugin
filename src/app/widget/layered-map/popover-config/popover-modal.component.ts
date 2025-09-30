@@ -19,6 +19,7 @@ interface Tab {
 @Component({
   templateUrl: './popover-modal.component.html',
   styleUrls: ['./popover-modal.component.less'],
+  standalone: false
 })
 export class PopoverModalComponent {
   title = 'Popover config';

@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'event-query-form',
   template: `<dynamic-query-form [filter]="filter" [params]="queryParams"></dynamic-query-form>`,
+  standalone: false
 })
 export class EventQueryFormComponent {
   @Input() filter = {};

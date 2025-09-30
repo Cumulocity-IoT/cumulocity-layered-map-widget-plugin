@@ -3,7 +3,10 @@ import { IManagedObject } from '@c8y/client';
 import { InventoryService } from '@c8y/ngx-components/api';
 import { has } from 'lodash';
 
-@Component({ template: '', selector: 'sub-device-resolver' })
+@Component({ 
+  template: '', selector: 'sub-device-resolver', 
+  standalone: false
+})
 export class SubDeviceResolverComponent {
   @Input() set device(mo: IManagedObject) {
     if (!mo) {

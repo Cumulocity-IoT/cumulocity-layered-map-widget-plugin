@@ -3,6 +3,7 @@ import { PopoverAction } from '../layered-map-widget.model';
 
 @Pipe({
   name: 'actionIcon',
+  standalone: false,
 })
 export class ActionIconPipe implements PipeTransform {
   transform(value: PopoverAction) {

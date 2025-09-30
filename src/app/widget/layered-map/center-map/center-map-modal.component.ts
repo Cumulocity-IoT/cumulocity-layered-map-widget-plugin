@@ -11,6 +11,7 @@ import { MapService } from '@c8y/ngx-components/map';
   providers: [LocationGeocoderService],
   styleUrls: ['./center-map-modal.component.less'],
   templateUrl: './center-map-modal.component.html',
+  standalone: false
 })
 export class CenterMapModalComponent implements AfterViewInit, OnDestroy {
   leaf!: typeof L;

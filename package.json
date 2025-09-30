@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "description": "Show markers on a layer basis. Create layers based on filter criteria.",
   "scripts": {
-    "start": "ng serve -u https://iot-strategy2022.eu-latest.cumulocity.com/ --shell cockpit-1021",
+    "start": "ng serve -u https://netmon-fernwaerme-rheinenergie.eu-latest.cumulocity.com/ --shell cockpit",
     "build": "ng build",
     "deploy": "c8ycli deploy -u https://your-tenant.cumulocity.com/",
     "test": "ng test"

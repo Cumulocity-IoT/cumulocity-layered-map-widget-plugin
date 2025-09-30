@@ -22,6 +22,7 @@ import { DashboardChildComponent } from '@c8y/ngx-components';
   providers: [LayeredMapWidgetService, InventoryPollingService, AlarmPollingService, EventPollingService, PositionPollingService, WMSLayerService],
   styleUrls: ['./layered-map-widget.component.less'],
   templateUrl: './layered-map-widget.component.html',
+  standalone: false
 })
 export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   map!: L.Map;

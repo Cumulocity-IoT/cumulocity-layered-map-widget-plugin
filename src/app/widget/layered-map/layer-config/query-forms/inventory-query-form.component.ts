@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'inventory-query-form',
   template: `<dynamic-query-form [filter]="filter" [params]="queryParams"></dynamic-query-form>`,
+  standalone: false,
 })
 export class InventoryQueryFormComponent {
   @Input() filter = {};
