@@ -51,7 +51,8 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
-        maxZoom: 19,
+        maxZoom: 22,
+        maxNativeZoom: 19,
         detectRetina: true,
       }),
     ],

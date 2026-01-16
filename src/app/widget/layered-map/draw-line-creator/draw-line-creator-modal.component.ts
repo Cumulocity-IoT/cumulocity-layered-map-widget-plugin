@@ -44,6 +44,7 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
         maxZoom: 22,
+        maxNativeZoom: 19,
         detectRetina: true,
       }),
     ],

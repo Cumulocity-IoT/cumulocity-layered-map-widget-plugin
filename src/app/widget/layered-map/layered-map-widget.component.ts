@@ -146,6 +146,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     this.cfg = config;
     const osm = this.leaf.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 22,
+      maxNativeZoom: 19,
       minZoom: 2,
       detectRetina: true,
     });
