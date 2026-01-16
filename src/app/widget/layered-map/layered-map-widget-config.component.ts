@@ -15,6 +15,7 @@ export type WidgetConfigMode = 'CREATE' | 'UPDATE';
 
 @Component({
   templateUrl: './layered-map-widget-config.component.html',
+  standalone: false,
 })
 export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBeforeSave {
   @Input() config: ILayeredMapWidgetConfig = {

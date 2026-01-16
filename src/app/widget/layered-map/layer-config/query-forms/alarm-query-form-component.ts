@@ -4,6 +4,7 @@ import { Severity, AlarmStatus } from '@c8y/client';
 @Component({
   selector: 'alarm-query-form',
   template: `<dynamic-query-form [filter]="filter" [params]="queryParams"></dynamic-query-form>`,
+  standalone: false,
 })
 export class AlarmQueryFormComponent {
   @Input() filter = {};

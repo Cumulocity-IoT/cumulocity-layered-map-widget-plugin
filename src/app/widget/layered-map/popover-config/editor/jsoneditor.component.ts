@@ -21,6 +21,7 @@ import { isEmpty } from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./jsoneditor.component.less', '../../../../../../node_modules/jsoneditor/dist/jsoneditor.min.css'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false
 })
 export class JsonEditorComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private editor: any;

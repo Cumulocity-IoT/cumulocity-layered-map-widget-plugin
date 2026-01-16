@@ -22,6 +22,7 @@ import { DashboardChildComponent } from '@c8y/ngx-components';
   providers: [LayeredMapWidgetService, InventoryPollingService, AlarmPollingService, EventPollingService, PositionPollingService, WMSLayerService],
   styleUrls: ['./layered-map-widget.component.less'],
   templateUrl: './layered-map-widget.component.html',
+  standalone: false
 })
 export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
   map!: L.Map;
@@ -145,6 +146,7 @@ export class LayeredMapWidgetComponent implements AfterViewInit, OnDestroy {
     this.cfg = config;
     const osm = this.leaf.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 22,
+      maxNativeZoom: 19,
       minZoom: 2,
       detectRetina: true,
     });

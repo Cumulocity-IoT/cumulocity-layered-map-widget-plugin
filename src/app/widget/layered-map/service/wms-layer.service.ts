@@ -23,7 +23,7 @@ export class WMSLayerService {
     const shortUrl = cfg.url.includes('?') ? cfg.url.split('?')[0] : cfg.url;
 
     if (cfg.token) {
-      const url = `service/c2c-integration/api/geoserver-proxy`;
+      const url = `service/geo-server/api/geoserver-proxy`;
       const layer = leaf.tileLayer.wms(url, {
         layers,
         format: shortUrl,

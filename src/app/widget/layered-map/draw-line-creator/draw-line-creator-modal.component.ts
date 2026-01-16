@@ -20,6 +20,7 @@ import { ITrack } from '../layered-map-widget.model';
   providers: [LocationGeocoderService],
   templateUrl: './draw-line-creator-modal.component.html',
   styleUrls: ['./draw-line-creator-modal.component.less'],
+  standalone: false
 })
 export class DrawLineCreatorModalComponent implements AfterViewInit {
   title = 'Create track';
@@ -43,6 +44,7 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
         maxZoom: 22,
+        maxNativeZoom: 19,
         detectRetina: true,
       }),
     ],
@@ -71,13 +73,13 @@ export class DrawLineCreatorModalComponent implements AfterViewInit {
 
   startDrawingLine(): void {
     this.isDrawingLine = true;
-    document.getElementById('draw-line-map').style.cursor = 'crosshair';
+    document.getElementById('draw-line-map')!.style.cursor = 'crosshair';
     this.map.dragging.disable();
   }
 
   pauseDrawingLine(): void {
     this.isDrawingLine = false;
-    document.getElementById('draw-line-map').style.cursor = '';
+    document.getElementById('draw-line-map')!.style.cursor = '';
     this.map.dragging.enable();
   }
 

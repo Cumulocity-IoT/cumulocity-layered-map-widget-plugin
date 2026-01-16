@@ -3,6 +3,7 @@ import { BasicLayerConfig, isDeviceFragmentLayerConfig, isQueryLayerConfig, isWe
 @Component({
   templateUrl: './layer-list.component.html',
   selector: 'layer-list',
+  standalone: false,
 })
 export class LayerListComponent {
   @Output() deleteLayer = new EventEmitter<LayerConfig<BasicLayerConfig>>();

@@ -9,11 +9,11 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ITrack } from '../layered-map-widget.model';
 
 type IEventsForm = {
-  deviceId: number;
-  startDate: Date;
-  startTime: Date;
-  endDate: Date;
-  endTime: Date;
+  deviceId: number | null;
+  startDate: Date | null;
+  startTime: Date | null;
+  endDate: Date | null;
+  endTime: Date | null;
   trackName: string;
 };
 
@@ -21,6 +21,7 @@ type IEventsForm = {
   providers: [LayeredMapWidgetService],
   templateUrl: './event-line-creator-modal.component.html',
   styleUrls: ['./event-line-creator-modal.component.less'],
+  standalone: false
 })
 export class EventLineCreatorModalComponent implements AfterViewInit {
   title = 'Create track';
@@ -34,7 +35,7 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
   mouseLines: Polyline[] = [];
 
   coordinates: LatLng[] = [];
-  line: Polyline;
+  line: Polyline | undefined;
 
   eventsForm: IEventsForm = {
     deviceId: null,
@@ -42,7 +43,7 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
     startTime: null,
     endDate: null,
     endTime: null,
-    trackName: null,
+    trackName: '',
   };
   isLoadingEvents = false;
 
@@ -50,7 +51,8 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
-        maxZoom: 19,
+        maxZoom: 22,
+        maxNativeZoom: 19,
         detectRetina: true,
       }),
     ],
@@ -58,12 +60,14 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
     center: latLng(0, 0),
     attributionControl: false,
   };
-  map: LMap;
+  map: LMap | undefined;
 
   constructor(public bsModalRef: BsModalRef, private trackService: LayeredMapWidgetService) {}
 
   ngAfterViewInit(): void {
-    this.map.invalidateSize();
+    if (this.map) {
+      this.map.invalidateSize();
+    }
   }
 
   onMapReady(map: LMap): void {
@@ -77,12 +81,22 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
   async onReload() {
     this.isLoadingEvents = true;
     const f = this.eventsForm;
+    if (!f.startDate || !f.startTime || !f.endDate || !f.endTime) {
+      this.text = 'Please provide valid start and end dates and times.';
+      this.isLoadingEvents = false;
+      return;
+    }
+    if (f.deviceId === null) {
+      this.text = 'Please select a device.';
+      this.isLoadingEvents = false;
+      return;
+    }
     const startDateAndTime = new Date(
       f.startDate.getFullYear(),
       f.startDate.getMonth(),
       f.startDate.getDate(),
       f.startTime.getHours(),
-      f.startDate.getMinutes(),
+      f.startTime.getMinutes(),
       f.startTime.getSeconds()
     ).toISOString();
     const endDateAndTime = new Date(
@@ -104,15 +118,15 @@ export class EventLineCreatorModalComponent implements AfterViewInit {
       return;
     }
 
-    if (this.line) {
+    if (this.line && this.map) {
       this.line.removeFrom(this.map);
+      this.line = polyline(coords ?? []);
+      this.line.addTo(this.map);
+      this.map.fitBounds(this.line.getBounds());
+  
+      this.coordinates = coords ?? [];
+      this.text = `Loaded ${(coords ?? []).length} coordinates.`;
     }
-    this.line = polyline(coords);
-    this.line.addTo(this.map);
-    this.map.fitBounds(this.line.getBounds());
-
-    this.coordinates = coords;
-    this.text = `Loaded ${coords.length} coordinates.`;
   }
 
   // - MODAL section

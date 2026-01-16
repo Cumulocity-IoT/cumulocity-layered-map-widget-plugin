@@ -11,6 +11,7 @@ import { MapService } from '@c8y/ngx-components/map';
   providers: [LocationGeocoderService],
   styleUrls: ['./center-map-modal.component.less'],
   templateUrl: './center-map-modal.component.html',
+  standalone: false
 })
 export class CenterMapModalComponent implements AfterViewInit, OnDestroy {
   leaf!: typeof L;
@@ -47,6 +48,7 @@ export class CenterMapModalComponent implements AfterViewInit, OnDestroy {
       layers: [
         this.leaf.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 22,
+          maxNativeZoom: 19,
           detectRetina: true,
         }),
       ],
