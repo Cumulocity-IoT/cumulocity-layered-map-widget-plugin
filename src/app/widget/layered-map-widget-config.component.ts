@@ -1,0 +1,203 @@
+import { CoreModule, DynamicComponent, OnBeforeSave } from '@c8y/ngx-components';
+import { IManagedObject } from '@c8y/client';
+import { Component, Input, OnInit } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { take } from 'rxjs/operators';
+import { clone, cloneDeep, has } from 'lodash';
+import { EventLineCreatorModalComponent } from './event-line-creator/event-line-creator-modal.component';
+import { DrawLineCreatorModalComponent } from './draw-line-creator/draw-line-creator-modal.component';
+import {
+  BasicLayerConfig,
+  ILayeredMapWidgetConfig,
+  ITrack,
+  LayerConfig,
+} from './layered-map-widget.model';
+import { LayerModalComponent } from './layer-config/layer-modal.component';
+import { PopoverModalComponent } from './popover-config/popover-modal.component';
+import { CenterMapModalComponent } from './center-map/center-map-modal.component';
+import { LayerListComponent } from './layer-config/layer-list.component';
+
+export type WidgetConfigMode = 'CREATE' | 'UPDATE';
+
+@Component({
+  selector: 'layered-map-widget-config',
+  templateUrl: './layered-map-widget-config.component.html',
+  standalone: true,
+  imports: [CoreModule, LayerListComponent],
+
+})
+export class LayeredMapWidgetConfig implements OnInit, DynamicComponent, OnBeforeSave {
+  @Input() config: ILayeredMapWidgetConfig = {
+    layers: [],
+    manualCenter: { lat: 0, long: 0, zoomLevel: 15 },
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ng1FormRef?: any;
+  items: IManagedObject[] = [];
+  mode!: WidgetConfigMode;
+
+  constructor(private bsModalService: BsModalService) {}
+
+  ngOnInit(): void {
+    this.mode = this.config.saved ? 'UPDATE' : 'CREATE';
+
+    if (!has(this.config, 'layers')) {
+      this.config.layers = [];
+    }
+
+    if (!has(this.config, 'autoCenter')) {
+      this.config.autoCenter = true;
+    } else {
+      this.config.autoCenter = `${this.config.autoCenter}` === 'true';
+    }
+
+    if (!has(this.config, 'manualCenter')) {
+      this.config.manualCenter = { lat: 0, long: 0, zoomLevel: 15 };
+    }
+
+    if (!has(this.config, 'positionPolling')) {
+      this.config.positionPolling = {
+        enabled: true,
+        interval: 10,
+      };
+    } else {
+      this.config.positionPolling.enabled = `${this.config.positionPolling.enabled}` === 'true';
+    }
+
+    this.config.layers.forEach((layer) => {
+      layer.config.enablePolling = `${layer.config.enablePolling}` === 'true';
+    });
+  }
+
+  async openLayerModal(layer?: LayerConfig<BasicLayerConfig>) {
+    const modalRef = this.bsModalService.show(LayerModalComponent, {});
+
+    const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
+
+    if (!layer) {
+      // create mode
+      const created = await close;
+
+      if (created) {
+        this.config.layers?.push({ config: created, active: true });
+        this.config.layers = [...this.config.layers];
+      }
+    } else {
+      // edit mode
+      const original = cloneDeep(layer.config);
+
+      modalRef.content?.setLayer(layer.config);
+      const updated = await close;
+
+      if (updated) {
+        layer.config = updated;
+        this.config.layers = [...this.config.layers];
+      } else {
+        layer.config = original;
+      }
+    }
+  }
+
+  async openPopoverModal(layer: LayerConfig<BasicLayerConfig>) {
+    const initialState = {
+      cfg: cloneDeep(layer.config.popoverConfig),
+    };
+    const modalRef = this.bsModalService.show(PopoverModalComponent, { initialState });
+    const close = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
+    const popoverConfig = await close;
+
+    if (popoverConfig) {
+      layer.config.popoverConfig = popoverConfig;
+    }
+  }
+
+  async openCenterMapModal() {
+    const initialState = {
+      center: cloneDeep(this.config.manualCenter),
+    };
+    const modalRef = this.bsModalService.show(CenterMapModalComponent, { initialState });
+    const modal = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
+    const center = await modal;
+
+    if (center) {
+      this.config.manualCenter = center;
+    }
+  }
+
+  editLayer(layer: LayerConfig<BasicLayerConfig>) {
+    void this.openLayerModal(layer);
+  }
+
+  editPopover(layer: LayerConfig<BasicLayerConfig>) {
+    void this.openPopoverModal(layer);
+  }
+
+  deleteLayer(layer: LayerConfig<BasicLayerConfig>) {
+    this.config.layers = this.config.layers.filter((l) => l !== layer);
+  }
+
+  async openEventTrackCreatorModal() {
+    const modalRef = this.bsModalService.show(EventLineCreatorModalComponent, {});
+
+    modalRef.content.items = clone(this.config.devices ?? []); // TODO: remove this and add device selection in event modal
+    const openExportTemplateModal = modalRef.content?.closeSubject.pipe(take(1)).toPromise();
+    const track = await openExportTemplateModal;
+
+    if (track) {
+      this.addTrackToConfig(track);
+    }
+  }
+
+  async openDrawTrackCreatorModal() {
+    const modalRef = this.bsModalService.show(DrawLineCreatorModalComponent, {
+      class: 'modal-lg',
+    });
+    const openExportTemplateModal = modalRef.content.closeSubject.pipe(take(1)).toPromise();
+    const track = await openExportTemplateModal;
+
+    if (track) {
+      this.addTrackToConfig(track);
+    }
+  }
+
+  private addTrackToConfig(track: ITrack | null): void {
+    if (!track) {
+      return;
+    }
+
+    if (!this.config.tracks) {
+      this.config.tracks = [];
+    }
+    this.config.tracks.push(track);
+  }
+
+  deleteTrack(track: ITrack): void {
+    this.config.tracks = this.config.tracks?.filter((t) => t.name !== track.name);
+
+    if (this.config.selectedTrack === track.name) {
+      this.config.selectedTrack = undefined;
+    }
+  }
+
+  userChangedSelection(event: { checked: boolean; track: ITrack }): void {
+    const { checked, track } = event;
+
+    if (checked) {
+      // check and select a new element (automatically unchecks other ones)
+      this.config.selectedTrack = track.name;
+    } else if (track.name === this.config.selectedTrack) {
+      this.config.selectedTrack = undefined;
+    }
+  }
+
+  onBeforeSave(config?: ILayeredMapWidgetConfig): Promise<boolean> {
+    if (!config) {
+      return Promise.resolve(false);
+    }
+
+    config.saved = true;
+
+    return Promise.resolve(true);
+  }
+}

@@ -1,0 +1,118 @@
+import { Injectable } from '@angular/core';
+import { AlarmService, EventService, IManagedObject, InventoryService } from '@c8y/client';
+import { normalizeQueryFilter } from 'shared';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QueryLayerService {
+  constructor(
+    private inventory: InventoryService,
+    private alarm: AlarmService,
+    private event: EventService
+  ) {}
+
+  async fetchByAlarmQuery(params: object): Promise<IManagedObject[]> {
+    const result = new Map<string, IManagedObject | null>();
+    const filter = {
+      withTotalPages: true,
+      pageSize: 200,
+      ...normalizeQueryFilter(params),
+    };
+
+    const resolvers: Promise<void>[] = [];
+
+    let res = await this.alarm.list(filter);
+
+    while (res.data.length) {
+      const ids = res.data
+        .filter((alarm) => !result.has(alarm.source.id))
+        .map((alarm) => alarm.source.id);
+
+      ids.forEach((id) => result.set(id, null));
+      resolvers.push(
+        this.resolveManagedObjects(ids).then((mos) =>
+          mos.data.forEach((mo) => result.set(mo.id, mo))
+        )
+      );
+
+      if (!res.paging?.nextPage) {
+        break;
+      }
+      res = await res.paging.next();
+    }
+
+    await Promise.all(resolvers);
+
+    return [...result.values()].filter((mo) => mo !== null);
+  }
+
+  async fetchByInventoryQuery(params: object) {
+    const result: IManagedObject[] = [];
+    const filter = {
+      withTotalPages: true,
+      pageSize: 2000,
+      ...normalizeQueryFilter(params),
+    };
+
+    let res = await this.inventory.list(filter);
+
+    while (res.data.length) {
+      result.push(...res.data);
+
+      if (res.data.length < (res.paging?.pageSize ?? -1)) {
+        break;
+      }
+
+      if (!res.paging?.nextPage) {
+        break;
+      }
+      res = await res.paging.next();
+    }
+
+    return result;
+  }
+
+  async fetchByEventQuery(params: object): Promise<IManagedObject[]> {
+    const result = new Map<string, IManagedObject | null>();
+    const filter = {
+      withTotalPages: true,
+      pageSize: 200,
+      ...normalizeQueryFilter(params),
+    };
+    const resolvers: Promise<void>[] = [];
+
+    let res = await this.event.list(filter);
+
+    while (res.data.length) {
+      const ids = res.data
+        .filter((event) => !result.has(event.source.id))
+        .map((event) => event.source.id);
+
+      ids.forEach((id) => result.set(id, null));
+      resolvers.push(
+        this.resolveManagedObjects(ids).then((mos) =>
+          mos.data.forEach((mo) => result.set(mo.id, mo))
+        )
+      );
+
+      if (!res.paging?.nextPage) {
+        break;
+      }
+      res = await res.paging.next();
+    }
+    await Promise.all(resolvers);
+
+    return [...result.values()].filter((mo) => mo !== null);
+  }
+
+  resolveManagedObjects(ids: string[]) {
+    return this.inventory.list({
+      ids: ids.toString(),
+      withTotalPages: false,
+      fragmentType: 'c8y_Position',
+      withChildren: false,
+      pageSize: 200,
+    });
+  }
+}

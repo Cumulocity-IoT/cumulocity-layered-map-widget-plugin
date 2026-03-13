@@ -19,11 +19,11 @@ Alarm details can be found in the popover of the device. The popover is built to
 
 ### General settings
 - Configure which bounds the map should show at startup
-![](/docs/center-map.png)
+![](/public/center-map.png)
 Either let the map calculate the best fit for all markers, or manually set the maps bounds.
 
 - By clicking on the crosshair icon on the right, you can open a modal to help you find the best latitude and longitude:
-![](/docs/center-map-modal.png)
+![](/public/center-map-modal.png)
 Here you can e.g. use geocoding and e.g. enter a city name in order to let the map fly to these coordinates, can configure the zoom level and what exactly should be shown.
 Or you click on the arrow on the right and grant access to your current location.
 
@@ -32,37 +32,37 @@ You want to monitor some wind farm? Then disable location update polling. You wa
 
 ### Layer settings
 - You can now configure to access Web Map Services (WMS)
-![](/docs/wms-example.png)
+![](/public/wms-example.png)
 You want to add an additional layer to your map via a WMS? This is now possible! Just add the base url of your WMS and configure the (WMS-)layers you want to show.
 Optionally, you can also configure basic authentication. Be aware that an additional Microservice is required, if credentials are provided.
 If you want to learn more about that topic, make sure to check out https://leafletjs.com/examples/wms/wms.html and get in contact with me (hendrik.naether@cumulocity.com).
 
 - Specify a color for a marker
 Style your markers do that they are distinct of markers from other layers!
- ![](/docs/color-marker-config.png)
+ ![](/public/color-marker-config.png)
  Markers now also have an outline to see better where markers overlap. Not supported for WMS and Alarm Layer. 
  Alarm layer will have a color configuration per Alarm-Severity in the future.
 
 - Configure polling interval per layer
 You can now decide if the layer needs a frequent update polling or not.
-![](/docs/layer-polling-config.png)
+![](/public/layer-polling-config.png)
 
 
 ## Sample images
 Create
-![alt Create device fragment layer example](/docs/create-device-fragment-layer.png)
+![alt Create device fragment layer example](/public/create-device-fragment-layer.png)
 
 Manage you existing layers in the config (by editing or deleting)
-![alt Manage layers](/docs/widget-config.png)
+![alt Manage layers](/public/widget-config.png)
 
 Layers can be selected and deselected on the map later. You can also choose whether or not layers should be selected by default.
-![alt Layers](/docs/layers.png)
+![alt Layers](/public/layers.png)
 
 Powerful queries can be created with a simple UI which let's you create the query parameters for a layer. Only devices matching your query will be shown for that layer.
-![alt Alarm query layer example](/docs/edit-alarm-layer.png)
+![alt Alarm query layer example](/public/edit-alarm-layer.png)
 
 Popovers show alarm counts. These can easily be extended in code.
-![alt Popover example](/docs/popover-example.png)
+![alt Popover example](/public/popover-example.png)
 
 ## Useful query samples
 Filter for all assets having a position and type test
@@ -89,6 +89,12 @@ Filter for all assets having a position and being connected and active
 - clustering of markers
 
 ## Plugin versions
+>= 5.0.0
+Angular v 20.x
+WebSDK v 1023.14.x (2026-lts)
+node v 22.x
+npm v 10.x
+
 >= 4.0.0
 Angular v 18.x
 WebSDK v 1021.0.x

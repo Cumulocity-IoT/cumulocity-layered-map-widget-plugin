@@ -1,5 +1,5 @@
 import type { ConfigurationOptions } from '@c8y/devkit';
-import { author, description, version, name } from './package.json';
+import { author, description, license, name, version } from './package.json';
 
 export default {
   runTime: {
@@ -11,18 +11,21 @@ export default {
       "base-uri 'none'; default-src 'self' 'unsafe-inline' http: https: ws: wss:; connect-src 'self' http: https: ws: wss:;  script-src 'self' *.bugherd.com *.twitter.com *.twimg.com *.aptrinsic.com 'unsafe-inline' 'unsafe-eval' data:; style-src * 'unsafe-inline' blob:; img-src * data: blob:; font-src * data:; frame-src *; worker-src 'self' blob:;",
     dynamicOptionsUrl: true,
     remotes: {
-      [name]: ['LayeredMapWidgetModule']
+      [name]: ['layeredMapWidgetProvider']
     },
     package: 'plugin',
     isPackage: true,
     noAppSwitcher: true,
+    license,
     exports: [
       {
         name: 'Layered Map',
-        module: 'LayeredMapWidgetModule',
-        path: './src/app/widget/layered-map/layered-map-widget.module.ts',
-        description: 'Displays a map with position markers for selected devices. Support for configuration of additional layers and custom markers.'
-      }
+        module: 'layeredMapWidgetProvider',
+        path: './src/app/index.ts',
+        readmePath: './src/app/README.md',
+        description:
+          'Displays a map with position markers for selected devices. Support for configuration of additional layers and custom markers.',
+      },
     ]
   },
   buildTime: {
@@ -42,12 +45,6 @@ export default {
       'ngx-bootstrap',
       '@ngx-translate/core',
       '@ngx-formly/core'
-    ],
-    "copy": [
-        {
-          "from": "docs",
-          "to": "docs"
-        }
-      ]
+    ]
   }
 } as const satisfies ConfigurationOptions;

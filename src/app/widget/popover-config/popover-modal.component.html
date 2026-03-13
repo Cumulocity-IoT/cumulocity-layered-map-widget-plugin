@@ -1,0 +1,61 @@
+<c8y-modal title="{{ title | translate }}" (onClose)="onClose()" (onDismiss)="onDismiss()" [labels]="labels"
+  style="width: 100%">
+  <div class="m-16">
+    <div class="form-group">
+      <formly-form [form]="form" [fields]="fields" [model]="config"></formly-form>
+    </div>
+    <!-- TODO: Fix this feature before enabling -->
+    <!-- <div class="form-group m-t-16">
+      <label>Actions</label>
+      @for (action of config.actions; track action) {
+        <span class="row m-0">
+          <input class="form-control input-sm col-sm-10" type="text" [(ngModel)]="action.label"
+            [tooltip]="action.body | json" />
+          <button class="btn btn-dot col m-l-8" (click)="removeAction(action)">
+            <i c8yIcon="minus-circle" class="text-danger"></i>
+          </button>
+        </span>
+      }
+    </div> -->
+    <!-- <button class="btn btn-default btn-sm" [disabled]="true" (click)="isActionsFormCollapsed = false; scroll(addActionBtn)"
+      [disabled]="!isActionsFormCollapsed">
+      <i c8yIcon="plus-circle" class="m-r-4"></i>Add action
+    </button> -->
+
+    <div class="actions-form" [collapse]="isActionsFormCollapsed" [isAnimated]="true">
+      <div class="legend form-block center">Add action</div>
+      <div class="form-group m-t-16">
+        <div class="tabContainer">
+          <!-- tabs -->
+          <ul class="nav nav-tabs nav-tabsc8y m-b-8">
+            @for (t of tabs; track t) {
+              <li [class.active]="t.active">
+                <button type="button" [title]="t.label" [disabled]="t.disabled" (click)="changeTab(t.id)">
+                  @if (t.icon) {
+                    <i class="{{ t.icon }}"></i>
+                  }
+                  <span class="txt">{{ t.label }}</span>
+                </button>
+              </li>
+            }
+          </ul>
+
+          <!-- tab content -->
+          <ng-container class="tab">
+            <div class="col-sm-12 m-b-8" style="height: 200px; border: 1px solid var(--c8y-component-border-color, var(--c8y-root-component-border-color))">
+              <domain-model-editor [domainModel]="currentTab" (valueChange)="onChange($event)" (isValidChange)="isEditorValid = $event"></domain-model-editor>
+            </div>
+            
+          </ng-container>
+
+          <div class="col-sm-12 p-t-16 p-b-8">
+            <button #addActionBtn class="btn btn-primary" (click)="addAction(currentTab)" [disabled]="!isEditorValid">
+              {{ ('Add' | translate) + ' ' + currentTab }}
+            </button>
+            <button class="btn btn-default" (click)="cancelAdd()">{{ 'Cancel' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</c8y-modal>

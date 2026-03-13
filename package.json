@@ -1,64 +1,65 @@
 {
-  "name": "layered-map-widget",
-  "version": "5.0.0",
-  "description": "Show markers on a layer basis. Create layers based on filter criteria.",
+  "name": "cumulocity-layered-map-widget",
+  "version": "5.0.1",
   "scripts": {
-    "start": "ng serve -u https://iot-strategy2022.eu-latest.cumulocity.com/ --shell cockpit-1022",
+    "ng": "ng",
+    "start": "ng serve -u  --shell cockpit",
     "build": "ng build",
-    "deploy": "c8ycli deploy -u https://your-tenant.cumulocity.com/",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "keywords": [
-    "Cumulocity",
-    "Plugin",
-    "map",
-    "widget",
-    "leaflet",
-    "layered",
-    "WMS"
-  ],
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
   "private": true,
-  "author": "Hendrik Naether",
-  "license": "Apache-2.0",
   "dependencies": {
-    "@angular/animations": "^19.0.0",
-    "@angular/cdk": "^19.2.19",
-    "@angular/common": "^19.0.0",
-    "@angular/compiler": "^19.0.0",
-    "@angular/core": "^19.0.0",
-    "@angular/forms": "^19.0.0",
-    "@angular/platform-browser": "^19.0.0",
-    "@angular/platform-browser-dynamic": "^19.0.0",
-    "@angular/router": "^19.0.0",
-    "@c8y/bootstrap": "1022.33.0",
-    "@c8y/client": "1022.33.0",
-    "@c8y/ngx-components": "1022.33.0",
-    "@c8y/style": "1022.33.0",
-    "monaco-editor": "~0.52.2",
-    "ngx-bootstrap": "19.0.2",
-    "rxjs": "7.8.1",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "jsoneditor": "^10.2.0",
+    "@angular/cdk": "^20.2.14",
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "@c8y/bootstrap": "1023.14.113",
+    "@c8y/client": "1023.14.113",
+    "@c8y/ngx-components": "1023.14.113",
+    "@c8y/style": "1023.14.113",
+    "date-fns": "4.1.0",
     "leaflet": "^1.9.4",
     "moment": "^2.30.1",
-    "ngx-color-picker": "^20.1.1"
+    "monaco-editor": "~0.53.0",
+    "ngx-bootstrap": "20.0.2",
+    "ngx-color-picker": "^20.1.1",
+    "osmtogeojson": "^3.0.0-beta.5",
+    "rxjs": "7.8.2",
+    "shared": "file:shared",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.0.7",
-    "@angular/cli": "^19.0.7",
-    "@angular/compiler-cli": "^19.0.0",
-    "@c8y/devkit": "1022.33.0",
-    "@c8y/options": "1022.33.0",
+    "@angular/build": "^20.3.19",
+    "@types/osmtogeojson": "^2.2.34",
+    "@angular/cli": "^20.3.19",
+    "@angular/compiler-cli": "^20.3.0",
+    "@c8y/devkit": "1023.14.113",
+    "@c8y/options": "1023.14.113",
     "@types/jasmine": "~5.1.0",
-    "jasmine-core": "~5.4.0",
+    "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.6.2",
-    "@types/leaflet": "^1.9.20",
-    "@types/lodash": "^4.17.20"
+    "less": "^4.2.0",
+    "typescript": "~5.9.2"
   }
 }
