@@ -1,11 +1,3 @@
 <div class="c8y-map">
   <div #mapContainer class="map-container"></div>
-  @if (railwayLoading$ | async) {
-    <div class="railway-loading-overlay leaflet-control leaflet-bar">
-      <c8y-loading
-        layout="component"
-        aria-label="Loading railway data"
-      ></c8y-loading>
-    </div>
-  }
 </div>
